@@ -4,7 +4,6 @@
   "automerge": true,
   "automergeType": "pr-comment",
   "automergeComment": "lgtm",
-  "masterIssue": true,
   "rangeStrategy": "bump",
   "extends": [
     "github>whitesource/merge-confidence:beta",
@@ -17,7 +16,20 @@
     "before 6am every weekday",
     "every weekend"
   ],
+  "enabledManagers": ["regex"],
+  "regexMangers": [
+    {
+      "fileMatch": ["(^|/)Dockerfile%"],
+      "matchStrings": ["ENV NODE_VERSION (?<currentValue>.*?)\n"],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node"
+    }
+  ],
   "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
     {
       "updateTypes": ["minor", "patch"],
       "groupName": "Bumped minor version of packages",
@@ -34,6 +46,11 @@
       ],
       "groupName": "merge with hazmat suit extra",
       "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": true,
+      "matchManagers": ["regex"]
     }
   ]
 }
