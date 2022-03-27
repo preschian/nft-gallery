@@ -62,7 +62,7 @@ specifiers:
   lazysizes: ^5.3.2
   lint-staged: ^12.3.7
   lodash: ^4.17.21
-  mingo: ^5.1.0
+  mingo: ^6.0.5
   netlify-lambda: ^2.0.15
   nuxt: ^2.15.8
   nuxt-buefy: ^0.4.21
@@ -124,7 +124,7 @@ dependencies:
   idb-keyval: 6.1.0
   lazysizes: 5.3.2
   lodash: 4.17.21
-  mingo: 5.1.0
+  mingo: 6.0.5
   nuxt: 2.15.8_consola@2.15.3+typescript@4.6.3
   nuxt-buefy: 0.4.21_vue@2.6.14
   nuxt-property-decorator: 2.9.1_vue@2.6.14+vuex@3.6.2
@@ -11721,8 +11721,8 @@ packages:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
 
-  /mingo/5.1.0:
-    resolution: {integrity: sha512-8sLvtWBi8xZQDuMQtfg54hTMVgpUAYWaPLhvBLInJLCsKPJ9SxtOj/WCA9A9ESItR+RBDoNnDbpXPaGYQMb4CA==}
+  /mingo/6.0.5:
+    resolution: {integrity: sha512-jXtE0VDF/z3sbAACv+IoN7Df8ZKeqXJ9ZMH4WmV8IgvdInaUSHOmJ32RjG6svRq/2CMLOe5qoqvnj/Fj23TSRw==}
     dev: false
 
   /minimalistic-assert/1.0.1:
