@@ -46,7 +46,7 @@ specifiers:
   chartjs-plugin-annotation: ^1.4.0
   chartjs-plugin-zoom: ^1.2.1
   consola: ^2.15.3
-  css-loader: 5.2.7
+  css-loader: 6.7.1
   cypress: ^9.5.2
   date-fns: ^2.28.0
   emoji-unicode: ^2.0.1
@@ -115,7 +115,7 @@ dependencies:
   chartjs-adapter-date-fns: 2.0.0_chart.js@3.7.1
   chartjs-plugin-annotation: 1.4.0_chart.js@3.7.1
   chartjs-plugin-zoom: 1.2.1_chart.js@3.7.1
-  css-loader: 5.2.7_webpack@5.70.0
+  css-loader: 6.7.1_webpack@5.70.0
   cypress: 9.5.2
   date-fns: 2.28.0
   emoji-unicode: 2.0.1
@@ -7280,21 +7280,19 @@ packages:
       webpack: 4.46.0
     dev: false
 
-  /css-loader/5.2.7_webpack@5.70.0:
-    resolution: {integrity: sha512-Q7mOvpBNBG7YrVGMxRxcBJZFL75o+cH2abNASdibkj/fffYD8qWbInZrD0S9ccI6vZclF3DsHE7njGlLtaHbhg==}
-    engines: {node: '>= 10.13.0'}
+  /css-loader/6.7.1_webpack@5.70.0:
+    resolution: {integrity: sha512-yB5CNFa14MbPJcomwNh3wLThtkZgcNyI2bNMRt8iE5Z8Vwl7f8vQXFAzn2HDOJvtDq2NTZBUGMSUNNyrv3/+cw==}
+    engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: ^4.27.0 || ^5.0.0
+      webpack: ^5.0.0
     dependencies:
       icss-utils: 5.1.0_postcss@8.4.12
-      loader-utils: 2.0.2
       postcss: 8.4.12
       postcss-modules-extract-imports: 3.0.0_postcss@8.4.12
       postcss-modules-local-by-default: 4.0.0_postcss@8.4.12
       postcss-modules-scope: 3.0.0_postcss@8.4.12
       postcss-modules-values: 4.0.0_postcss@8.4.12
       postcss-value-parser: 4.2.0
-      schema-utils: 3.1.1
       semver: 7.3.5
       webpack: 5.70.0
     dev: false
