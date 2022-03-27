@@ -4,6 +4,7 @@
   "automerge": true,
   "automergeType": "pr-comment",
   "automergeComment": "lgtm",
+  "masterIssue": true,
   "rangeStrategy": "bump",
   "extends": [
     "github>whitesource/merge-confidence:beta",
