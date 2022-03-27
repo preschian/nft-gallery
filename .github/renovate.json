@@ -31,7 +31,7 @@
       "enabled": false
     },
     {
-      "updateTypes": ["minor", "patch"],
+      "updateTypes": ["minor", "patch", "pin"],
       "groupName": "Bumped minor version of packages",
       "prHeader": "Bumped minor version of packages, check if builds are still passing, please 🥺"
     },
