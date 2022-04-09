@@ -65,7 +65,7 @@
     "@kodadot1/sub-api": "^0.0.1-rc.3",
     "@kodadot1/vuex-options": "^0.0.1-rc.2",
     "@nuxtjs/apollo": "^4.0.1-rc.5",
-    "@nuxtjs/i18n": "^7.2.0",
+    "@nuxtjs/i18n": "^7.2.1",
     "@polkadot/extension-dapp": "^0.42.6",
     "@polkadot/extension-inject": "^0.42.7",
     "@polkadot/ui-keyring": "0.89.4-1",
