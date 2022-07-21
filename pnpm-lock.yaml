@@ -3018,7 +3018,7 @@ packages:
       '@netlify/functions': 1.0.0
       '@nuxt/devalue': 2.0.0
       '@nuxt/kit': /@nuxt/kit-edge/3.0.0-27470397.9ebea90_fpjgvbnupg2zqeyjrxnvkub2km
-      '@nuxt/ui-templates': /@nuxt/ui-templates-edge/0.1.1-27618612.4c28b3f
+      '@nuxt/ui-templates': /@nuxt/ui-templates-edge/0.2.1-27639787.fbab1cb
       '@rollup/plugin-alias': 3.1.9_rollup@2.75.6
       '@rollup/plugin-commonjs': 21.1.0_rollup@2.75.6
       '@rollup/plugin-inject': 4.0.4_rollup@2.75.6
@@ -3243,8 +3243,8 @@ packages:
       - webpack
     dev: true
 
-  /@nuxt/ui-templates-edge/0.1.1-27618612.4c28b3f:
-    resolution: {integrity: sha512-LcGxTJK4+RcIJx5NjDu1ApNqDHF0wLQGc62XpnTOidz1VB0DB774Oek8ozaJEM+q1r86Pk3NkhSgRuT6JZIkpg==}
+  /@nuxt/ui-templates-edge/0.2.1-27639787.fbab1cb:
+    resolution: {integrity: sha512-PUB0QY9mwe/bGCJu/mQnhOvXz1w7SM1+6kCKG6q0gjf1pzD8zQTJeUVs8bgTbD8OKU0VBd+6yeoHvpcoKUIE8A==}
     dev: true
 
   /@nuxt/utils-edge/2.16.0-27358576.777a4b7f:
