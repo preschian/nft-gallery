@@ -3,7 +3,7 @@ import { BaseDotsamaWallet } from '@/utils/config/wallets/BaseDotsamaWallet'
 
 export class NovaWallet extends BaseDotsamaWallet {
   img = require('@/assets/partners/logo-nova.png')
-  extensionName = 'nova'
+  extensionName = 'polkadot-js'
   name = 'Nova'
   source = SupportWalletExtension.Nova
   walletUrl = 'https://novawallet.io/'
