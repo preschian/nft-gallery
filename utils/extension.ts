@@ -14,11 +14,13 @@ export const getAddress = async (address: string) => {
     const walletName = localStorage.getItem('wallet') || 'polkadot-js'
     const wallet = getWalletBySource(walletName)
     await wallet?.enable()
+
+    alert(JSON.stringify(wallet))
+    alert(JSON.stringify(wallet?.extension))
+
     if (wallet?.extension) {
       return wallet.extension
     }
-
-    alert(JSON.stringify({ address, walletName, wallet }))
 
     throw new Error('Wallet not found')
   } catch (e) {
