@@ -66,6 +66,8 @@ export class BaseDotsamaWallet implements Wallet {
     try {
       const injectedExtension = this.rawExtension
       const rawExtension = await injectedExtension?.enable(DAPP_NAME)
+      alert(JSON.stringify(this.rawExtension))
+      alert(JSON.stringify(rawExtension))
       if (!rawExtension) {
         return
       }
