@@ -12,7 +12,7 @@ export enum SupportWalletExtension {
   Clover = 'clover',
   Ledger = 'ledger',
   Math = 'polkadot-js', // mathwallet
-  Nova = 'nova',
+  Nova = 'polkadot-js', // nova
   SubWallet = 'subwallet-js',
   Talisman = 'talisman',
 }

@@ -38,8 +38,6 @@
             {{ replaceBuyNowWithYolo ? 'YOLO' : actionLabel('BUY') }}
           </b-button>
         </b-tooltip>
-
-        {{ debug }}
       </template>
     </div>
     <BalanceInput
@@ -130,7 +128,6 @@ export default class AvailableActions extends mixins(
   private identity: IdentityFields = emptyObject<IdentityFields>()
   private ownerIdentity: IdentityFields = emptyObject<IdentityFields>()
   private ShoppingActions = ShoppingActions
-  private debug = {}
 
   @Ref('balanceInput') readonly balanceInput
   @Ref('addressInput') readonly addressInput
@@ -348,26 +345,11 @@ export default class AvailableActions extends mixins(
         await this.checkBuyBeforeSubmit()
       }
 
-      this.debug = {
-        state: 'before',
-        accountId: this.accountId,
-        cb,
-        arg,
-      }
-
-      console.log('')
-      console.log('before asdf')
-
       this.howAboutToExecute(
         this.accountId,
         cb,
         [arg],
         (blockNumber: string) => {
-          console.log('asdf')
-          this.debug = {
-            ...this.debug,
-            state: 'after',
-          }
           showNotification(blockNumber, notificationTypes.info)
           if (this.isConsume) {
             this.unpinNFT()
