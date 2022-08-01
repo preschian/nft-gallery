@@ -57,6 +57,7 @@ export default class MetaTransactionMixin extends Mixins(
         showNotification(e.toString(), notificationTypes.danger)
         this.isLoading = false
       }
+      console.error('error hey', e)
     }
   }
 

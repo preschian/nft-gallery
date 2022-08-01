@@ -32,10 +32,21 @@ const exec = async (
     const injector = await getAddress(toDefaultAddress(address))
     const hasCallback = typeof statusCb === 'function'
 
+    alert(JSON.stringify({ injector }))
+
     const options = injector ? { signer: injector.signer } : undefined
     const signer: AddressOrPair = injector
       ? address
       : extractFromKeyring(address, password)
+    console.log()
+    console.log({
+      address,
+      password,
+      injector,
+      hasCallback,
+      options,
+      signer,
+    })
 
     const tx = await transfer.signAsync(signer, options)
     const hash = hasCallback ? await tx.send(statusCb) : await transfer.send()
