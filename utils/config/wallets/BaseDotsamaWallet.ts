@@ -49,6 +49,9 @@ export class BaseDotsamaWallet implements Wallet {
     const injectedWindow = window as Window & InjectedWindow
     const injectedExtension = injectedWindow?.injectedWeb3?.[this.extensionName]
 
+    alert(JSON.stringify({ extensionName: this.extensionName }))
+    alert(JSON.stringify(injectedExtension))
+
     return !!injectedExtension
   }
 
