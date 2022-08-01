@@ -18,6 +18,8 @@ export const getAddress = async (address: string) => {
       return wallet.extension
     }
 
+    alert(JSON.stringify({ address, walletName, wallet }))
+
     throw new Error('Wallet not found')
   } catch (e) {
     console.warn(`[EXTENSION] No Addr ${address}`)
