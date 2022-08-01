@@ -349,6 +349,7 @@ export default class AvailableActions extends mixins(
       }
 
       this.debug = {
+        state: 'before',
         accountId: this.accountId,
         cb,
         arg,
@@ -363,6 +364,10 @@ export default class AvailableActions extends mixins(
         [arg],
         (blockNumber: string) => {
           console.log('asdf')
+          this.debug = {
+            ...this.debug,
+            state: 'after',
+          }
           showNotification(blockNumber, notificationTypes.info)
           if (this.isConsume) {
             this.unpinNFT()
