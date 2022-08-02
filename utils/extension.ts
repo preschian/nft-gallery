@@ -12,8 +12,7 @@ export const getInjectedExtensions = async () => {
 export const getAddress = async (address: string) => {
   try {
     const walletName = localStorage.getItem('wallet')
-    const wallet =
-      getWalletBySource(walletName) || getWalletBySource('polkadot-js')
+    const wallet = getWalletBySource(walletName)
     await wallet?.enable()
 
     alert(JSON.stringify({ walletName }))
