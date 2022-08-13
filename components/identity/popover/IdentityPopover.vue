@@ -35,7 +35,6 @@ import IdentityPopoverFooter from './IdentityPopoverFooter.vue'
 import IdentityPopoverHeader from './IdentityPopoverHeader.vue'
 
 import { Interaction } from '@/components/rmrk/service/scheme'
-import { MintInfo } from '@/store/identityMint'
 
 import { notificationTypes, showNotification } from '@/utils/notification'
 import { formatToNow } from '@/utils/format/time'
@@ -96,31 +95,28 @@ const fetchLastBought = async () => {
   }
 }
 
-const handleNFTStats = async ({
-  data,
-  type,
-}: {
-  data: MintInfo | any
-  type?: 'cache'
-}) => {
+const handleNFTStats = async ({ data, type }) => {
+  totalCreated.value = data.created.totalCount
+  totalCollected.value = data.collected.totalCount
+  totalSold.value = data.sold.totalCount
+
   if (type === 'cache') {
-    totalCreated.value = data.totalCreated
-    totalCollected.value = data.totalCollected
-    totalSold.value = data.totalSold
     firstMintDate.value = data.firstMintDate
   } else if (data) {
-    totalCreated.value = data.created.totalCount
-    totalCollected.value = data.collected.totalCount
-    totalSold.value = data.sold.totalCount
-
     if (data?.firstMint?.length > 0) {
       firstMintDate.value = data.firstMint[0].createdAt
     }
 
     const cacheData = {
-      totalCreated: totalCreated.value,
-      totalCollected: totalCollected.value,
-      totalSold: totalSold.value,
+      created: {
+        totalCount: totalCreated.value,
+      },
+      collected: {
+        totalCount: totalCollected.value,
+      },
+      sold: {
+        totalCount: totalSold.value,
+      },
       firstMintDate: firstMintDate.value,
       updatedAt: Date.now(),
     }
@@ -151,7 +147,7 @@ const fetchNFTStats = async () => {
         },
       })
 
-      handleNFTStats({ data: account })
+      handleNFTStats({ data: account, type: 'fresh' })
     }
   } catch (e) {
     showNotification(`${e}`, notificationTypes.danger)
@@ -161,6 +157,7 @@ const fetchNFTStats = async () => {
 
 watch(address, () => {
   if (address) {
+    fetchLastBought()
     fetchNFTStats()
   }
 })
