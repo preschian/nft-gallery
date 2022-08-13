@@ -14,19 +14,23 @@
       <IdentityPopoverHeader
         :identity="identity"
         :address="shortenedAddress"
-        started-minting=""
-        last-bought="" />
+        :started-minting="startedMinting"
+        :last-bought="lastBought"
+        :total-collected="totalCollected"
+        :total-created="totalCreated" />
       <hr style="height: 1px" class="m-0" />
-      <!-- <IdentityPopoverFooter /> -->
+      <IdentityPopoverFooter
+        :total-collected="totalCollected"
+        :total-created="totalCreated"
+        :total-sold="totalSold" />
     </div>
   </v-tippy>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, onMounted, ref, useNuxtApp } from '#app'
+import { computed, defineProps, onMounted, ref, useNuxtApp, watch } from '#app'
 import { isAfter, subHours } from 'date-fns'
 
-import Identicon from '@polkadot/vue-identicon'
 import IdentityPopoverFooter from './IdentityPopoverFooter.vue'
 import IdentityPopoverHeader from './IdentityPopoverHeader.vue'
 
@@ -34,21 +38,16 @@ import { Interaction } from '@/components/rmrk/service/scheme'
 import { MintInfo } from '@/store/identityMint'
 
 import { notificationTypes, showNotification } from '@/utils/notification'
+import { formatToNow } from '@/utils/format/time'
 import resolveQueryPath from '@/utils/queryPathResolver'
 import shortAddress from '@/utils/shortAddress'
-import shouldUpdate from '@/utils/shouldUpdate'
 
-import CreatedAtMixin from '@/utils/mixins/createdAtMixin'
-import PrefixMixin from '@/utils/mixins/prefixMixin'
 import prefix from '@/utils/hooks/usePrefix'
 
-type Address = string | undefined
-type IdentityFields = Record<string, string>
-
-const { $apollo, $store } = useNuxtApp()
+const { $apollo, $store, $consola } = useNuxtApp()
 
 const props = defineProps<{
-  identity: IdentityFields
+  identity: { [key: string]: string }
 }>()
 
 const totalCreated = ref(0)
@@ -59,22 +58,36 @@ const lastBoughtDate = ref(new Date())
 
 const { client } = prefix()
 
+const address = computed(() => {
+  return props.identity.address
+})
+
 const shortenedAddress = computed(() => {
   return shortAddress(props.identity.address || '')
 })
 
+const startedMinting = computed(() => {
+  return formatToNow(firstMintDate.value)
+})
+
+const lastBought = computed(() => {
+  return formatToNow(lastBoughtDate.value)
+})
+
 onMounted(() => {
-  fetchLastBought()
-  fetchNFTStats()
+  if (address.value) {
+    fetchLastBought()
+    fetchNFTStats()
+  }
 })
 
 const fetchLastBought = async () => {
   const query = await resolveQueryPath(client.value, 'buyEventByProfile')
-  const { data } = await $apollo.query({
+  const { data } = await $apollo.query<{ events: Interaction[] }>({
     query: query.default,
     client: client.value,
     variables: {
-      id: props.identity.address,
+      id: address.value,
     },
   })
 
@@ -83,37 +96,74 @@ const fetchLastBought = async () => {
   }
 }
 
+const handleNFTStats = async ({
+  data,
+  type,
+}: {
+  data: MintInfo | any
+  type?: 'cache'
+}) => {
+  if (type === 'cache') {
+    totalCreated.value = data.totalCreated
+    totalCollected.value = data.totalCollected
+    totalSold.value = data.totalSold
+    firstMintDate.value = data.firstMintDate
+  } else if (data) {
+    totalCreated.value = data.created.totalCount
+    totalCollected.value = data.collected.totalCount
+    totalSold.value = data.sold.totalCount
+
+    if (data?.firstMint?.length > 0) {
+      firstMintDate.value = data.firstMint[0].createdAt
+    }
+
+    const cacheData = {
+      totalCreated: totalCreated.value,
+      totalCollected: totalCollected.value,
+      totalSold: totalSold.value,
+      firstMintDate: firstMintDate.value,
+      updatedAt: Date.now(),
+    }
+
+    await $store.dispatch('identityMint/setIdentity', {
+      address: address.value,
+      cacheData,
+    })
+  }
+}
+
 const fetchNFTStats = async () => {
   try {
     const data = $store.getters['identityMint/getIdentityMintFor'](
-      props.identity.address
+      address.value
     )
 
-    console.log({ data })
-
     // if cache exist and within 12h
-    // if (data?.updatedAt && isAfter(data.updatedAt, subHours(Date.now(), 12))) {
-    //   await handleResult({ data, type: 'cache' })
-    // } else {
-    // const query = await resolveQueryPath(client.value, 'userStatsByAccount')
+    if (data?.updatedAt && isAfter(data.updatedAt, subHours(Date.now(), 12))) {
+      handleNFTStats({ data, type: 'cache' })
+    } else {
+      const query = await resolveQueryPath(client.value, 'userStatsByAccount')
+      const { data: account } = await $apollo.query({
+        query: query.default,
+        client: client.value,
+        variables: {
+          account: address.value,
+        },
+      })
 
-    // $apollo.addSmartQuery('collections', {
-    //   query: query.default,
-    //   manual: true,
-    //   client: client,
-    //   loadingKey: 'isLoading',
-    //   result: handleResult,
-    //   variables: {
-    //     account: props.identity.address || '',
-    //   },
-    //   fetchPolicy: 'cache-and-network',
-    // })
-    // }
+      handleNFTStats({ data: account })
+    }
   } catch (e) {
     showNotification(`${e}`, notificationTypes.danger)
-    // $consola.warn(e)
+    $consola.warn(e)
   }
 }
+
+watch(address, () => {
+  if (address) {
+    fetchNFTStats()
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -126,19 +176,6 @@ const fetchNFTStats = async () => {
 .popover-content-container {
   border: 2px solid $primary;
   max-width: 350px;
-}
-
-.popover-image {
-  min-width: 60px;
-}
-
-.popover-stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.break-word {
-  overflow-wrap: break-word;
 }
 
 .ms-dos-shadow {

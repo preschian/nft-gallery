@@ -34,18 +34,18 @@
           v-clipboard:copy="identity.address"
           @click.native="toast('Copied to clipboard')"></b-icon>
       </p>
-      <!-- <p
+      <p
         class="is-size-7 is-flex is-align-items-center py-3"
         v-if="totalCreated">
         <b-icon icon="clock" size="is-small" />
         <span class="ml-2">Started minting {{ startedMinting }}</span>
-      </p> -->
-      <!-- <p
+      </p>
+      <p
         class="is-size-7 is-flex is-align-items-center py-3"
-        v-if="totalCollected && formattedLastBoughtToNow">
+        v-if="totalCollected && lastBought">
         <b-icon icon="clock" size="is-small" />
         <span class="ml-2">Last bought {{ lastBought }}</span>
-      </p> -->
+      </p>
     </div>
   </div>
 </template>
@@ -59,6 +59,8 @@ defineProps<{
   address: string
   startedMinting: string
   lastBought: string
+  totalCreated?: number
+  totalCollected?: number
 }>()
 
 const { $buefy } = useNuxtApp()
@@ -71,5 +73,13 @@ const toast = (message: string) => {
 <style scoped>
 .copy-icon {
   cursor: pointer;
+}
+
+.popover-image {
+  min-width: 60px;
+}
+
+.break-word {
+  overflow-wrap: break-word;
 }
 </style>

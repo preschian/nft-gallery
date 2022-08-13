@@ -14,3 +14,18 @@
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+defineProps<{
+  totalCollected: number
+  totalCreated: number
+  totalSold: number
+}>()
+</script>
+
+<style scoped>
+.popover-stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+</style>
