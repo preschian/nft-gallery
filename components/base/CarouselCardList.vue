@@ -84,12 +84,9 @@ import PrefixMixin from '@/utils/mixins/prefixMixin'
 import type { CarouselNFT } from './types'
 
 const components = {
-  // Identicon,
-  Loader: () => import('@/components/shared/Loader.vue'),
   Money: () => import('@/components/shared/format/Money.vue'),
   Identity: () => import('@/components/shared/format/Identity.vue'),
   BasicImage: () => import('@/components/shared/view/BasicImage.vue'),
-  Appreciation: () => import('@/components/rmrk/Gallery/Appreciation.vue'),
   PreviewMediaResolver: () =>
     import('@/components/media/PreviewMediaResolver.vue'),
 }

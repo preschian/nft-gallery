@@ -85,16 +85,20 @@
 </template>
 
 <script lang="ts">
-import { Component, mixins, Prop, Watch } from 'nuxt-property-decorator'
-import { notificationTypes, showNotification } from '@/utils/notification'
-import { MintInfo } from '@/store/identityMint'
-import shortAddress from '@/utils/shortAddress'
-import Identicon from '@polkadot/vue-identicon'
-import PrefixMixin from '@/utils/mixins/prefixMixin'
-import CreatedAtMixin from '@/utils/mixins/createdAtMixin'
+import { Component, Prop, Watch, mixins } from 'nuxt-property-decorator'
 import { isAfter, subHours } from 'date-fns'
-import shouldUpdate from '@/utils/shouldUpdate'
+import Identicon from '@polkadot/vue-identicon'
+
+import { MintInfo } from '@/store/identityMint'
+
+import { notificationTypes, showNotification } from '@/utils/notification'
 import resolveQueryPath from '@/utils/queryPathResolver'
+import shortAddress from '@/utils/shortAddress'
+import shouldUpdate from '@/utils/shouldUpdate'
+
+import CreatedAtMixin from '@/utils/mixins/createdAtMixin'
+import PrefixMixin from '@/utils/mixins/prefixMixin'
+
 import { Interaction } from '@/components/rmrk/service/scheme'
 
 type Address = string | undefined
