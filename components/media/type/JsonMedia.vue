@@ -9,25 +9,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+<script lang="ts" setup>
 import api from '@/utils/fetch'
 
-@Component({})
-export default class Unknown extends Vue {
-  @Prop() public src!: string
-  @Prop() public mimeType!: string
-  private data: { key: string; value: string }[] = []
+const { $consola } = useNuxtApp()
+const props = defineProps<{
+  src?: string
+}>()
+const data = ref<{ key: string; value: string }[]>([])
 
-  private async mounted() {
-    if (this.src) {
-      const { data } = await api.get(this.src)
-      this.$consola.log('data', data)
-      this.data = Object.entries(data).map(([key, value]) => ({
+onMounted(async () => {
+  if (props.src) {
+    const { data } = await api.get(props.src)
+    $consola.log('data', data)
+    data.forEach(([key, value]) => {
+      data.push({
         key,
         value: JSON.stringify(value),
-      }))
-    }
+      })
+    })
   }
-}
+})
 </script>
