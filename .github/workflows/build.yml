@@ -13,6 +13,8 @@ jobs:
     container:
       image: cypress/included:10.6.0
       options: --user 1001
+    env:
+      CYPRESS_CACHE_FOLDER: '${GITHUB_WORKSPACE}/.cypress-cache'
     steps:
       - uses: actions/checkout@v3
 
@@ -46,8 +48,6 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
-        env:
-          CYPRESS_CACHE_FOLDER: '${GITHUB_WORKSPACE}/.cypress-cache'
         with:
           project: ./tests
           build: pnpm generate
