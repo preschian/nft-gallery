@@ -72,14 +72,16 @@ describe('Media component', () => {
 
             // same item in related carousel
             cy.getCy('carousel-related').find(tagRelated).should('exist')
+          })
+      })
 
-            // item in collection list
-            cy.getCy('item-collection')
-              .should('exist')
-              .click()
-              .then(() => {
-                cy.getCy(`type-${type}`).should('exist')
-              })
+      it(`should render ${type} in collection list`, () => {
+        // item in collection list
+        cy.getCy('item-collection')
+          .should('exist')
+          .click()
+          .then(() => {
+            cy.getCy(`type-${type}`).should('exist')
           })
       })
     }
