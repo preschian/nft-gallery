@@ -72,18 +72,21 @@ describe('Media component', () => {
 
             // same item in related carousel
             cy.getCy('carousel-related').find(tagRelated).should('exist')
-          })
-      })
 
-      it(`should render ${type} in collection list`, () => {
-        cy.visit(url)
-        cy.getCy('item-collection')
-          .should('exist')
-          .click()
-          .then(() => {
+            // item in collection list
+            cy.getCy('item-collection').should('exist').click()
+            cy.location('pathname').should('include', '/collection/')
             cy.waitForNetworkIdle('+(GET|HEAD)', '*', 1000)
             cy.getCy(`type-${type}`).should('exist')
           })
+      })
+
+      it.skip(`should render ${type} in collection list`, () => {
+        cy.visit(url)
+        cy.getCy('item-collection').should('exist').click()
+        cy.location('pathname').should('include', '/collection/')
+        cy.waitForNetworkIdle('+(GET|HEAD)', '*', 1000)
+        cy.getCy(`type-${type}`).should('exist')
       })
     }
   )
