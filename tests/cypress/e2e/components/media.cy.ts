@@ -76,11 +76,12 @@ describe('Media component', () => {
       })
 
       it(`should render ${type} in collection list`, () => {
-        // item in collection list
+        cy.visit(url)
         cy.getCy('item-collection')
           .should('exist')
           .click()
           .then(() => {
+            cy.waitForNetworkIdle('+(GET|HEAD)', '*', 1000)
             cy.getCy(`type-${type}`).should('exist')
           })
       })
