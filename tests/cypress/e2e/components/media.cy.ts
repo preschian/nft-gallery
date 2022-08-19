@@ -5,7 +5,6 @@ const mediaType = [
     description: 'Mutagen is mined in a Laboratory',
     collection: 'Kusama Ape Game',
     creator: 'Kusama Ape Club',
-    tag: 'img',
     tagRelated: 'img',
     type: 'image',
   },
@@ -15,7 +14,6 @@ const mediaType = [
     description: 'Class: "Zaphkiel" Cruiser',
     collection: 'Budget Spaceships',
     creator: 'cwh',
-    tag: 'model-viewer',
     tagRelated: 'model-viewer',
     type: '3d',
   },
@@ -25,7 +23,6 @@ const mediaType = [
     description: '',
     collection: 'glaciers mood',
     creator: 'fr.om',
-    tag: 'audio',
     tagRelated: 'img',
     type: 'audio',
   },
@@ -35,7 +32,6 @@ const mediaType = [
     description: '',
     collection: '[ polkawear ]',
     creator: 'mad4ox',
-    tag: 'video',
     tagRelated: 'img',
     type: 'video',
   },
@@ -43,16 +39,7 @@ const mediaType = [
 
 describe('Media component', () => {
   mediaType.forEach(
-    ({
-      url,
-      title,
-      description,
-      collection,
-      creator,
-      tag,
-      tagRelated,
-      type,
-    }) => {
+    ({ url, title, description, collection, creator, tagRelated, type }) => {
       it(`should render ${type} in Media component`, () => {
         cy.visit(url)
         cy.getCy(`type-${type}`)
