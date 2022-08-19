@@ -80,14 +80,6 @@ describe('Media component', () => {
             cy.getCy(`type-${type}`).should('exist')
           })
       })
-
-      it.skip(`should render ${type} in collection list`, () => {
-        cy.visit(url)
-        cy.getCy('item-collection').should('exist').click()
-        cy.location('pathname').should('include', '/collection/')
-        cy.waitForNetworkIdle('+(GET|HEAD)', '*', 1000)
-        cy.getCy(`type-${type}`).should('exist')
-      })
     }
   )
 })
