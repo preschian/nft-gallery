@@ -17,7 +17,7 @@ const mediaType = [
     creator: 'cwh',
     tag: 'model-viewer',
     tagRelated: 'model-viewer',
-    type: '3D model',
+    type: '3d',
   },
   {
     url: '/rmrk/gallery/9684463-c8205518d881699b3e-%E2%9D%84%EF%B8%8F-01_FROM_SINGULARITY-0000000000000005',
@@ -41,7 +41,7 @@ const mediaType = [
   },
 ]
 
-describe('render Media.vue component', () => {
+describe('Media component', () => {
   mediaType.forEach(
     ({
       url,
@@ -53,53 +53,47 @@ describe('render Media.vue component', () => {
       tagRelated,
       type,
     }) => {
-      describe(`should render ${type}`, () => {
-        beforeEach(() => {
-          cy.visit(url)
-          cy.waitForNetworkIdle('+(GET|HEAD)', '*', 2000)
-        })
+      it(`should render ${type} in Media component`, () => {
+        cy.visit(url)
+        cy.getCy(`type-${type}`)
+          .should('exist')
+          .then(() => {
+            // title
+            cy.getCy('item-title').should('contain.text', title)
 
-        it('should render item title', () => {
-          cy.getCy('item-title').should('contain.text', title)
-        })
+            // collection name
+            cy.getCy('item-collection').should('contain.text', collection)
 
-        it('should render item collection name', () => {
-          cy.getCy('item-collection').should('contain.text', collection)
-        })
+            // creator name
+            cy.getCy('item-creator').should('contain.text', creator)
 
-        it('should render item creator name', () => {
-          cy.getCy('item-creator').should('contain.text', creator)
-        })
+            cy.get('body').then(($body) => {
+              // owner
+              if ($body.find('[data-cy="item-owner"]').length) {
+                cy.getCy('item-owner')
+                  .find('[data-cy="identity"]')
+                  .should('exist')
+              }
 
-        it('should check owner or description', () => {
-          cy.get('body').then(($body) => {
-            if ($body.find('[data-cy="item-owner"]').length) {
-              cy.getCy('item-owner')
-                .find('[data-cy="identity"]')
-                .should('exist')
-            }
+              // description
+              if ($body.find('[data-cy="item-description"]').length) {
+                cy.getCy('item-description')
+                  .find('.description-wrapper')
+                  .should('contain.text', description)
+              }
+            })
 
-            if ($body.find('[data-cy="item-description"]').length) {
-              cy.getCy('item-description')
-                .find('.description-wrapper')
-                .should('contain.text', description)
-            }
+            // same item in related carousel
+            cy.getCy('carousel-related').find(tagRelated).should('exist')
+
+            // item in collection list
+            cy.getCy('item-collection')
+              .should('exist')
+              .click()
+              .then(() => {
+                cy.getCy(`type-${type}`).should('exist')
+              })
           })
-        })
-
-        it('should render item', () => {
-          cy.getCy('item-media').find(tag).should('exist')
-        })
-
-        it('should render item in related carousel', () => {
-          cy.getCy('carousel-related').find(tagRelated).should('exist')
-        })
-
-        it('should render item in collection list', () => {
-          cy.getCy('item-collection').click()
-          cy.waitForNetworkIdle('+(GET|HEAD)', '*', 1000)
-          cy.getCy('0').find(tag).should('exist')
-        })
       })
     }
   )
