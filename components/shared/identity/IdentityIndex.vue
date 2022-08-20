@@ -60,17 +60,8 @@ const {
   customNameOption: props.customNameOption,
 })
 
-const totalCreated = ref(0)
-const totalCollected = ref(0)
-const firstMintDate = ref(new Date())
-const lastBoughtDate = ref(new Date())
-
 provide('address', props.address)
 provide('shortenedAddress', shortenedAddress.value)
-provide('firstMintDate', firstMintDate)
-provide('lastBoughtDate', lastBoughtDate)
-provide('totalCreated', totalCreated)
-provide('totalCollected', totalCollected)
 provide(
   'identity',
   computed(() => ({
