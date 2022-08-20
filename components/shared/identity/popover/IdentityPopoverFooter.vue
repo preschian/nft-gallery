@@ -78,13 +78,13 @@ const handleNFTStats = async ({ data, type }) => {
 
     const cacheData = {
       created: {
-        totalCount: totalCreated,
+        totalCount: totalCreated.value,
       },
       collected: {
-        totalCount: totalCollected,
+        totalCount: totalCollected.value,
       },
       sold: {
-        totalCount: totalSold,
+        totalCount: totalSold.value,
       },
       firstMintDate: firstMintDate.value,
       updatedAt: Date.now(),
