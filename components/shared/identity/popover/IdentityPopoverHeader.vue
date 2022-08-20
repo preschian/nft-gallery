@@ -4,7 +4,7 @@
       <Identicon
         :size="60"
         :theme="'polkadot'"
-        :value="identity?.address"
+        :value="address"
         class="popover-image avatar mr-5" />
     </div>
     <div class="column is-three-quarters">

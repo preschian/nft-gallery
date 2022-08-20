@@ -46,7 +46,7 @@ export default function useNFTStats({ address }) {
   const { data: stats } = useGraphql({
     queryname: 'userStatsByAccount',
     variables: {
-      account: address,
+      account: address || '',
     },
   })
 

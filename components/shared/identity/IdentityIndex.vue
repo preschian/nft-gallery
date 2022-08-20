@@ -53,7 +53,6 @@ const {
   shortenedAddress,
   twitter,
   discord,
-  display,
   name,
 } = useIdentity({
   address: props.address,
@@ -64,10 +63,6 @@ provide('address', props.address)
 provide('shortenedAddress', shortenedAddress.value)
 provide(
   'identity',
-  computed(() => ({
-    address: props.address,
-    display: display.value,
-    twitter: twitter.value,
-  }))
+  computed(() => identity.value)
 )
 </script>

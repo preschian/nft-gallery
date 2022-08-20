@@ -73,10 +73,6 @@ export default function useIdentity({ address, customNameOption }) {
     return display || shortenedAddress.value
   })
 
-  onMounted(() => {
-    whichIdentity()
-  })
-
   const whichIdentity = async () => {
     const identityCached = await get(resolveAddress(address), identityStore)
 
@@ -91,6 +87,8 @@ export default function useIdentity({ address, customNameOption }) {
       })
     }
   }
+
+  onMounted(whichIdentity)
 
   return {
     identity,

@@ -31,7 +31,11 @@ export default function ({ queryname, variables = {}, options = {} }) {
     }
   }
 
-  doFetch()
+  if (isRef(variables)) {
+    watchEffect(doFetch)
+  } else {
+    doFetch()
+  }
 
   return {
     data,
