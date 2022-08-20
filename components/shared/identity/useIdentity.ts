@@ -89,6 +89,7 @@ export default function useIdentity({ address, customNameOption }) {
   }
 
   onMounted(whichIdentity)
+  watch(address, whichIdentity)
 
   return {
     identity,
