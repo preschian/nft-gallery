@@ -81,6 +81,8 @@ export default function useIdentity({ address, customNameOption }) {
     } else {
       isFetchingIdentity.value = true
 
+      // better if get data from indexer
+      // reference: https://github.com/kodadot/nft-gallery/issues/3783
       onApiConnect(apiUrl.value, async () => {
         identity.value = await fetchIdentity(address)
         isFetchingIdentity.value = false
