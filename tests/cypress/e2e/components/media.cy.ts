@@ -85,6 +85,7 @@ describe('Media component', () => {
         cy.getCy('item-collection').scrollIntoView().click()
         cy.location('pathname').should('include', '/collection/')
         cy.getCy('small-display').click().scrollIntoView()
+        cy.getCy(tagRelated).should('exist')
         cy.waitForNetworkIdle('*', '*', 1000)
         cy.document().then((doc) => {
           const totalItems = doc.querySelectorAll(
