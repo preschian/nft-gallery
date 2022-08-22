@@ -85,7 +85,7 @@ const mediaType = [
   },
 ]
 
-describe('Media component', () => {
+describe.skip('Media component', () => {
   mediaType.forEach(
     ({ url, title, description, collection, creator, tagRelated, type }) => {
       it(`should render ${type} in Media component`, () => {
