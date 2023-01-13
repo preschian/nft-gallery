@@ -1,5 +1,5 @@
 import { $fetch, FetchError } from 'ohmyfetch'
-import { URLS } from '../utils/constants'
+import { URLS } from '@/utils/constants'
 import consola from 'consola'
 import { Metadata } from '@kodadot1/minimark'
 
