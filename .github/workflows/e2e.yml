@@ -18,18 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            .nuxt
-            .output
-            dist
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
