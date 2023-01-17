@@ -8,7 +8,7 @@
       <h1
         class="title is-size-1 is-size-2-mobile has-text-weight-bold has-text-centered"
       >
-        <span>{{ $t('search.landingTitle1') }} 18.04</span>
+        <span>{{ $t('search.landingTitle1') }} 6.22</span>
         {{ $t('search.landingTitle2') }}
         <span> {{ $t('search.landingTitle3') }}</span>
       </h1>
