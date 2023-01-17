@@ -93,6 +93,9 @@ jobs:
         with:
           version: latest
 
+      - name: Install Dependencies
+        run: pnpm install && pnpm cypress install
+
       - name: Cypress run
         run: pnpm start:static & pnpm wait-on http://localhost:9090 && MATRIX=${{ matrix.index }} node tests/cypress/e2e-run-tests.js
 
