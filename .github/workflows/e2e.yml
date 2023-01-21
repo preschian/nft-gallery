@@ -46,7 +46,8 @@ jobs:
       - name: Build App
         run: pnpm generate
 
-      - uses: Cypress run
+      - name: Cypress run
+        uses: Wandalen/wretry.action@master
         with:
           command: pnpm start:static & pnpm wait-on http://localhost:9090 && MATRIX=${{ matrix.index }} node tests/cypress/e2e-run-tests.js
           attempt_limit: 3
