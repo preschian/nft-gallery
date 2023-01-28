@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   },
 
   bridge: {
-    nitro: true,
+    nitro: process.env.NODE_ENV !== 'production',
   },
 
   nitro: {
@@ -337,8 +337,8 @@ export default defineNuxtConfig({
     ],
     extend(config) {
       if (
-        process.env.NODE_ENV !== 'development' &&
-        process.env.SENTRY_AUTH_TOKEN
+        process.env.SENTRY_AUTH_TOKEN &&
+        process.env.NODE_ENV !== 'development'
       ) {
         config.devtool = 'source-map'
 
