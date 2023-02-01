@@ -9,7 +9,8 @@
         "pages/**/*.vue",
         "plugins/**/*.vue",
         "store/**/*.vue"
-      ]
+      ],
+      "outputs": ["dist/**"]
     },
     "test": {},
     "lint": {}
