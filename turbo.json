@@ -3,12 +3,21 @@
   "pipeline": {
     "generate": {
       "inputs": [
-        "components/**/*.vue",
-        "composables/**/*.vue",
-        "layouts/**/*.vue",
-        "pages/**/*.vue",
-        "plugins/**/*.vue",
-        "store/**/*.vue"
+        "assets/*",
+        "components/*",
+        "composables/*",
+        "layouts/*",
+        "locales/*",
+        "middleware/*",
+        "pages/*",
+        "params/*",
+        "plugins/*",
+        "queries/*",
+        "services/*",
+        "static/*",
+        "store/*",
+        "styles/*",
+        "utils/*"
       ],
       "outputs": ["dist/**"]
     },
