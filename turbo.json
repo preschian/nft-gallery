@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "generate": {
+      "inputs": [
+        "components/**/*.vue",
+        "components/**/*.ts",
+        "composables/**/*.ts",
+        "layouts/**/*.vue",
+        "pages/**/*.vue",
+        "plugins/**/*.ts",
+        "store/**/*.ts",
+        "styles/**/*.scss",
+        "utils/**/*.ts"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "test": {},
+    "lint": {}
+  }
+}

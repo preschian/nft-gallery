@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   e2e:
     runs-on: ubuntu-latest
@@ -44,7 +48,7 @@ jobs:
         run: pnpm install && pnpm cypress install
 
       - name: Build App
-        run: pnpm generate
+        run: pnpm turbo:generate
 
       - name: Cypress run
         timeout-minutes: 10
