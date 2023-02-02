@@ -25,7 +25,7 @@
     "build": "nuxi build --modern",
     "start": "nuxi preview",
     "start:static": "npx --yes serve@14.2.0 -L -l 9090 -s dist",
-    "generate:pnpm": "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm generate",
+    "generate:pnpm": "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm turbo:generate",
     "generate": "cross-env NITRO_PRESET=netlify nuxi generate",
     "turbo:generate": "turbo run generate --filter=kodadot-nft-marketplace",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.vue .",
