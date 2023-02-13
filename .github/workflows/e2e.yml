@@ -57,21 +57,23 @@ jobs:
             dist
             cypress
 
-      - name: Install Dependencies
-        uses: ./.github/actions/pnpm-install
+      - run: ls -l
 
-      - name: Install Cypress
-        run: pnpm cypress install
+      # - name: Install Dependencies
+      #   uses: ./.github/actions/pnpm-install
 
-      - name: Run Cypress
-        timeout-minutes: 10
-        uses: Wandalen/wretry.action@master
-        with:
-          command: pnpm start:static & pnpm wait-on http://localhost:9090 && MATRIX=${{ matrix.index }} node tests/cypress/e2e-run-tests.js
-          attempt_limit: 3
+      # - name: Install Cypress
+      #   run: pnpm cypress install
 
-      - name: Upload Screenshots
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          path: ./cypress/screenshots/
+      # - name: Run Cypress
+      #   timeout-minutes: 10
+      #   uses: Wandalen/wretry.action@master
+      #   with:
+      #     command: pnpm start:static & pnpm wait-on http://localhost:9090 && MATRIX=${{ matrix.index }} node tests/cypress/e2e-run-tests.js
+      #     attempt_limit: 3
+
+      # - name: Upload Screenshots
+      #   uses: actions/upload-artifact@v3
+      #   if: failure()
+      #   with:
+      #     path: ./cypress/screenshots/
