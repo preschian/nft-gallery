@@ -59,8 +59,8 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/pnpm-install
 
-      # - name: Install Cypress
-      #   run: pnpm cypress install
+      - name: Install Cypress
+        run: pnpm cypress install
 
       - name: Run Cypress
         timeout-minutes: 10
