@@ -31,7 +31,9 @@ jobs:
       - name: Build App Results
         uses: actions/upload-artifact@v3
         with:
-          path: dist
+          path: |
+            dist
+            cypress
 
   e2e:
     runs-on: ubuntu-latest
@@ -48,7 +50,9 @@ jobs:
       - name: Use Generated App
         uses: actions/download-artifact@v3
         with:
-          path: dist
+          path: |
+            dist
+            cypress
 
       - name: Install Dependencies
         uses: ./.github/actions/pnpm-install
