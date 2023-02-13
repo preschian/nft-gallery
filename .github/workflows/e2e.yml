@@ -53,9 +53,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: generated-dist
-          path: |
-            dist
-            cypress
 
       - run: ls -l
 
