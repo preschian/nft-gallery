@@ -314,6 +314,14 @@ export default defineNuxtConfig({
     // https://github.com/nuxt-community/apollo-module#options
   },
 
+  buildModules: ['nuxt-webpack-optimisations'],
+
+  webpackOptimisations: {
+    features: {
+      esbuildLoader: false,
+    },
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {
