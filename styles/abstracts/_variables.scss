@@ -1,77 +1,77 @@
-@import "initial-variables";
-@import "~bulma/sass/utilities/_all";
-@import "derived-variables";
-@import "theme";
+@import 'initial-variables';
+@import '~~/node_modules/bulma/sass/utilities/_all';
+@import 'derived-variables';
+@import 'theme';
 
 // Setup $colors to use as bulma classes (e.g. "is-twitter")
 $colors: mergeColorMaps(
   (
-    "white": (
+    'white': (
       $white,
       $black,
     ),
-    "black": (
+    'black': (
       $black,
       $white,
     ),
-    "light": (
+    'light': (
       $light,
       $light-invert,
     ),
-    "dark": (
+    'dark': (
       $dark,
       $dark-invert,
     ),
-    "primary": (
+    'primary': (
       $primary,
       $primary-invert,
       $primary-light,
       $primary-dark,
     ),
-    "link": (
+    'link': (
       $link,
       $link-invert,
       $link-light,
       $link-dark,
     ),
-    "info": (
+    'info': (
       $info,
       $info-invert,
       $info-light,
       $info-dark,
     ),
-    "success": (
+    'success': (
       $success,
       $success-invert,
       $success-light,
       $success-dark,
     ),
-    "warning": (
+    'warning': (
       $warning,
       $warning-invert,
       $warning-light,
       $warning-dark,
     ),
-    "danger": (
+    'danger': (
       $danger,
       $danger-invert,
       $danger-light,
       $danger-dark,
     ),
-    "grey": (
+    'grey': (
       $grey-darker,
       $white,
     ),
-    "orange": (
+    'orange': (
       $orange,
       $orange-invert,
       $orange-light,
       $orange-dark,
     ),
-    "neo": (
+    'neo': (
       $white,
       $black,
-    )
+    ),
   ),
   $custom-colors
 );
@@ -175,7 +175,6 @@ $sleek-primary-border: 1px solid $primary;
 
 $table-sticky-header-height: 60vh;
 
-
 $body-family: $family-primary;
 
 $fluid-container-padding: 2.5rem;
@@ -185,14 +184,14 @@ $tooltip-content-zindex: 999;
 
 // Define a list of values for the margin and padding helpers
 $spacing-values: (
-  "0": 0, 
-  "1": 0.25rem, 
-  "2": 0.5rem, 
-  "3": 0.75rem, 
-  "4": 1rem, 
-  "5": 1.5rem, 
-  "6": 2rem, 
-  "7": 2.5rem, 
-  "8": 3rem, 
-  "auto": auto
+  '0': 0,
+  '1': 0.25rem,
+  '2': 0.5rem,
+  '3': 0.75rem,
+  '4': 1rem,
+  '5': 1.5rem,
+  '6': 2rem,
+  '7': 2.5rem,
+  '8': 3rem,
+  'auto': auto,
 ) !default;

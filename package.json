@@ -93,6 +93,7 @@
     "apollo-boost": "^0.4.9",
     "axios": "^0.27.2",
     "buefy": "^0.9.23",
+    "bulma": "0.9.4",
     "chart.js": "^3.9.1",
     "chartjs-adapter-date-fns": "^2.0.1",
     "chartjs-plugin-annotation": "^2.2.1",
@@ -107,8 +108,8 @@
     "lazysizes": "^5.3.2",
     "lodash": "^4.17.21",
     "mingo": "^5.1.0",
+    "nuxt": "^3.4.3",
     "nuxt-buefy": "^0.4.25",
-    "nuxt-edge": "2.16.0-27720022.54e852f",
     "nuxt-property-decorator": "^2.9.1",
     "ohmyfetch": "^0.4.21",
     "pinia-plugin-persistedstate": "^3.1.0",
@@ -138,7 +139,6 @@
     "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@kevinmarrec/nuxt-pwa": "0.15.0",
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-27889410.9247608",
     "@nuxt/test-utils": "^0.2.2",
     "@nuxt/types": "^2.16.3",
     "@nuxtjs/color-mode": "^3.2.0",
@@ -183,14 +183,8 @@
     "wait-on": "^6.0.1"
   },
   "pnpm": {
-    "overrides": {
-      "vue-server-renderer": "2.7.14",
-      "vue-template-compiler": "2.7.14",
-      "h3": "1.1.0"
-    },
     "patchedDependencies": {
-      "vuex@3.6.2": "patches/vuex@3.6.2.patch",
-      "@nuxt/webpack-edge@2.16.0-27720022.54e852f": "patches/@nuxt__webpack-edge@2.16.0-27720022.54e852f.patch"
+      "vuex@3.6.2": "patches/vuex@3.6.2.patch"
     }
   }
 }
