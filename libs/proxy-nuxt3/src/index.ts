@@ -11,14 +11,14 @@ app.get('/:prefix/u/:address', (c) => {
   const prefix = c.req.param('prefix')
   const address = c.req.param('address')
 
-  return fetch(`https://nft-gallery-mirror.pages.dev/${prefix}/u/${address}`)
+  return fetch(`https://marketplace-nuxt3.pages.dev/${prefix}/u/${address}`)
 })
 
 app.get('/blog/*', (c) => {
   // get url pathname
   const pathname = new URL(c.req.url).pathname
 
-  return fetch(`https://nft-gallery-mirror.pages.dev${pathname}`)
+  return fetch(`https://marketplace-nuxt3.pages.dev${pathname}`)
 })
 
 export default app
