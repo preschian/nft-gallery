@@ -173,7 +173,7 @@ export default defineNuxtConfig({
     '~/plugins/vueTippy',
   ],
 
-  serverMiddleware: ['~/server-middleware/check-spa'],
+  // serverMiddleware: ['~/server-middleware/check-spa'],
 
   router: {
     middleware: ['prefix', 'redirects'],
