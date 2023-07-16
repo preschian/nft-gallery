@@ -1,5 +1,3 @@
-import { readParam } from '@/composables/useReplaceUrl'
-
 export const useCollectionSearch = () => {
   const query = useRoute().query
   const route = useRoute()

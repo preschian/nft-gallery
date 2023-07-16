@@ -18,7 +18,6 @@
 <script setup lang="ts">
 import { MediaItem } from '@kodadot1/brick'
 import { sanitizeIpfsUrl } from '@/utils/ipfs'
-import { getNftMetadata } from '@/composables/useNft'
 import { getMimeType } from '@/utils/gallery/media'
 
 import type { NFTWithMetadata } from '@/composables/useNft'

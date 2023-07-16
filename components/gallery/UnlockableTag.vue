@@ -33,8 +33,6 @@
 import { NeoTooltip } from '@kodadot1/brick'
 import { isOwner as checkOwner } from '@/utils/account'
 import { NFT } from '@/components/rmrk/service/scheme'
-import { useWindowSize } from '@vueuse/core'
-import { useUnlockableIcon } from '@/composables/useUnlockableIcon'
 
 const props = defineProps<{
   nft: NFT | undefined

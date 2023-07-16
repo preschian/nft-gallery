@@ -1,10 +1,3 @@
-import {
-  useDebounceFn,
-  useInfiniteScroll,
-  useResizeObserver,
-  useScroll,
-} from '@vueuse/core'
-
 export const INFINITE_SCROLL_CONTAINER_ID = 'infinite-scroll-container'
 export const INFINITE_SCROLL_ITEM_CLASS_NAME = 'infinite-scroll-item'
 

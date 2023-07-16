@@ -1,8 +1,8 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Debounce } from 'vue-debounce-decorator'
 
-export const INFINITE_SCROLL_CONTAINER_ID = 'infinite-scroll-container'
-export const INFINITE_SCROLL_ITEM_CLASS_NAME = 'infinite-scroll-item'
+export const INFINITE_SCROLL_CONTAINER_ID_MIXINS = 'infinite-scroll-container'
+export const INFINITE_SCROLL_ITEM_CLASS_NAME_MIXINS = 'infinite-scroll-item'
 
 type LoadDirection = 'up' | 'down'
 @Component
@@ -19,8 +19,8 @@ export default class InfiniteScrollMixin extends Vue {
   protected prefetchDistance = 1600
   protected isFetchingData = false
   protected disablePrefetchPreviousPage = false
-  protected scrollContainerId = INFINITE_SCROLL_CONTAINER_ID
-  protected scrollItemClassName = INFINITE_SCROLL_ITEM_CLASS_NAME
+  protected scrollContainerId = INFINITE_SCROLL_CONTAINER_ID_MIXINS
+  protected scrollItemClassName = INFINITE_SCROLL_ITEM_CLASS_NAME_MIXINS
 
   protected mounted(): void {
     window.addEventListener('resize', this.onResize)

@@ -69,7 +69,6 @@ import {
 import { SearchQuery } from './types'
 import PrefixMixin from '~/utils/mixins/prefixMixin'
 import KeyboardEventsMixin from '~/utils/mixins/keyboardEventsMixin'
-import { useWindowSize } from '@vueuse/core'
 import { NeoAutocomplete } from '@kodadot1/brick'
 
 @Component({

@@ -66,7 +66,7 @@
 <script lang="ts" setup>
 import { NeoButton, NeoButtonVariant } from '@kodadot1/brick'
 import { usePreferencesStore } from '@/stores/preferences'
-import { SwipeDirection, useSwipe } from '@vueuse/core'
+import { SwipeDirection } from '@vueuse/core'
 
 const router = useRouter()
 const { urlPrefix } = usePrefix()

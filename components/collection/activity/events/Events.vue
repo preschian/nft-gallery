@@ -41,10 +41,8 @@
 
 <script setup lang="ts">
 import EventRow from './EventRow.vue'
-import { useIntersectionObserver } from '@vueuse/core'
 import { Interaction } from '@kodadot1/minimark/v1'
 import { isAnyActivityFilterActive } from '../utils'
-import { useResizeObserver } from '@vueuse/core'
 import { mintInteraction } from '@/composables/collectionActivity/helpers'
 import {
   InteractionWithNFT,

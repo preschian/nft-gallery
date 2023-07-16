@@ -84,7 +84,6 @@
 
 <script setup lang="ts">
 import { NeoButton, NeoTooltip } from '@kodadot1/brick'
-import { onClickOutside } from '@vueuse/core'
 import { warningMessage } from '@/utils/notification'
 import { ShoppingActions } from '@/utils/shoppingActions'
 import { simpleDivision } from '@/utils/balance'

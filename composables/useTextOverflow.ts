@@ -1,4 +1,4 @@
-import { ComponentPublicInstance, Ref, nextTick, ref } from 'vue'
+import { ComponentPublicInstance, Ref } from 'vue'
 
 export function useTextOverflow() {
   const isTextCut: Ref<boolean> = ref(false)

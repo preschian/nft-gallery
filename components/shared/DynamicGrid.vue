@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core'
 import { usePreferencesStore } from '@/stores/preferences'
 
 const props = withDefaults(

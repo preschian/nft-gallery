@@ -28,8 +28,8 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { RmrkType } from '@/components/rmrk/service/scheme'
 import {
-  INFINITE_SCROLL_CONTAINER_ID,
-  INFINITE_SCROLL_ITEM_CLASS_NAME,
+  INFINITE_SCROLL_CONTAINER_ID_MIXINS,
+  INFINITE_SCROLL_ITEM_CLASS_NAME_MIXINS,
 } from '~/utils/mixins/infiniteScrollMixin'
 import { usePreferencesStore } from '@/stores/preferences'
 
@@ -45,8 +45,8 @@ export default class GalleryCardList extends Vue {
   @Prop() public items!: RmrkType[]
   @Prop(Boolean) public horizontalLayout!: boolean
   @Prop(Boolean) public listed!: boolean
-  protected scrollContainerId = INFINITE_SCROLL_CONTAINER_ID
-  protected scrollItemClassName = INFINITE_SCROLL_ITEM_CLASS_NAME
+  protected scrollContainerId = INFINITE_SCROLL_CONTAINER_ID_MIXINS
+  protected scrollItemClassName = INFINITE_SCROLL_ITEM_CLASS_NAME_MIXINS
   private preferencesStore = usePreferencesStore()
 
   get classLayout() {

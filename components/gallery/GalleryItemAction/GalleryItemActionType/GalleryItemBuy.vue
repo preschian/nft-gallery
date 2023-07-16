@@ -61,7 +61,6 @@
 import { NeoButton, NeoTooltip } from '@kodadot1/brick'
 import GalleryItemPriceSection from '../GalleryItemActionSection.vue'
 import GalleryItemActionSlides from '../GalleryItemActionSlides.vue'
-import { onClickOutside } from '@vueuse/core'
 import {
   notificationTypes,
   showNotification,

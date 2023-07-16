@@ -102,7 +102,6 @@
 
 <script setup lang="ts">
 import { NeoAvatar, NeoButton, NeoCollapsible } from '@kodadot1/brick'
-import { useIntersectionObserver } from '@vueuse/core'
 import { NFT, NFTS, Status } from './types'
 import {
   statusClass,
