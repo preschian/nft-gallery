@@ -27,7 +27,7 @@
     "start": "nuxi preview",
     "start:static": "npx --yes serve@14.2.0 -L -l 9090 -s dist",
     "generate:pnpm": "npx pnpm@latest-8 i --store=node_modules/.pnpm-store && npx pnpm@latest-8 generate",
-    "generate": "node ./script/substack.mjs && cross-env NODE_OPTIONS=--openssl-legacy-provider nuxi generate",
+    "generate": "node ./script/substack.mjs && cross-env NODE_OPTIONS=--openssl-legacy-provider NITRO_PRESET=cloudflare-pages nuxi generate",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.vue .",
     "lint:quiet": "eslint --quiet --ignore-path .gitignore --ext .js,.ts,.vue .",
     "lint:fix": "eslint --fix --quiet --ignore-path .gitignore --ext .js,.ts,.vue .",
@@ -139,7 +139,6 @@
     "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-28142286.528efb7",
     "@nuxt/test-utils": "^0.2.2",
     "@nuxt/types": "^2.17.0",
-    "@nuxtjs/color-mode": "^3.3.0",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
     "@rollup/plugin-graphql": "^1.1.0",
     "@sentry/webpack-plugin": "^1.20.1",
@@ -183,7 +182,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@apollo/federation": "0.38.1"
+      "@apollo/federation": "0.38.1",
+      "h3": "1.7.1"
     }
   }
 }
