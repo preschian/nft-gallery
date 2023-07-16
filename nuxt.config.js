@@ -35,7 +35,7 @@ export default defineNuxtConfig({
   },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+  ssr: false, // how to enable SSR
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -172,6 +172,8 @@ export default defineNuxtConfig({
     '~/plugins/vueSocialSharing',
     '~/plugins/vueTippy',
   ],
+
+  serverMiddleware: ['~/server-middleware/check-spa'],
 
   router: {
     middleware: ['prefix', 'redirects'],
