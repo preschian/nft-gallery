@@ -1,13 +1,13 @@
 <template>
   <div>
-    <b-select v-if="!offersListed" v-model="selectedStatus">
+    <NeoSelect v-if="!offersListed" v-model="selectedStatus">
       <option
         v-for="option in getUniqType(offers)"
         :key="option.type"
         :value="option.type">
         {{ option.value }}
       </option>
-    </b-select>
+    </NeoSelect>
     <BasicSwitch
       v-if="!hideToggle"
       v-model="offersListed"
@@ -67,12 +67,11 @@
         v-slot="props"
         :label="$t('offer.action')"
         width="120">
-        <b-button
+        <NeoButton
           v-if="props.row.status === 'ACTIVE'"
-          type="is-orange"
-          outlined
+          no-shadow
           icon-left="times"
-          @click="withdrawOffer(props.row)" />
+          @click.native="withdrawOffer(props.row)" />
       </NeoTableColumn>
     </NeoTable>
   </div>
@@ -81,7 +80,7 @@
 <script lang="ts">
 import { emptyArray } from '@kodadot1/minimark/utils'
 import { Attribute } from '@kodadot1/minimark/common'
-import { NeoTable, NeoTableColumn } from '@kodadot1/brick'
+import { NeoButton, NeoSelect, NeoTable, NeoTableColumn } from '@kodadot1/brick'
 
 import { Component, Emit, Prop, mixins } from 'nuxt-property-decorator'
 import { formatDistanceToNow } from 'date-fns'
@@ -104,6 +103,8 @@ const components = {
   BasicSwitch: () => import('@/components/shared/form/BasicSwitch.vue'),
   NeoTable,
   NeoTableColumn,
+  NeoSelect,
+  NeoButton,
 }
 
 @Component({ components, filters: { formatDistanceToNow } })

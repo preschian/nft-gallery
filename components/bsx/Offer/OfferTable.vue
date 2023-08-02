@@ -11,14 +11,14 @@
       <div v-if="headerText" class="has-text-centered offer-title mb-2">
         {{ headerText }}
       </div>
-      <b-select v-model="selectedStatus">
+      <NeoSelect v-model="selectedStatus">
         <option
           v-for="option in getUniqType(offers)"
           :key="option.type"
           :value="option.type">
           {{ option.value }}
         </option>
-      </b-select>
+      </NeoSelect>
       <NeoTableColumn
         v-if="displayCollection"
         v-slot="props"
@@ -99,17 +99,17 @@
             :label="$t('offer.expired')"
             :active="calcExpirationTime(props.row.expiration) === 'expired'"
             class="mr-2">
-            <b-button
-              type="is-success"
-              outlined
+            <NeoButton
+              variant="success"
+              no-shadow
               icon-left="money-bill"
               :disabled="calcExpirationTime(props.row.expiration) === 'expired'"
               @click="tellFrens(props.row.caller, false)" />
           </NeoTooltip>
-          <b-button
+          <NeoButton
             v-if="props.row.caller === accountId || isOwner"
-            type="is-orange"
-            outlined
+            variant="warning"
+            no-shadow
             icon-left="times"
             @click="tellFrens(props.row.caller, true)" />
         </div>
@@ -152,7 +152,13 @@ import { Offer } from './types'
 import OfferMixin from '@/utils/mixins/offerMixin'
 import PrefixMixin from '@/utils/mixins/prefixMixin'
 import { getKusamaAssetId } from '@/utils/api/bsx/query'
-import { NeoTable, NeoTableColumn, NeoTooltip } from '@kodadot1/brick'
+import {
+  NeoButton,
+  NeoSelect,
+  NeoTable,
+  NeoTableColumn,
+  NeoTooltip,
+} from '@kodadot1/brick'
 
 const components = {
   Identity: () => import('@/components/identity/IdentityIndex.vue'),
@@ -161,6 +167,8 @@ const components = {
   NeoTable,
   NeoTableColumn,
   NeoTooltip,
+  NeoSelect,
+  NeoButton,
 }
 
 @Component({ components, filters: { formatDistanceToNow } })
