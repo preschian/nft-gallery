@@ -4,7 +4,6 @@ yarn.lock
 data_ksmcc2/
 suite/
 
-package-lock.json
 # local env files
 .env.local
 .env.*.local

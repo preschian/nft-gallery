@@ -7,7 +7,7 @@ import Mode from 'frontmatter-markdown-loader/mode'
 import { manifestIcons } from './utils/config/pwa'
 import { URLS, apolloClientConfig } from './utils/constants'
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:9090'
+const baseUrl = process.env.BASE_URL || process.env.CF_PAGES_URL || 'http://localhost:9090'
 
 export default defineNuxtConfig({
   alias: {
@@ -338,7 +338,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    hostname: process.env.BASE_URL || 'http://localhost:9090',
+    hostname: baseUrl,
   },
 
   hooks: {
@@ -443,14 +443,11 @@ export default defineNuxtConfig({
     postcss: null,
   },
 
-  // env: {
-  //   baseUrl : process.env.BASE_URL || 'http://localhost:9090',
-  // },
   // https://nuxtjs.org/docs/configuration-glossary/configuration-env/,
   runtimeConfig: {
     public: {
       prefix: process.env.URL_PREFIX || 'rmrk',
-      baseUrl: process.env.BASE_URL || 'http://localhost:9090',
+      baseUrl: baseUrl,
       googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || '',
       dev: process.env.NODE_ENV === 'development',
     },

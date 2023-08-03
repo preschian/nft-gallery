@@ -1,0 +1,4 @@
+name = "marketplace-proxy"
+compatibility_date = "2023-01-01"
+
+routes = ["preschian.xyz/rmrk/u/*", "preschian.xyz/blog*"]
