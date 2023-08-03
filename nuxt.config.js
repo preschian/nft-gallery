@@ -395,7 +395,7 @@ export default defineNuxtConfig({
         process.env.NODE_ENV !== 'development' &&
         process.env.SENTRY_AUTH_TOKEN
       ) {
-        config.devtool = 'source-map'
+        // config.devtool = 'source-map'
 
         config.plugins.push(
           new SentryWebpackPlugin({
