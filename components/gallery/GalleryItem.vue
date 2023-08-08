@@ -25,11 +25,11 @@
 
           <!-- media item -->
           <div v-if="hasResources" class="gallery-item-carousel">
-            <o-carousel
+            <NeoCarousel
               v-model="activeCarousel"
               indicators-class="mt-4"
               indicator-item-class="mx-1">
-              <o-carousel-item
+              <NeoCarouselItem
                 v-for="resource in nftResources"
                 :key="resource.id">
                 <MediaItem
@@ -38,8 +38,8 @@
                   :mime-type="resource.mimeType"
                   :animation-src="resource.animation"
                   is-detail />
-              </o-carousel-item>
-            </o-carousel>
+              </NeoCarouselItem>
+            </NeoCarousel>
           </div>
           <MediaItem
             v-else
@@ -119,7 +119,7 @@
               class="mt-4" />
 
             <!-- price section -->
-            <GalleryItemAction :nft="nft" @buy-success="onNFTBought" />
+            <GalleryItemAction :nft="nft" />
             <UnlockableTag
               v-if="isUnlockable && !isMobile"
               :link="unlockLink"
@@ -160,8 +160,12 @@
 </template>
 
 <script setup lang="ts">
-import { OCarousel, OCarouselItem } from '@oruga-ui/oruga'
-import { MediaItem, NeoIcon } from '@kodadot1/brick'
+import {
+  MediaItem,
+  NeoCarousel,
+  NeoCarouselItem,
+  NeoIcon,
+} from '@kodadot1/brick'
 
 import { useGalleryItem } from './useGalleryItem'
 
@@ -179,6 +183,7 @@ import { MediaType } from '@/components/rmrk/types'
 import { resolveMedia } from '@/utils/gallery/media'
 import UnlockableTag from './UnlockableTag.vue'
 import { useWindowSize } from '@vueuse/core'
+import { usePreferencesStore } from '@/stores/preferences'
 
 const { urlPrefix } = usePrefix()
 const { $seoMeta } = useNuxtApp()
@@ -187,11 +192,14 @@ const router = useRouter()
 const { placeholder } = useTheme()
 const mediaItemRef = ref<{ isLewdBlurredLayer: boolean } | null>(null)
 const galleryDescriptionRef = ref<{ isLewd: boolean } | null>(null)
+const preferencesStore = usePreferencesStore()
 
 const galleryItem = useGalleryItem()
 const { nft, nftMetadata, nftImage, nftAnimation, nftMimeType, nftResources } =
   galleryItem
 const collection = computed(() => nft.value?.collection)
+
+const triggerBuySuccess = computed(() => preferencesStore.triggerBuySuccess)
 
 const breakPointWidth = 930
 const isMobile = computed(() => useWindowSize().width.value < breakPointWidth)
@@ -234,6 +242,14 @@ const onNFTBought = () => {
   activeTab.value = tabs.activity
   showCongratsMessage.value = true
 }
+
+watch(triggerBuySuccess, (value, oldValue) => {
+  if (value && !oldValue) {
+    onNFTBought()
+    preferencesStore.setTriggerBuySuccess(false)
+  }
+})
+
 const congratsNewNft = ref('')
 
 const CarouselTypeRelated = defineAsyncComponent(

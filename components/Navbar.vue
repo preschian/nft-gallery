@@ -38,9 +38,9 @@
                 ref="mobilSearchRef"
                 hide-filter
                 class="is-flex-grow-1 mt-3" />
-              <b-button class="cancel-btn" @click="hideMobileSearchBar">
+              <button class="cancel-btn p-3" @click="hideMobileSearchBar">
                 {{ $t('cancel') }}
-              </b-button>
+              </button>
             </div>
           </div>
         </div>
@@ -144,6 +144,10 @@
             :show-label="isMobile"
             @closeBurgerMenu="showMobileNavbar" />
 
+          <ShoppingCartButton
+            :show-label="isMobile"
+            @closeBurgerMenu="showMobileNavbar" />
+
           <template v-if="isMobile">
             <template v-if="!account">
               <MobileLanguageOption @closeLanguageOption="showMobileNavbar" />
@@ -204,6 +208,7 @@ import ConnectWalletButton from '@/components/shared/ConnectWalletButton.vue'
 import { useIdentityStore } from '@/stores/identity'
 import { getChainNameByPrefix } from '@/utils/chain'
 import { createVisible, explorerVisible } from '@/utils/config/permision.config'
+import ShoppingCartButton from './navbar/ShoppingCartButton.vue'
 
 const { $buefy, $nextTick } = useNuxtApp()
 const instance = getCurrentInstance()
@@ -241,6 +246,12 @@ const openWalletConnectModal = (): void => {
     parent: instance?.proxy,
     ...ConnectWalletModalConfig,
   } as unknown as BModalConfig)
+
+  // close all modal
+  document.querySelectorAll('.modal').forEach((modal) => {
+    modal.__vue__?.$vnode?.context?.close()
+    modal.remove()
+  })
 }
 
 const showMobileNavbar = () => {
@@ -323,12 +334,20 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep .navbar-explore .o-drop__item {
-  padding: 1.5rem 2rem;
-  min-width: 18.75rem;
+:deep .navbar-explore {
+  .navbar-item {
+    height: 4.5rem;
+  }
+  .o-drop__menu {
+    margin: 0;
+  }
+  .o-drop__item {
+    padding: 1.5rem 2rem;
+    min-width: 18.75rem;
 
-  &:hover {
-    background-color: unset;
+    &:hover {
+      background-color: unset;
+    }
   }
 }
 </style>

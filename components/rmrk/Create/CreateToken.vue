@@ -86,7 +86,6 @@ import AuthMixin from '@/utils/mixins/authMixin'
 import ChainMixin from '@/utils/mixins/chainMixin'
 import MetaTransactionMixin from '@/utils/mixins/metaMixin'
 import PrefixMixin from '@/utils/mixins/prefixMixin'
-import RmrkVersionMixin from '@/utils/mixins/rmrkVersionMixin'
 import UseApiMixin from '@/utils/mixins/useApiMixin'
 import {
   notificationTypes,
@@ -130,7 +129,6 @@ const components = {
 
 @Component({ components })
 export default class CreateToken extends mixins(
-  RmrkVersionMixin,
   MetaTransactionMixin,
   ChainMixin,
   PrefixMixin,
@@ -168,6 +166,10 @@ export default class CreateToken extends mixins(
 
   public updatePrice(value: string) {
     this.price = value
+  }
+
+  get version() {
+    return useRmrkVersion().version.value
   }
 
   get hasPrice() {
@@ -218,10 +220,6 @@ export default class CreateToken extends mixins(
     return balanceInputValid && baseTokenFormValid
   }
 
-  get arweaveUpload(): boolean {
-    return this.preferencesStore.arweaveUpload
-  }
-
   public async submit() {
     if (!this.base.selectedCollection) {
       throw ReferenceError('[MINT] Unable to mint without collection')
@@ -267,8 +265,18 @@ export default class CreateToken extends mixins(
       }
 
       watch([blockNumber, createdNFTs], () => {
-        if (this.hasPrice) {
-          if (blockNumber.value && createdNFTs.value) {
+        if (blockNumber.value && createdNFTs.value) {
+          const isJustNftMint = !this.listed
+          if (isJustNftMint) {
+            setTimeout(
+              () =>
+                this.handleCreatedNftsRedirect(
+                  createdNFTs.value,
+                  blockNumber.value as string
+                ),
+              300
+            )
+          } else if (this.hasPrice) {
             setTimeout(
               () =>
                 this.listForSale(
@@ -317,7 +325,6 @@ export default class CreateToken extends mixins(
         nftId: toNFTId(nft, originalBlockNumber),
       }))
 
-      const isSingle = list.length === 1
       this.isLoading = true
       transaction({
         interaction: Interaction.LIST,
@@ -330,18 +337,27 @@ export default class CreateToken extends mixins(
 
       watch([isLoading, blockNumber], () => {
         if (!isLoading.value && blockNumber.value) {
-          this.navigateToDetail({
-            pageId: isSingle
-              ? list[0].nftId
-              : (this.base.selectedCollection?.id as string),
-            nftName: this.base.name,
-            toCollectionPage: !isSingle,
-          })
+          this.handleCreatedNftsRedirect(createdNFT, originalBlockNumber)
         }
       })
     } catch (e) {
       showNotification((e as Error).message, notificationTypes.warn)
     }
+  }
+
+  protected handleCreatedNftsRedirect(
+    createdNFT: CreatedNFT[] | CreatedNFTV2[],
+    originalBlockNumber: string
+  ) {
+    const nfts = createdNFT.map((nft) => toNFTId(nft, originalBlockNumber))
+
+    const isSingle = nfts.length === 1
+
+    this.navigateToDetail({
+      pageId: isSingle ? nfts[0] : (this.base.selectedCollection?.id as string),
+      nftName: this.base.name,
+      toCollectionPage: !isSingle,
+    })
   }
 
   protected async estimateTx() {
