@@ -64,6 +64,7 @@ useNuxt2Meta({
   .subtitle {
     font-size: 25px;
     margin-bottom: 0;
+    white-space: break-spaces;
   }
 
   h1,
@@ -112,6 +113,10 @@ useNuxt2Meta({
 
     img {
       border: 1px solid theme('border-color');
+    }
+
+    a {
+      color: theme('k-blue');
     }
   }
 
