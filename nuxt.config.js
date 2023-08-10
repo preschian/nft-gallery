@@ -28,6 +28,7 @@ export default defineNuxtConfig({
 
   bridge: {
     nitro: true,
+    imports: false,
   },
 
   nitro: {
