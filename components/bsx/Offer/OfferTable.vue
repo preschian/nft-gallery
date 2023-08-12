@@ -11,14 +11,14 @@
       <div v-if="headerText" class="has-text-centered offer-title mb-2">
         {{ headerText }}
       </div>
-      <b-select v-model="selectedStatus">
+      <NeoSelect v-model="selectedStatus">
         <option
           v-for="option in getUniqType(offers)"
           :key="option.type"
           :value="option.type">
           {{ option.value }}
         </option>
-      </b-select>
+      </NeoSelect>
       <NeoTableColumn
         v-if="displayCollection"
         v-slot="props"
@@ -71,7 +71,7 @@
         field="formatPrice"
         :label="$t('offer.price')"
         sortable>
-        <Money :value="props.row.price" :token-id="assetId" inline />
+        <Money :value="props.row.price" :token-id="tokenId" inline />
       </NeoTableColumn>
       <NeoTableColumn
         v-slot="props"
@@ -99,17 +99,17 @@
             :label="$t('offer.expired')"
             :active="calcExpirationTime(props.row.expiration) === 'expired'"
             class="mr-2">
-            <b-button
-              type="is-success"
-              outlined
+            <NeoButton
+              variant="success"
+              no-shadow
               icon-left="money-bill"
               :disabled="calcExpirationTime(props.row.expiration) === 'expired'"
               @click="tellFrens(props.row.caller, false)" />
           </NeoTooltip>
-          <b-button
+          <NeoButton
             v-if="props.row.caller === accountId || isOwner"
-            type="is-orange"
-            outlined
+            variant="warning"
+            no-shadow
             icon-left="times"
             @click="tellFrens(props.row.caller, true)" />
         </div>
@@ -129,7 +129,7 @@
         :label="$t('nft.offer.date')"
         sortable>
         <p>
-          {{ new Date(props.row.createdAt) | formatDistanceToNow }}
+          {{ timeAgo(new Date(props.row.createdAt).getTime()) }}
         </p>
       </NeoTableColumn>
       <template #empty>
@@ -141,69 +141,116 @@
   </div>
 </template>
 
-<script lang="ts">
-import { emptyArray } from '@kodadot1/minimark/utils'
-import { Attribute } from '@kodadot1/minimark/common'
-import { Component, Emit, Prop, Watch, mixins } from 'nuxt-property-decorator'
-import { Debounce } from 'vue-debounce-decorator'
-import { formatDistanceToNow } from 'date-fns'
+<script setup lang="ts">
+import { AllOfferStatusType } from '@/utils/offerStatus'
+import { formatBsxBalanceToNumber } from '@/utils/format/balance'
+import { endDate, formatSecondsToDuration } from '@/utils/format/time'
+import { timeAgo } from '@/components/collection/utils/timeAgo'
 
 import { Offer } from './types'
-import OfferMixin from '@/utils/mixins/offerMixin'
-import PrefixMixin from '@/utils/mixins/prefixMixin'
-import { getKusamaAssetId } from '@/utils/api/bsx/query'
-import { NeoTable, NeoTableColumn, NeoTooltip } from '@kodadot1/brick'
-
-const components = {
-  Identity: () => import('@/components/identity/IdentityIndex.vue'),
-  Money: () => import('@/components/bsx/format/TokenMoney.vue'),
-  Pagination: () => import('@/components/rmrk/Gallery/Pagination.vue'),
+import {
+  NeoButton,
+  NeoSelect,
   NeoTable,
   NeoTableColumn,
   NeoTooltip,
+} from '@kodadot1/brick'
+
+import Identity from '@/components/identity/IdentityIndex.vue'
+import Money from '@/components/bsx/format/TokenMoney.vue'
+
+withDefaults(
+  defineProps<{
+    offers: Offer[]
+    isOwner: boolean
+    isBsxStats: boolean
+    isCollection: boolean
+    displayCollection: boolean
+    headerText: string
+  }>(),
+  {
+    headerText: '',
+    displayCollection: false,
+  }
+)
+
+const { $route } = useNuxtApp()
+const { urlPrefix, tokenId } = usePrefix()
+const { accountId } = useAuth()
+
+const itemsPerPage = ref(20)
+const currentPage = ref(parseInt($route.query?.page as string) || 1)
+const selectedStatus = ref<AllOfferStatusType>(AllOfferStatusType.ALL)
+
+const emit = defineEmits(['select'])
+const tellFrens = (caller: string, withdraw: boolean) => {
+  emit('select', { caller, withdraw })
 }
 
-@Component({ components, filters: { formatDistanceToNow } })
-export default class OfferTable extends mixins(OfferMixin, PrefixMixin) {
-  @Prop({ type: Array, default: () => emptyArray<Attribute>() })
-  public offers!: Offer[]
-  @Prop(Boolean) public isOwner!: boolean
-  @Prop(Boolean) public isBsxStats!: boolean
-  @Prop({ type: String, default: '' }) public headerText!: string
-  @Prop(Boolean) public isCollection!: boolean
-  @Prop({ type: Boolean, default: false }) public displayCollection!: boolean
-  public currentBlock = 0
-  public itemsPerPage = 20
-  public currentPage = parseInt(this.$route.query?.page as string) || 1
+watch(currentPage, (val) => {
+  replaceUrl(String(val))
+})
 
-  @Emit('select')
-  tellFrens(caller: string, withdraw: boolean) {
-    return {
-      caller,
-      withdraw,
-    }
-  }
-
-  get assetId() {
-    return getKusamaAssetId(this.urlPrefix)
-  }
-
-  @Watch('currentPage')
-  watchPageValue(val) {
-    this.replaceUrl(String(val))
-  }
-
-  @Debounce(100)
-  replaceUrl(value: string, key = 'page') {
-    this.$router
+const replaceUrl = (value: string, key = 'page') => {
+  const { $route, $router, $consola } = useNuxtApp()
+  if ($route.query[key] !== value) {
+    $router
       .replace({
-        path: String(this.$route.path),
-        query: { ...this.$route.query, [key]: value },
+        path: String($route.path),
+        query: { ...$route.query, [key]: value },
       })
-      .catch(this.$consola.warn /*Navigation Duplicate err fix later */)
+      .catch($consola.warn /*Navigation Duplicate err fix later */)
   }
+}
+
+const currentBlock = ref(async () => {
+  const { apiInstance } = useApi()
+  const api = await apiInstance.value
+  const block = await api.rpc.chain.getHeader()
+  return block.number.toNumber()
+})
+
+const getUniqType = (offers: Offer[]) => {
+  const statusSet = new Set(offers.map((offer) => offer.status))
+  const singleEventList = Array.from(statusSet).map((type) => ({
+    type: type as AllOfferStatusType,
+    value: AllOfferStatusType[type],
+  }))
+  return [{ type: AllOfferStatusType.ALL, value: 'All' }, ...singleEventList]
+}
+
+const displayOffers = (offers: Offer[]) => {
+  return offers.map((offer) => ({
+    ...offer,
+    formatPrice: formatBsxBalanceToNumber(offer.price),
+    expirationBlock: parseInt(offer.expiration),
+  }))
+}
+
+const calcSecondsToBlock = (block: number): number => {
+  const secondsForEachBlock = 12
+  return secondsForEachBlock * (block - currentBlock.value)
+}
+
+const calcExpirationTime = (expirationBlock: number): string => {
+  if (currentBlock.value === 0) {
+    return 'computing'
+  }
+  if (currentBlock.value > expirationBlock) {
+    return 'expired'
+  }
+  return formatSecondsToDuration(calcSecondsToBlock(expirationBlock))
+}
+
+const calcExpirationDate = (expirationBlock: number): string => {
+  return endDate(calcSecondsToBlock(expirationBlock))
+}
+
+const isExpired = (expirationBlock: number): boolean => {
+  return currentBlock.value >= expirationBlock
 }
 </script>
+
 <style lang="scss">
 .offer-table-container {
   .scrollable.table-wrapper {

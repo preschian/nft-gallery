@@ -58,7 +58,7 @@ export const useGalleryItem = (nftId?: string): GalleryItem => {
   const queryPath = {
     rmrk: 'chain-rmrk',
     ksm: 'chain-ksm',
-    stmn: 'chain-stmn',
+    ahk: 'chain-ahk',
   }
 
   const { urlPrefix } = usePrefix()
@@ -98,9 +98,9 @@ export const useGalleryItem = (nftId?: string): GalleryItem => {
     const resources = nftEntity.resources?.map((resource) => {
       return {
         ...resource,
-        src: sanitizeIpfsUrl(resource.meta.animationUrl || resource.src),
-        thumb: sanitizeIpfsUrl(resource.thumb || resource.meta.image),
-        animation: sanitizeIpfsUrl(resource.meta.animationUrl),
+        src: sanitizeIpfsUrl(resource.meta?.animationUrl || resource.src),
+        thumb: sanitizeIpfsUrl(resource.thumb || resource.meta?.image),
+        animation: sanitizeIpfsUrl(resource.meta?.animationUrl),
       }
     })
 

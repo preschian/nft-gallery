@@ -6,12 +6,13 @@
       multiple
       class="select-dropdown">
       <template #trigger>
-        <b-button
-          type="is-primary"
+        <NeoButton
+          type="primary"
+          no-shadow
           icon-right="caret-down"
           data-cy="gallery-sort-by">
           {{ $t('sort.collection.sortBy') }}
-        </b-button>
+        </NeoButton>
       </template>
       <NeoDropdownItem
         v-for="action in actions"
@@ -21,7 +22,7 @@
         {{ $t('sort.' + action) }}
       </NeoDropdownItem>
     </NeoDropdown>
-    <b-select
+    <NeoSelect
       v-else
       v-model="selectedAction"
       :placeholder="$t('sort.collection.sortBy')"
@@ -32,7 +33,7 @@
           isCollection ? $t('sort.collection.' + action) : $t('sort.' + action)
         }}
       </option>
-    </b-select>
+    </NeoSelect>
   </NeoField>
 </template>
 
@@ -43,11 +44,19 @@ import {
   NFT_SQUID_SORT_CONDITION_LIST_FOR_MOONRIVER,
 } from '@/utils/constants'
 import PrefixMixin from '@/utils/mixins/prefixMixin'
-import { NeoDropdown, NeoDropdownItem, NeoField } from '@kodadot1/brick'
+import {
+  NeoButton,
+  NeoDropdown,
+  NeoDropdownItem,
+  NeoField,
+  NeoSelect,
+} from '@kodadot1/brick'
 
 @Component({
   components: {
+    NeoButton,
     NeoField,
+    NeoSelect,
     NeoDropdown,
     NeoDropdownItem,
   },

@@ -12,11 +12,11 @@ const DEFAULT_BALANCE_STATE = {
   ksm: '0',
   rmrk: '0',
   snek: '0',
-  stmn: '0',
+  ahk: '0',
   glmr: '0',
   movr: '0',
   dot: '0',
-  stt: '0',
+  ahp: '0',
 }
 
 export interface IdentityMap {
@@ -36,6 +36,7 @@ type ChainType =
   | 'basilisk'
   | 'basilisk-testnet'
   | 'statemine'
+  | 'statemint'
 type ChainDetail = {
   balance: string
   nativeBalance: string
@@ -102,6 +103,7 @@ export const useIdentityStore = defineStore('identity', {
       { chain: 'kusama' },
       { chain: 'statemine' },
       { chain: 'polkadot', token: 'DOT' },
+      { chain: 'statemint', token: 'DOT' },
       { chain: 'basilisk', token: 'BSX' },
       { chain: 'basilisk', token: 'KSM', tokenId: getKusamaAssetId('bsx') },
     ],
@@ -180,7 +182,7 @@ export const useIdentityStore = defineStore('identity', {
     async setAuth(authRequest: Auth) {
       this.auth = { ...authRequest, balance: DEFAULT_BALANCE_STATE }
       await this.fetchBalance({ address: authRequest.address })
-      localStorage.setItem('kodaauth', authRequest.address)
+      localStorage.setItem('kodaauth', authRequest.address || '')
     },
     setBalance(prefix: string, balance: string) {
       if (this.auth.balance) {
