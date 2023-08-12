@@ -131,7 +131,7 @@
     "@babel/plugin-transform-runtime": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
     "@kevinmarrec/nuxt-pwa": "0.15.0",
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-28142286.528efb7",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-28177393.984ce7c",
     "@nuxt/test-utils": "^0.2.2",
     "@nuxt/types": "^2.17.1",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",

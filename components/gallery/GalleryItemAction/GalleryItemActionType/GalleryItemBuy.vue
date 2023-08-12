@@ -57,7 +57,6 @@
 import { NeoButton, NeoTooltip } from '@kodadot1/brick'
 import GalleryItemPriceSection from '../GalleryItemActionSection.vue'
 import { getKusamaAssetId } from '@/utils/api/bsx/query'
-import { openConnectWalletModal } from '@/components/common/ConnectWallet/useConnectWallet'
 import { useIdentityStore } from '@/stores/identity'
 import { useShoppingCartStore } from '@/stores/shoppingCart'
 import { usePreferencesStore } from '@/stores/preferences'
@@ -67,8 +66,6 @@ import { openShoppingCart } from '@/components/common/shoppingCart/ShoppingCartM
 import { NFT } from '@/components/rmrk/service/scheme'
 import { nftToShoppingCardItem } from '@/components/common/shoppingCart/utils'
 import { chainNames } from '@/libs/static/src/chains'
-
-import { useWindowSize } from '@vueuse/core'
 
 const props = defineProps<{ nft: NFT }>()
 const isMobileDevice = computed(() => useWindowSize().width.value < 1024)
