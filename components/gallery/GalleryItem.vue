@@ -182,7 +182,6 @@ import { formatBalanceEmptyOnZero } from '@/utils/format/balance'
 import { MediaType } from '@/components/rmrk/types'
 import { resolveMedia } from '@/utils/gallery/media'
 import UnlockableTag from './UnlockableTag.vue'
-import { useWindowSize } from '@vueuse/core'
 import { usePreferencesStore } from '@/stores/preferences'
 
 const { urlPrefix } = usePrefix()

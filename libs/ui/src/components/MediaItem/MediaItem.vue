@@ -23,8 +23,6 @@
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue'
-
 import { getMimeType, resolveMedia } from '@/utils/gallery/media'
 import NeoIcon from './../NeoIcon/NeoIcon.vue'
 

@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useWindowSize } from '@vueuse/core'
 import type { CarouselNFT } from '@/components/base/types'
 import type { RowSeries } from '@/components/series/types'
 

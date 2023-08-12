@@ -47,7 +47,6 @@
 <script setup lang="ts">
 import { parseNftAvatar } from '@/utils/nft'
 import BasicImage from '@/components/shared/view/BasicImage.vue'
-import { useElementHover } from '@vueuse/core'
 import { NeoButton } from '@kodadot1/brick'
 import { ShoppingCartItem } from './types'
 import CommonTokenMoney from '@/components/shared/CommonTokenMoney.vue'

@@ -1,7 +1,7 @@
 import { sanitizeIpfsUrl } from '@/utils/ipfs'
 import { getMimeType } from '@/utils/gallery/media'
 import { useHistoryStore } from '@/stores/history'
-import { NftResources, getNftMetadata } from '@/composables/useNft'
+import { NftResources } from '@/composables/useNft'
 import useSubscriptionGraphql from '@/composables/useSubscriptionGraphql'
 import type { NFT } from '@/components/rmrk/service/scheme'
 import type { NFTWithMetadata } from '@/composables/useNft'

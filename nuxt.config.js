@@ -27,6 +27,8 @@ export default defineNuxtConfig({
 
   bridge: {
     nitro: true,
+    capi: false,
+    meta: true,
   },
 
   nitro: {
@@ -34,7 +36,7 @@ export default defineNuxtConfig({
   },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+  ssr: false, // how to enable SSR
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -172,6 +174,8 @@ export default defineNuxtConfig({
     '~/plugins/vueTippy',
   ],
 
+  // serverMiddleware: ['~/server-middleware/check-spa'],
+
   router: {
     middleware: ['prefix', 'redirects'],
   },
@@ -242,7 +246,7 @@ export default defineNuxtConfig({
     '@nuxtjs/apollo',
     '@nuxtjs/i18n',
     '@kevinmarrec/nuxt-pwa',
-    '@nuxtjs/color-mode',
+    // '@nuxtjs/color-mode',
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/sitemap',

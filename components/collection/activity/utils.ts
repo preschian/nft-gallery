@@ -1,4 +1,3 @@
-import { readParam } from '@/composables/useReplaceUrl'
 import { mediaAbsoluteDeviation, median } from '@/utils/math'
 
 export type DataPoint = {

@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent } from 'vue'
 import { NeoButton } from '@kodadot1/brick'
 
 const Identity = defineAsyncComponent(

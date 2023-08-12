@@ -18,8 +18,6 @@
 
 <script lang="ts" setup>
 import { NeoTooltip } from '@kodadot1/brick'
-import { useUnlockableIcon } from '@/composables/useUnlockableIcon'
-
 const { unlockableIcon } = useUnlockableIcon()
 </script>
 

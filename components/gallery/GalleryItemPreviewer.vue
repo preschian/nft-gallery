@@ -26,7 +26,6 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
 import { MediaItem, NeoButton, NeoIcon, NeoModal } from '@kodadot1/brick'
 import { GalleryItem } from './useGalleryItem'
 const { placeholder } = useTheme()

@@ -71,7 +71,6 @@ import { useExploreFiltersStore } from '@/stores/exploreFilters'
 import { Collection, usePopularCollections } from './usePopularCollections'
 import { sanitizeIpfsUrl } from '@/utils/ipfs'
 import { getCollectionIds } from '@/utils/queryParams'
-import { useTextOverflow } from '@/composables/useTextOverflow'
 
 const exploreFiltersStore = useExploreFiltersStore()
 const route = useRoute()

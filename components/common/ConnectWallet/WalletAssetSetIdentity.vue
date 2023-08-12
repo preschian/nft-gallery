@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { useStorage } from '@vueuse/core'
-
 const rememberIdentity = useStorage('remember-identity', false)
 </script>
 

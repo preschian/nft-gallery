@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { ZipEntry, unzip } from 'unzipit'
 import { MAX_UPLOADED_FILE_SIZE } from '@/utils/constants'
 export interface FileObject {
