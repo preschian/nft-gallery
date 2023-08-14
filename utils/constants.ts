@@ -40,7 +40,7 @@ export const MAX_UPLOADED_FILE_SIZE = 30
 
 export const URLS = {
   koda: {
-    pinata: 'https://kodadot.mypinata.cloud/ipfs/',
+    pinata: 'https://image.preschian.xyz/ipfs/',
     directUpload: 'https://direct-upload.kodadot.workers.dev/',
     estuary: 'https://pinning.kodadot.workers.dev/',
     nftStorage: 'https://nft-storage.kodadot.workers.dev/',
@@ -57,7 +57,7 @@ export const URLS = {
     speck: 'https://squid.subsquid.io/speck/v/v2/graphql',
     replicate: 'https://replicate.kodadot.workers.dev/',
     search: 'https://polysearch.w.kodadot.xyz',
-    baseUrl: 'https://kodadot.xyz',
+    baseUrl: 'https://preschian.xyz',
   },
   providers: {
     coingecko: 'https://api.coingecko.com/api/v3',

@@ -21,7 +21,7 @@ const ipfsProviders: Partial<Record<IPFSProviders, string>> = {
   cloudflare: 'https://cloudflare-ipfs.com/',
   ipfs: DEFAULT_IPFS_PROVIDER,
   dweb: 'https://dweb.link/',
-  image: kodaImage,
+  image: 'https://image.preschian.xyz/', // test
 }
 export const getIPFSProvider = (providerName: IPFSProviders): string => {
   return ipfsProviders[providerName] || (ipfsProviders['image'] as string)
