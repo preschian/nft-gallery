@@ -244,6 +244,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/ahp/collection/13': { sitemap: { changefreq: 'daily', priority: 0.3 } },
+    '/blog/**': {
+      prerender: true,
+    },
   },
 
   hooks: {
