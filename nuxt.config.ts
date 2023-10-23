@@ -243,6 +243,9 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
+    '/*': {
+      ssr: false,
+    },
     '/ahp/collection/13': { sitemap: { changefreq: 'daily', priority: 0.3 } },
     '/blog/**': {
       ssr: true,
