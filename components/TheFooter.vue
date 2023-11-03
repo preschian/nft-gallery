@@ -88,7 +88,7 @@
         <h2 class="subtitle is-5">
           {{ $t('footer.join') }}
         </h2>
-        <ul class="footer-container-socials-list is-flex">
+        <ul class="footer-container-socials-list is-flex mb-6">
           <li
             v-for="item in socials"
             :key="item.url"
@@ -123,11 +123,22 @@
               </svg>
               <NeoIcon
                 v-else
-                :pack="item.name == 'Swag' ? 'fasr' : 'fab'"
+                :pack="item.pack || item.name == 'Swag' ? 'fasr' : 'fab'"
                 :icon="item.icon" />
             </a>
           </li>
         </ul>
+
+        <a
+          href="https://stellate.co/?ref=powered-by"
+          target="_blank"
+          rel="nofollow noopener noreferrer">
+          <img
+            :src="`https://stellate.co/${
+              isDarkMode ? 'badge-light' : 'badge'
+            }.svg`"
+            alt="Powered by Stellate, the GraphQL API Management platform" />
+        </a>
       </section>
     </div>
     <img src="/blurred-landing-footer.png" class="left-blurred-image" alt="" />
@@ -135,8 +146,9 @@
 </template>
 
 <script lang="ts" setup>
-// import { TranslateResult } from 'vue-i18n/types'
 import { NeoIcon } from '@kodadot1/brick'
+
+const { isDarkMode } = useTheme()
 
 interface Menu {
   name: string
@@ -229,14 +241,15 @@ const socials = [
     icon: 'x-twitter',
   },
   {
-    name: 'Discord',
-    url: 'https://discord.gg/u6ymnbz4PR',
-    icon: 'discord',
+    name: 'Beehiiv',
+    url: 'https://kodadotweeklyroundup.beehiiv.com',
+    icon: 'newspaper',
+    pack: 'fal',
   },
   {
-    name: 'Substack',
-    url: 'https://kodadot.substack.com',
-    icon: 'substack',
+    name: 'Linkedin',
+    url: 'https://www.linkedin.com/company/kodadot',
+    icon: 'linkedin',
   },
   {
     name: 'Medium',

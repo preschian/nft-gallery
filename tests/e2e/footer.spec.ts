@@ -50,38 +50,38 @@ const footerLinks = [
 const footerSocialMediaLinks = [
   {
     linkName: 'Twitter',
-    linkAddress: 'https://twitter.com/KodaDot',
+    linkAddress: 'KodaDot',
   },
   {
-    linkName: 'Discord',
-    linkAddress: 'https://discord.com/invite/u6ymnbz4PR',
+    linkName: 'Beehiiv',
+    linkAddress: 'kodadotweeklyroundup',
   },
   {
-    linkName: 'Substack',
-    linkAddress: 'https://kodadot.substack.com',
+    linkName: 'Linkedin',
+    linkAddress: '/company/kodadot',
   },
-  //{
-  //  linkName: 'Medium',
-  //  linkAddress: 'https://medium.com/kodadot',
-  //},
+  {
+    linkName: 'Medium',
+    linkAddress: 'blog.kodadot.xyz',
+  },
   {
     linkName: 'Youtube',
-    linkAddress: 'https://www.youtube.com/channel/UCEULduld5NrqOL49k1KVjoA/',
+    linkAddress: 'UCEULduld5NrqOL49k1KVjoA',
   },
-  //{
-  //  linkName: 'Instagram',
-  //  linkAddress: 'https://instagram.com/kodadot.xyz',
-  // },
+  {
+    linkName: 'Instagram',
+    linkAddress: 'kodadot.xyz',
+  },
   {
     linkName: 'Reddit',
-    linkAddress: 'https://www.reddit.com/r/KodaDot/',
+    linkAddress: '/r/KodaDot/',
   },
 ]
 
 test('Check Footer Subscription', async ({ page }) => {
   await page.goto('/')
   const footerSubscribe = page.getByTestId('footer-subscribe')
-  await page.getByPlaceholder('jane.doe@kodadot.xyz').fill('a')
+  await footerSubscribe.getByPlaceholder('jane.doe@kodadot.xyz').fill('a')
   await footerSubscribe.locator('button').click()
   await expect(footerSubscribe.locator('.error')).toBeVisible()
 })
@@ -112,7 +112,7 @@ test('Check Social Media Links', async ({ page }) => {
     const newTabPromise = page.waitForEvent('popup')
     await socialMedia.locator(`[aria-label="${data.linkName}"]`).click()
     const newTab = await newTabPromise
-    await expect(newTab).toHaveURL(data.linkAddress)
+    await expect(newTab).toHaveURL(new RegExp(`${data.linkAddress}`))
     await newTab.close()
   }
 })
