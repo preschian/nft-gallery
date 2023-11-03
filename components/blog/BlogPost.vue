@@ -73,7 +73,8 @@ onMounted(() => {
 })
 
 const title = computed(() => post?.title)
-useSeoMeta({
+
+useServerSeoMeta({
   title: title.value,
   description: convertMarkdownToText(post?.subtitle),
   ogUrl: route.path,
