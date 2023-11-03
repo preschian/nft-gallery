@@ -250,13 +250,9 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/*': {
-      ssr: false,
-    },
+    '/blog/**': { ssr: true },
+    '/**': { ssr: false },
     '/ahp/collection/13': { sitemap: { changefreq: 'daily', priority: 0.3 } },
-    '/blog/**': {
-      ssr: true,
-    },
   },
 
   hooks: {
