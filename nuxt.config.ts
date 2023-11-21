@@ -44,9 +44,6 @@ export default defineNuxtConfig({
     appManifest: false,
   },
 
-  // Disable server-side rendering
-  ssr: true,
-
   // Global page headers: https://nuxt.com/docs/api/configuration/nuxt-config#head
   app: {
     head: {
@@ -284,8 +281,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/blog/**': { ssr: true },
-    '/**': { ssr: false },
     '/ahp/collection/13': { sitemap: { changefreq: 'daily', priority: 0.3 } },
   },
 
