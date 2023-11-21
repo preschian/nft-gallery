@@ -1,7 +1,7 @@
 import { pwa } from './utils/config/pwa'
 import { URLS, apolloClientConfig } from './utils/constants'
 import * as fs from 'fs'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+// import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:9090'
 
@@ -20,20 +20,20 @@ export default defineNuxtConfig({
     },
   },
 
-  vite: {
-    build: {
-      sourcemap: false,
-    },
-    plugins: [
-      process.env.NODE_ENV === 'development'
-        ? null
-        : sentryVitePlugin({
-            org: 'kodadot',
-            project: 'nft-gallery',
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-          }),
-    ],
-  },
+  // vite: {
+  //   build: {
+  //     sourcemap: false,
+  //   },
+  //   plugins: [
+  //     process.env.NODE_ENV === 'development'
+  //       ? null
+  //       : sentryVitePlugin({
+  //           org: 'kodadot',
+  //           project: 'nft-gallery',
+  //           authToken: process.env.SENTRY_AUTH_TOKEN,
+  //         }),
+  //   ],
+  // },
 
   nitro: {
     publicAssets: [],
