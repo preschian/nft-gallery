@@ -22,7 +22,7 @@ export default defineNuxtConfig({
 
   vite: {
     build: {
-      sourcemap: true,
+      sourcemap: false,
     },
     plugins: [
       process.env.NODE_ENV === 'development'
