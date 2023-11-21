@@ -1,7 +1,7 @@
 export default defineEventHandler((event) => {
   console.log('event', event.path)
 
-  if (!event.path.includes('/blog')) {
+  if (event.path.includes('/blog')) {
     return
   }
 
