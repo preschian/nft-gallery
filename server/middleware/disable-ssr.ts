@@ -1,7 +1,12 @@
 export default defineEventHandler((event) => {
-  console.log('event', event.path)
+  const ssrPaths = ['/privacy-policy', '/blog']
+  console.log(
+    'event',
+    event.path,
+    ssrPaths.some((path) => event.path.includes(path)),
+  )
 
-  if (event.path.includes('/blog')) {
+  if (ssrPaths.some((path) => event.path.includes(path))) {
     return
   }
 

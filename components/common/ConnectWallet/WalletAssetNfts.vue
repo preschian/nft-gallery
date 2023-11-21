@@ -4,8 +4,8 @@
     <p class="has-text-grey is-size-7 mb-2">Recent NFTs</p>
     <div class="nfts">
       <a
-        v-for="nft in nfts"
-        :key="nft.id"
+        v-for="(nft, index) in nfts"
+        :key="index"
         v-safe-href="`/${urlPrefix}/gallery/${nft.id}`">
         <MediaItem
           :src="sanitizeIpfsUrl(nft.meta.image)"

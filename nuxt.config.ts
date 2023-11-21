@@ -56,56 +56,8 @@ export default defineNuxtConfig({
         { name: 'name', content: 'KodaDot NFT Marketplace' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'format-detection', content: 'telephone=no' },
-        // { property: 'og:site_name', content: 'KodaDot' },
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
         { property: 'og:locale', content: 'en_US' },
-        { property: 'twitter:site', content: '@KodaDot' },
-        {
-          hid: 'twitter:card',
-          name: 'twitter:card',
-          content: 'summary_large_image',
-        },
         { hid: 'og:type', property: 'og:type', content: 'website' },
-        { hid: 'og:url', property: 'og:url', content: baseUrl },
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: 'KodaDot - NFT Market Explorer',
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: `${baseUrl}/k_card.png`,
-        },
-        {
-          hid: 'twitter:url',
-          property: 'twitter:url',
-          content: baseUrl,
-        },
-        {
-          hid: 'twitter:title',
-          property: 'twitter:title',
-          content: 'KodaDot - NFT Market Explorer',
-        },
-        {
-          hid: 'twitter:description',
-          property: 'twitter:description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
-        {
-          hid: 'twitter:image',
-          property: 'twitter:image',
-          content: `${baseUrl}/k_card.png`,
-        },
         baseUrl === URLS.koda.baseUrl
           ? {}
           : {

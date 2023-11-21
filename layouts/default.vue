@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-full is-flex is-flex-direction-column is-clipped">
-    <Navbar />
+    <ClientOnly><Navbar /></ClientOnly>
     <main class="is-flex-grow-1 py-8">
       <div class="container is-fluid">
         <Error
@@ -11,9 +11,11 @@
         <NuxtPage v-else />
       </div>
     </main>
-    <LazyTheFooter />
-    <LazyCookieBanner />
-    <Buy />
+    <ClientOnly>
+      <LazyTheFooter />
+      <LazyCookieBanner />
+      <Buy />
+    </ClientOnly>
   </div>
 </template>
 
