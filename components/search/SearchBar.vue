@@ -6,6 +6,9 @@
       :root-class="`gallery-search ${
         isCollectionSearchMode && 'is-collection-search'
       }`"
+      :class="{
+        'gallery-search--skip-button': isTouchDevice,
+      }"
       :placeholder="placeholderContent"
       icon="search"
       icon-pack="fasr"
@@ -47,11 +50,13 @@
       </svg>
     </div>
     <img
+      v-if="!isTouchDevice"
       class="search-bar-keyboard-icon"
       :class="{ 'is-invisible': name || inputFocused }"
       src="/search-k-keyboard.svg"
       alt="press k to focus search input" />
     <img
+      v-if="!isTouchDevice"
       class="search-bar-keyboard-icon"
       :class="{ 'is-invisible': !name && !inputFocused }"
       src="/k-search-enter.svg"
@@ -65,6 +70,8 @@ import { useCollectionSearch } from '@/components/search/utils/useCollectionSear
 import SearchSuggestion from '@/components/search/SearchSuggestion.vue'
 import { SearchQuery } from './types'
 import type { PropType } from 'vue'
+
+const isTouchDevice = 'ontouchstart' in document.documentElement
 
 const props = defineProps({
   modelValue: {
@@ -81,8 +88,8 @@ const name = useVModel(props, 'modelValue', emits, {
   eventName: 'update:modelValue',
 })
 
-const searchRef = ref<typeof NeoAutocomplete>()
-const searchSuggestionRef = ref<typeof SearchSuggestion>()
+const searchRef = ref<InstanceType<typeof NeoAutocomplete>>()
+const searchSuggestionRef = ref<InstanceType<typeof SearchSuggestion>>()
 const enableSearchInCollection = ref(true)
 const inputFocused = ref(false)
 const { urlPrefix } = usePrefix()
@@ -109,6 +116,8 @@ function exitCollectionSearch() {
 
 function onEnter() {
   closeDropDown()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   searchRef.value?.$refs?.input?.$refs?.input?.blur()
   // insert search term in history
   searchSuggestionRef.value?.insertNewHistory()
@@ -116,6 +125,8 @@ function onEnter() {
 }
 
 function focusInput() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   searchRef.value?.focus()
 }
 
@@ -142,6 +153,8 @@ function bindSearchEvents(event: KeyboardEvent) {
 }
 
 function closeDropDown() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   searchRef.value.isActive = false
 }
 

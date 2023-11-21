@@ -31,12 +31,13 @@ import HeroButtons from '@/components/collection/HeroButtons.vue'
 import { generateCollectionImage } from '@/utils/seoImageGenerator'
 import { convertMarkdownToText } from '@/utils/markdown'
 
+const collectionId = computed(() => route.params.id)
 const route = useRoute()
 const { placeholder } = useTheme()
 const { data } = useGraphql({
   queryName: 'collectionById',
   variables: {
-    id: route.params.id,
+    id: collectionId.value,
   },
 })
 
@@ -102,6 +103,7 @@ useSeoMeta({
   background-size: cover;
   height: 560px;
   position: relative;
+  background-position: 50% 50%;
 
   @include ktheme() {
     border-bottom: 1px solid theme('border-color');
@@ -130,7 +132,7 @@ useSeoMeta({
   }
 
   &-avatar {
-    padding: 0.75rem;
+    padding: 0.625rem;
 
     @include ktheme() {
       border: 1px solid theme('border-color');
@@ -143,13 +145,11 @@ useSeoMeta({
       width: 5.5rem;
       height: 5.5rem;
       border: 1px solid;
-      padding: 1rem;
-      object-fit: contain;
     }
   }
 
   &-name {
-    font-weight: bold;
+    font-weight: 700;
     font-size: 2rem;
     margin-top: 1.5rem;
 

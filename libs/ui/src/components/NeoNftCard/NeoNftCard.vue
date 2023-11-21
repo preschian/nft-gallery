@@ -23,6 +23,8 @@
           :mime-type="nft.mimeType"
           :placeholder="placeholder"
           :title="nft?.name"
+          :preview="mediaStaticVideo"
+          :autoplay="autoplay"
           disable-operation
           :audio-player-cover="mediaPlayerCover"
           :audio-hover-on-cover-play="mediaHoverOnCoverPlay" />
@@ -71,13 +73,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { NeoSkeleton, NftCardVariant } from '@kodadot1/brick'
+import { NeoSkeleton, type NftCardVariant } from '@kodadot1/brick'
 import type { ComputedOptions, ConcreteComponent, MethodOptions } from 'vue'
 
 import MediaItem from '../MediaItem/MediaItem.vue'
 import NFTMediaInfoStacked from './NFTMediaInfoStacked.vue'
 import NFTMediaInfo from './NFTMediaInfo.vue'
-import { NeoNFT } from './types'
+import type { NeoNFT } from './types'
 
 const props = withDefaults(
   defineProps<{
@@ -98,6 +100,7 @@ const props = withDefaults(
     showActionOnHover?: boolean
     mediaPlayerCover?: string
     mediaHoverOnCoverPlay?: boolean
+    mediaStaticVideo?: boolean
     hideMediaInfo?: boolean
     linkTo?: string
   }>(),
@@ -123,6 +126,9 @@ const isStacked = computed(() =>
   props.variant ? props.variant.includes('stacked') : false,
 )
 const isMinimal = props.variant.includes('minimal')
+const autoplay = computed(() =>
+  props.mediaStaticVideo === undefined ? undefined : !props.mediaStaticVideo,
+)
 </script>
 
 <style lang="scss" scoped>

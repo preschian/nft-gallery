@@ -18,15 +18,19 @@
                 custom-class="avatar-image" />
             </div>
 
-            <TimeTag :drop-start-time="drop.dropStartTime" />
+            <TimeTag
+              :drop-start-time="drop.dropStartTime"
+              :ended="availableCount === 0" />
           </div>
         </section>
       </div>
       <div class="py-5 px-6">
         <div
           class="is-flex is-justify-content-space-between flex-direction column-gap">
-          <div class="is-flex is-flex-direction-column column-gap">
-            <span class="has-text-weight-bold">{{ drop.collection.name }}</span>
+          <div class="is-flex is-flex-direction-column column-gap is-ellipsis">
+            <span class="has-text-weight-bold is-ellipsis">{{
+              drop.collection.name
+            }}</span>
             <div v-if="drop.collection.issuer" class="is-flex">
               <div class="mr-2 has-text-grey">
                 {{ $t('activity.creator') }}:
@@ -45,10 +49,7 @@
             <div class="is-flex is-flex-direction-column">
               <div class="has-text-grey">Available</div>
 
-              <div v-if="isFreeDrop">
-                {{ drop.max - drop.minted }}/{{ drop.max }}
-              </div>
-              <div v-else>{{ drop.minted }}/{{ drop.max }}</div>
+              <div>{{ availableCount }}/{{ drop.max }}</div>
             </div>
             <div class="is-flex is-flex-direction-column">
               <span class="has-text-grey">{{ $t('price') }}</span>
@@ -121,6 +122,14 @@ const isFreeDrop = computed(() => {
   return !Number(props.drop?.price)
 })
 
+const availableCount = computed(() => {
+  if (isFreeDrop.value) {
+    return props.drop.max - props.drop.minted
+  } else {
+    return props.drop.minted
+  }
+})
+
 onMounted(async () => {
   if (!props.drop?.collection) {
     return
@@ -133,7 +142,9 @@ onMounted(async () => {
   image.value = sanitizeIpfsUrl(
     metadata.image || metadata.thumbnailUri || metadata.mediaUri || '',
   )
-  externalUrl.value = metadata.external_url || ''
+  externalUrl.value = metadata.external_url?.match('kodadot')
+    ? ''
+    : metadata.external_url
   isLoadingMeta.value = false
 })
 </script>
@@ -199,6 +210,12 @@ onMounted(async () => {
     @include ktheme() {
       border: 1px solid theme('k-shade');
     }
+  }
+}
+// allow text to wrap on mobile
+.is-ellipsis {
+  @include mobile {
+    white-space: unset;
   }
 }
 </style>

@@ -12,7 +12,7 @@
         <div v-else>
           <!-- new header component for collection here -->
           <div v-if="isCollection">
-            <CollectionBanner :key="route.path" />
+            <CollectionBanner />
             <section class="pt-5">
               <div class="container is-fluid mobile-padding">
                 <CollectionInfo />
@@ -27,7 +27,7 @@
             </div>
           </section>
           <hr class="text-color my-0" />
-          <NuxtPage />
+          <NuxtPage :keepalive="keepalive" />
         </div>
       </main>
     </div>
@@ -36,6 +36,8 @@
       <ListingCartMini />
       <ListingCartModal />
     </template>
+
+    <Loader v-model="$loader" :can-cancel="false" />
   </div>
 </template>
 
@@ -51,7 +53,7 @@ const { $config } = useNuxtApp()
 const route = useRoute()
 const { listingCartEnabled } = useListingCartConfig()
 const { urlPrefix } = usePrefix()
-const { $i18n } = useNuxtApp()
+const { $i18n, $loader } = useNuxtApp()
 
 useHead({
   link: [
@@ -67,6 +69,8 @@ const isExplore = computed(() => route.path.includes('/explore'))
 const isCollection = computed(
   () => route.name?.toString().includes('prefix-collection-id'),
 )
+
+const keepalive = computed(() => (isCollection.value ? false : undefined))
 
 const getExploreTitle = computed(() => {
   if (
