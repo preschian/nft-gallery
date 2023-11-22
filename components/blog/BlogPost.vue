@@ -72,13 +72,15 @@ onMounted(() => {
   Prism.highlightAll()
 })
 
+const ogImage = `https://ogi.kodadot.workers.dev/blog/${slug}/__og_image__/og.png`
+
 useSeoMeta({
   description: convertMarkdownToText(post.value?.subtitle),
   ogDescription: convertMarkdownToText(post.value?.subtitle),
-  ogImage: `https://ogi.kodadot.workers.dev/blog/${slug}/__og_image__/og.png`,
+  ogImage: ogImage,
   ogUrl: `${URLS.koda.baseUrl}${route.fullPath}`,
   twitterCard: 'summary_large_image',
-  twitterImage: `https://ogi.kodadot.workers.dev/blog/${slug}/__og_image__/twitter.png`,
+  twitterImage: ogImage,
 })
 </script>
 
