@@ -26,7 +26,6 @@
     "locales:check": "node ./script/checkLocale.mjs",
     "start": "nuxi preview",
     "start:node": "PORT=9090 node .output/server/index.mjs",
-    "generate:script": "node ./script/substack.mjs && cross-env NODE_OPTIONS=--openssl-legacy-provider NITRO_PRESET=netlify nuxi generate",
     "generate": "node ./script/substack.mjs && cross-env NODE_OPTIONS=--openssl-legacy-provider nuxi build",
     "lint": "eslint --cache --ignore-path .gitignore --ext .js,.ts,.vue .",
     "lint:quiet": "eslint --cache --quiet --ignore-path .gitignore --ext .js,.ts,.vue .",
