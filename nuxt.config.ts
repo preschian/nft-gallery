@@ -20,6 +20,10 @@ export default defineNuxtConfig({
     },
   },
 
+  build: {
+    transpile: ['tslib'],
+  },
+
   // vite: {
   //   build: {
   //     sourcemap: false,
@@ -127,10 +131,6 @@ export default defineNuxtConfig({
       },
       {
         path: '~/components/landing',
-        extensions: ['vue'],
-      },
-      {
-        path: '~/components/metadata',
         extensions: ['vue'],
       },
       {
