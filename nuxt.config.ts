@@ -11,6 +11,14 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
   },
 
+  postcss: {
+    plugins: {
+      'tailwindcss/nesting': {},
+      tailwindcss: { config: './libs/ui/tailwind.config.js' },
+      autoprefixer: {},
+    },
+  },
+
   sourcemap: false,
 
   vue: {
@@ -162,6 +170,7 @@ export default defineNuxtConfig({
 
   // Modules: https://nuxt.com/docs/api/nuxt-config#components
   modules: [
+    '@nuxt/image',
     '@nuxtjs/apollo',
     '@nuxtjs/i18n',
     // '@nuxtjs/sentry',
@@ -173,6 +182,16 @@ export default defineNuxtConfig({
     'nuxt-simple-sitemap',
     '@nuxtjs/google-fonts',
   ],
+
+  image: {
+    format: ['avif', 'webp'],
+    providers: {
+      customCloudflare: {
+        provider: '~/providers/cloudflare.ts',
+      },
+    },
+    provider: 'customCloudflare',
+  },
 
   googleFonts: {
     families: {
