@@ -181,6 +181,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-simple-sitemap',
     '@nuxtjs/google-fonts',
+    'nuxt-og-image',
   ],
 
   image: {
