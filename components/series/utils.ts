@@ -1,7 +1,7 @@
 import { RowSeries, SimpleSeriesNFT, SortType } from './types'
 // import formatBalance from '@/utils/format/balance'
 // import * as store from '~/store'
-import { after, between, getVolume, pairListBuyEvent } from '@/utils/math'
+import { after, betweenRange, getVolume, pairListBuyEvent } from '@/utils/math'
 import { eachDayOfInterval, formatISO, subDays } from 'date-fns'
 import { Interaction } from '../rmrk/service/scheme'
 
@@ -29,16 +29,20 @@ export const threeMonthlyVolume = (buyEvents: Interaction[]) =>
   Number(getVolume(buyEvents.filter(after(last3monthDate))))
 
 export const dailyrangeVolume = (buyEvents: Interaction[]) =>
-  Number(getVolume(buyEvents.filter(between(sub2dayDate, yesterdayDate))))
+  Number(getVolume(buyEvents.filter(betweenRange(sub2dayDate, yesterdayDate))))
 
 export const weeklyrangeVolume = (buyEvents: Interaction[]) =>
-  Number(getVolume(buyEvents.filter(between(last2weekDate, lastweekDate))))
+  Number(getVolume(buyEvents.filter(betweenRange(last2weekDate, lastweekDate))))
 
 export const monthlyrangeVolume = (buyEvents: Interaction[]) =>
-  Number(getVolume(buyEvents.filter(between(last2monthDate, lastmonthDate))))
+  Number(
+    getVolume(buyEvents.filter(betweenRange(last2monthDate, lastmonthDate))),
+  )
 
 export const threeMonthRangeVolume = (buyEvents: Interaction[]) =>
-  Number(getVolume(buyEvents.filter(between(last6monthDate, last3monthDate))))
+  Number(
+    getVolume(buyEvents.filter(betweenRange(last6monthDate, last3monthDate))),
+  )
 
 export const nftFn = (a: any): RowSeries => {
   // const metaImage = fetchMetadataImage(a); DO NOT!
