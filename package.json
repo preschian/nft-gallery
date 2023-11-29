@@ -47,8 +47,6 @@
     ]
   },
   "engines": {
-    "npm": "please-use-pnpm",
-    "pnpm": "8",
     "node": "^18"
   },
   "prettier": {
@@ -155,7 +153,8 @@
     "husky": "^7.0.4",
     "jsdom": "^19.0.0",
     "lint-staged": "^12.5.0",
-    "nuxt-nightly": "3.9.0-28346301.c214869e",
+    "nuxi": "^3.10.0",
+    "nuxt": "^3.8.2",
     "nuxt-og-image": "^2.2.4",
     "nuxt-simple-sitemap": "^3.4.1",
     "postcss": "^8.4.31",
@@ -168,9 +167,8 @@
     "vue-eslint-parser": "^9.3.2",
     "vue-gtag": "^2.0.1"
   },
-  "pnpm": {
-    "overrides": {
-      "@apollo/federation": "0.38.1"
-    }
+  "overrides": {
+    "@apollo/federation": "0.38.1",
+    "globby": "13.2.2"
   }
 }
