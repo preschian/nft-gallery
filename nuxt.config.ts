@@ -16,6 +16,10 @@ export default defineNuxtConfig({
       'tailwindcss/nesting': {},
       tailwindcss: { config: './libs/ui/tailwind.config.js' },
       autoprefixer: {},
+      cssnano:
+        process.env.NODE_ENV === 'production'
+          ? { preset: ['default', { discardComments: { removeAll: true } }] }
+          : false, // disable cssnano when not in production
     },
   },
 
