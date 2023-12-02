@@ -53,6 +53,7 @@ export default defineNuxtConfig({
 
   nitro: {
     publicAssets: [],
+    logLevel: 0,
   },
 
   // 🔧 Cloudflare build
@@ -277,12 +278,14 @@ export default defineNuxtConfig({
         // @ts-ignore
         config.build.rollupOptions.output.manualChunks = {
           fontawesome: ['@fortawesome/fontawesome-svg-core'],
-          '@google/model-viewer': ['@google/model-viewer'],
+          three: ['three'],
+          lodash: ['lodash'],
           '@oruga-ui/oruga-next': ['@oruga-ui/oruga-next'],
           '@polkadot/api': ['@polkadot/api'],
           '@polkadot/api-derive': ['@polkadot/api-derive'],
           '@polkadot/types': ['@polkadot/types'],
           '@polkadot/types-known': ['@polkadot/types-known'],
+          '@polkadot/x-global': ['@polkadot/x-global'],
           'vue-tippy': ['vue-tippy'],
         }
       }
