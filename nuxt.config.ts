@@ -36,20 +36,20 @@ export default defineNuxtConfig({
     transpile: ['tslib', 'wavesurfer.js', 'graphql-ws'],
   },
 
-  // vite: {
-  //   build: {
-  //     sourcemap: false,
-  //   },
-  //   plugins: [
-  //     process.env.NODE_ENV === 'development'
-  //       ? null
-  //       : sentryVitePlugin({
-  //           org: 'kodadot',
-  //           project: 'nft-gallery',
-  //           authToken: process.env.SENTRY_AUTH_TOKEN,
-  //         }),
-  //   ],
-  // },
+  vite: {
+    build: {
+      sourcemap: false,
+    },
+    // plugins: [
+    //   process.env.NODE_ENV === 'development'
+    //     ? null
+    //     : sentryVitePlugin({
+    //         org: 'kodadot',
+    //         project: 'nft-gallery',
+    //         authToken: process.env.SENTRY_AUTH_TOKEN,
+    //       }),
+    // ],
+  },
 
   nitro: {
     publicAssets: [],
@@ -261,15 +261,31 @@ export default defineNuxtConfig({
   },
 
   hooks: {
-    sitemap: {
-      generate: {
-        done(nuxtInstance) {
-          fs.copyFileSync(
-            `${nuxtInstance.options.generate.dir}/sitemap.xml`,
-            'public/sitemap.xml',
-          )
-        },
-      },
+    // sitemap: {
+    //   generate: {
+    //     done(nuxtInstance) {
+    //       fs.copyFileSync(
+    //         `${nuxtInstance.options.generate.dir}/sitemap.xml`,
+    //         'public/sitemap.xml',
+    //       )
+    //     },
+    //   },
+    // },
+    'vite:extendConfig'(config, { isClient }) {
+      if (isClient) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        config.build.rollupOptions.output.manualChunks = {
+          fontawesome: ['@fortawesome/fontawesome-svg-core'],
+          '@google/model-viewer': ['@google/model-viewer'],
+          '@oruga-ui/oruga-next': ['@oruga-ui/oruga-next'],
+          '@polkadot/api': ['@polkadot/api'],
+          '@polkadot/api-derive': ['@polkadot/api-derive'],
+          '@polkadot/types': ['@polkadot/types'],
+          '@polkadot/types-known': ['@polkadot/types-known'],
+          'vue-tippy': ['vue-tippy'],
+        }
+      }
     },
   },
 
