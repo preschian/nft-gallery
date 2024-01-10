@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['tslib', 'wavesurfer.js', 'graphql-ws'],
+    transpile: ['tslib', 'wavesurfer.js'],
   },
 
   vite: {
