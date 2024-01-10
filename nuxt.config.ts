@@ -1,7 +1,7 @@
 import { pwa } from './utils/config/pwa'
 import { URLS, apolloClientConfig } from './utils/constants'
 import * as fs from 'fs'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+// import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:9090'
 
@@ -16,6 +16,10 @@ export default defineNuxtConfig({
       'tailwindcss/nesting': {},
       tailwindcss: { config: './libs/ui/tailwind.config.js' },
       autoprefixer: {},
+      cssnano:
+        process.env.NODE_ENV === 'production'
+          ? { preset: ['default', { discardComments: { removeAll: true } }] }
+          : false, // disable cssnano when not in production
     },
   },
 
@@ -28,19 +32,23 @@ export default defineNuxtConfig({
     },
   },
 
+  build: {
+    transpile: ['tslib', 'wavesurfer.js'],
+  },
+
   vite: {
     build: {
-      sourcemap: true,
+      sourcemap: false,
     },
-    plugins: [
-      process.env.NODE_ENV === 'development'
-        ? null
-        : sentryVitePlugin({
-            org: 'kodadot',
-            project: 'nft-gallery',
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-          }),
-    ],
+    // plugins: [
+    //   process.env.NODE_ENV === 'development'
+    //     ? null
+    //     : sentryVitePlugin({
+    //         org: 'kodadot',
+    //         project: 'nft-gallery',
+    //         authToken: process.env.SENTRY_AUTH_TOKEN,
+    //       }),
+    // ],
     // https://github.com/nuxt/nuxt/issues/24196#issuecomment-1825484618
     optimizeDeps:
       process.env.NODE_ENV === 'development'
@@ -76,15 +84,13 @@ export default defineNuxtConfig({
 
   nitro: {
     publicAssets: [],
+    logLevel: 0,
   },
 
   // 🔧 Cloudflare build
   experimental: {
     appManifest: false,
   },
-
-  // Disable server-side rendering
-  ssr: false,
 
   // Global page headers: https://nuxt.com/docs/api/configuration/nuxt-config#head
   app: {
@@ -98,56 +104,8 @@ export default defineNuxtConfig({
         { name: 'name', content: 'KodaDot NFT Marketplace' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'format-detection', content: 'telephone=no' },
-        // { property: 'og:site_name', content: 'KodaDot' },
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
         { property: 'og:locale', content: 'en_US' },
-        { property: 'twitter:site', content: '@KodaDot' },
-        {
-          hid: 'twitter:card',
-          name: 'twitter:card',
-          content: 'summary_large_image',
-        },
         { hid: 'og:type', property: 'og:type', content: 'website' },
-        { hid: 'og:url', property: 'og:url', content: baseUrl },
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: 'KodaDot - NFT Market Explorer',
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: `${baseUrl}/k_card.png`,
-        },
-        {
-          hid: 'twitter:url',
-          property: 'twitter:url',
-          content: baseUrl,
-        },
-        {
-          hid: 'twitter:title',
-          property: 'twitter:title',
-          content: 'KodaDot - NFT Market Explorer',
-        },
-        {
-          hid: 'twitter:description',
-          property: 'twitter:description',
-          content: 'One Stop NFT Shop on Polkadot',
-        },
-        {
-          hid: 'twitter:image',
-          property: 'twitter:image',
-          content: `${baseUrl}/k_card.png`,
-        },
         baseUrl === URLS.koda.baseUrl
           ? {}
           : {
@@ -259,6 +217,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-simple-sitemap',
     '@nuxtjs/google-fonts',
+    'nuxt-og-image',
     '@nuxtjs/device',
   ],
 
@@ -335,15 +294,33 @@ export default defineNuxtConfig({
   },
 
   hooks: {
-    sitemap: {
-      generate: {
-        done(nuxtInstance) {
-          fs.copyFileSync(
-            `${nuxtInstance.options.generate.dir}/sitemap.xml`,
-            'public/sitemap.xml',
-          )
-        },
-      },
+    // sitemap: {
+    //   generate: {
+    //     done(nuxtInstance) {
+    //       fs.copyFileSync(
+    //         `${nuxtInstance.options.generate.dir}/sitemap.xml`,
+    //         'public/sitemap.xml',
+    //       )
+    //     },
+    //   },
+    // },
+    'vite:extendConfig'(config, { isClient }) {
+      if (isClient) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        config.build.rollupOptions.output.manualChunks = {
+          fontawesome: ['@fortawesome/fontawesome-svg-core'],
+          three: ['three'],
+          lodash: ['lodash'],
+          '@oruga-ui/oruga-next': ['@oruga-ui/oruga-next'],
+          '@polkadot/api': ['@polkadot/api'],
+          '@polkadot/api-derive': ['@polkadot/api-derive'],
+          '@polkadot/types': ['@polkadot/types'],
+          '@polkadot/types-known': ['@polkadot/types-known'],
+          '@polkadot/x-global': ['@polkadot/x-global'],
+          'vue-tippy': ['vue-tippy'],
+        }
+      }
     },
   },
 

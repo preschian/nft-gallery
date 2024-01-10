@@ -70,7 +70,7 @@ export const before =
     isBefore(parseISO(event.timestamp), date) ||
     isEqual(parseISO(event.timestamp), date)
 
-export const between =
+export const betweenRange =
   (dateA: Date, dateB: Date) =>
   (event: Interaction): boolean =>
     (isAfter(parseISO(event.timestamp), dateA) ||

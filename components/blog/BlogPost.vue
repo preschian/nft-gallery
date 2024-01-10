@@ -48,7 +48,7 @@ import { URLS } from '@/utils/constants'
 const route = useRoute()
 const slug = route.params.slug
 
-const { data: post } = await useAsyncData('post', () =>
+const { data: post } = await useAsyncData(`post-${slug}`, () =>
   queryContent(`/blog/${slug}`).findOne(),
 )
 
@@ -62,7 +62,7 @@ const openShareUrl = (platform: 'twitter' | 'linkedin') => {
       shareUrl = 'https://www.linkedin.com/shareArticle?mini=true&url='
       break
   }
-  const currentUrl = `${URLS.koda.baseUrl}${location.pathname}`
+  const currentUrl = `${URLS.koda.baseUrl}${route.fullPath}`
 
   window.open(`${shareUrl}${encodeURIComponent(currentUrl)}`, '_blank')
 }
@@ -71,13 +71,18 @@ onMounted(() => {
   Prism.highlightAll()
 })
 
-const title = computed(() => post?.title)
 useSeoMeta({
-  title: title.value,
-  description: convertMarkdownToText(post?.subtitle),
-  ogUrl: route.path,
-  ogImage: post?.image,
-  twitterImage: post?.image,
+  description: convertMarkdownToText(post.value?.subtitle),
+  ogDescription: convertMarkdownToText(post.value?.subtitle),
+  ogTitle: post.value?.title,
+  ogUrl: `${URLS.koda.baseUrl}${route.fullPath}`,
+  twitterCard: 'summary_large_image',
+})
+
+defineOgImage({
+  component: 'OgBlog',
+  title: post.value?.title,
+  image: post.value?.image,
 })
 </script>
 
