@@ -14,35 +14,34 @@
         <ModalIdentityItem />
       </div>
       <div class="py-2">
-        <ConfirmPurchaseItemRow
+        <ConfirmNftPurchaseItemRow
           v-for="nft in items"
           :key="nft.id"
           :nft="nft"
           class="py-2" />
       </div>
+
       <div class="py-4 border-top border-bottom card-border-color">
-        <div
-          class="is-flex is-justify-content-space-between is-align-items-center mb-2">
+        <div class="flex justify-between items-center mb-2">
           <span class="is-size-7">{{
             $t('confirmPurchase.priceForNFTs')
           }}</span>
           <CommonTokenMoney :value="totalNFTsPrice" />
         </div>
-        <div
-          class="is-flex is-justify-content-space-between has-text-grey is-size-7">
+        <div class="flex justify-between has-text-grey is-size-7">
           {{ $t('confirmPurchase.royalties') }}
           <CommonTokenMoney :value="totalRoyalties" />
         </div>
       </div>
-      <div class="is-flex is-justify-content-space-between py-4">
+      <div class="flex justify-between py-4">
         {{ $t('confirmPurchase.youWillPay') }}
-        <div class="is-flex">
+        <div class="flex">
           <CommonTokenMoney :value="total" class="has-text-grey" />
           <span class="has-text-weight-bold ml-2"> {{ priceUSD }}$ </span>
         </div>
       </div>
 
-      <div class="is-flex is-justify-content-space-between pt-5">
+      <div class="flex justify-between pt-5">
         <AutoTeleportActionButton
           ref="autoteleport"
           :amount="total"
@@ -63,7 +62,6 @@ import { sum } from '@/utils/math'
 import { usePreferencesStore } from '@/stores/preferences'
 import { useShoppingCartStore } from '@/stores/shoppingCart'
 import CommonTokenMoney from '@/components/shared/CommonTokenMoney.vue'
-import ConfirmPurchaseItemRow from './ConfirmPurchaseItemRow.vue'
 import { totalPriceUsd } from '../shoppingCart/utils'
 import ModalIdentityItem from '@/components/shared/ModalIdentityItem.vue'
 import { type AutoTeleportAction } from '@/composables/autoTeleport/types'
@@ -83,7 +81,7 @@ const { urlPrefix } = usePrefix()
 const autoteleport = ref()
 const actions = computed(() => [props.action])
 
-const loading = computed(() => !autoteleport.value?.hasBalances)
+const loading = computed(() => !autoteleport.value?.isReady)
 
 const mode = computed(() => prefrencesStore.getCompletePurchaseModal.mode)
 

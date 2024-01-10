@@ -1,5 +1,5 @@
 <template>
-  <NeoNftCard
+  <NftCard
     v-if="entity"
     :nft="entity"
     :link-to="linkTo"
@@ -22,13 +22,13 @@
     :media-static-video="hideVideoControls"
     media-hover-on-cover-play>
     <template v-if="!hideAction" #action>
-      <div v-if="!isOwner && isAvailableToBuy" class="is-flex">
+      <div v-if="!isOwner && isAvailableToBuy" class="flex">
         <NeoButton
           :label="buyLabel"
           data-testid="item-buy"
           no-shadow
           :loading="showActionSection"
-          class="is-flex-grow-1 btn-height"
+          class="flex-grow btn-height"
           loading-with-label
           @click.prevent="onClickBuy">
         </NeoButton>
@@ -47,14 +47,14 @@
             pack="fa-kit" />
         </NeoButton>
       </div>
-      <div v-else-if="isOwner" class="is-flex">
+      <div v-else-if="isOwner" class="flex">
         <template v-if="isStack">
           <NeoButton
             v-if="isThereAnythingToList !== undefined"
             :label="listLabel"
             data-testid="item-buy"
             no-shadow
-            class="is-flex-grow-1 btn-height"
+            class="flex-grow btn-height"
             @click.prevent="onClickListingCart">
           </NeoButton>
         </template>
@@ -64,20 +64,20 @@
             :label="listLabel"
             data-testid="item-buy"
             no-shadow
-            class="is-flex-grow-1 btn-height"
+            class="flex-grow btn-height"
             @click.prevent="onClickListingCart">
           </NeoButton>
         </template>
       </div>
     </template>
-  </NeoNftCard>
+  </NftCard>
 </template>
 
 <script setup lang="ts">
 // PLEASE FIX bind-key href => to
 import { resolveComponent } from 'vue'
-import { NeoButton, NeoIcon, NeoNftCard } from '@kodadot1/brick'
-import type { NftCardVariant } from '@kodadot1/brick'
+import { NeoButton, NeoIcon } from '@kodadot1/brick'
+import type { NftCardVariant } from '@/components/shared/nftCard/types'
 import type { TokenEntity } from '@/composables/useNft'
 import { useShoppingCartStore } from '@/stores/shoppingCart'
 import { useListingCartStore } from '@/stores/listingCart'

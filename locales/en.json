@@ -5,12 +5,17 @@
   "exploreItems": "Explore Items on",
   "exploreCollections": "Explore Collections on",
   "credit": "Credit",
+  "img": "Img",
   "gallery": "Gallery",
   "collection": "Collection",
   "creator": "Creator",
   "collections": "Collections",
   "items": "Items",
   "users": "Users",
+  "burn": "Burn",
+  "purchase": "Purchase",
+  "delete": "Delete",
+  "bridging": "Bridging",
   "recent": "Recent",
   "user": "User",
   "soon": "Soon",
@@ -29,10 +34,10 @@
   "flippers": "Flippers",
   "assets": "Assets",
   "tip": "Tip",
+  "loading": "Loading",
   "useTeleport": "Use Teleport",
   "addFunds": "Add Funds",
   "or": "or",
-  "incomingOffers": "Incoming Offers",
   "transform": "Transform",
   "settings": "Settings",
   "first NFT market explorer on Kusama and Polkadot": "first NFT market explorer on Kusama and Polkadot",
@@ -46,6 +51,7 @@
   "Maximum NFTs in collection": "Maximum NFTs in collection",
   "name": "Name",
   "simple": "Simple",
+  "confirmed": "Confirmed",
   "creative": "Creative",
   "multipleNFTS": "Multiple NFT's",
   "about": "About",
@@ -63,6 +69,7 @@
   "theatre": "theatre",
   "view": "view",
   "price": "Price",
+  "active": "Active",
   "lowestPrice": "Lowest Price",
   "royalty": "royalty",
   "Instance_tooltip": "Instance is like the identifier of an NFT, like a marketplace ticker. It's a \"short computer-friendly name\"",
@@ -139,10 +146,10 @@
   },
   "topCollections": {
     "timeFrames": {
-      "week": "7 Days",
-      "month": "30 Days",
-      "quarter": "90 Days",
-      "all": "All"
+      "week": "7D",
+      "month": "30D",
+      "quarter": "90D",
+      "all": "ALL"
     }
   },
   "funfacts": {
@@ -425,6 +432,8 @@
       "price_DESC": "Price: High to Low",
       "price_ASC": "Price: Low to High",
       "sn_ASC": "Alphabetically",
+      "volume_DESC": "Volume",
+      "highestSale_DESC": "Highest Sale",
       "listed": "Buy now",
       "sortBy": "Sort By"
     }
@@ -591,8 +600,12 @@
     "unlockable": {
       "phaseIntroduction": "We will have a 60-minute window every phase, each featuring only 10 exclusive items.",
       "readyIn": "Your mint will be ready in {0}, DO NOT CLOSE THIS WINDOW",
-      "mintLive": "Free Generative Drop",
-      "mintLiveSmall": "Free Generative Drop",
+      "mintLive": "Generative Drop Minting Now",
+      "mintLiveSmall": "Generative Drop",
+      "freeMintLive": "Free Generative Drop",
+      "freeMintLiveSmall": "Free Generative Drop",
+      "mintedOut": "Generative Drop Minted Out",
+      "mintedOutSmall": "Drop Minted Out",
       "takeMe": "Claim Yours",
       "viewItem": "View Item",
       "preparing": "Preparing Your Item...",
@@ -603,6 +616,10 @@
       "onlyOneExample": "Example Of Drop",
       "mintThisNft": "Mint This NFT",
       "seeYourNft": "See Your NFT",
+      "minimumFundsDescription": "Holding a Minimum of <strong>{0} On {1}</strong> in Your Wallet is Required",
+      "freeMinimumFundsDescription": "Holding a Minimum of <strong>{0} On {1}</strong> in Your Wallet is Required for This Free Mint.",
+      "claimNftNow": "Claim NFT Now",
+      "claimPaidNft": "Claim For {0}",
       "nftAlreadyMinted": "NFT Already Minted",
       "yourVariation": "Your Unique Variation",
       "loader": {
@@ -616,11 +633,26 @@
       },
       "open": "Open",
       "phase": "Mint Phase",
-      "totalAvailableItem": "Total available items",
       "ayeVotersOnly": "For Aye Voters Only",
       "eligible": "You Are Eligible",
       "exclusive": "Exclusive Access Only",
-      "howItemWork": "How unlockable item works"
+      "howItemWork": "How unlockable item works",
+      "checkEligibility": "Check Eligibility",
+      "notEligibility": "Not Eligible",
+      "seeListings": "See Listings",
+      "addFundsModal": {
+        "title": "Action Required",
+        "textP1": "To participate in this free, gasless drop, your wallet must hold a minimum of <strong>{0} on {1}</<strong>",
+        "textP2": "Please add funds to continue",
+        "howToAddFunds": "How to add funds",
+        "tooltip": {
+          "title": "Adding {0} to Your Wallet",
+          "onramp": "<strong>Onramp:</strong> Buy {0} with fiat via onramp in your wallet.",
+          "exchange": "<strong>Exchange:</strong> Purchase on a crypto exchange and transfer to your wallet.",
+          "transfer": "<strong>Transfer:</strong> Move {0} from another account to your wallet.",
+          "note": "Transactions may require a network confirmation"
+        }
+      }
     },
     "blockchain": {
       "label": "Select Blockchain",
@@ -641,7 +673,6 @@
     "buyDisabled": "Not enough balance",
     "holdings": "Nfts owned by",
     "gains": "Gained by",
-    "makeOfferDisabled": "You have already made an offer for this NFT",
     "needToUploadNFTFile": "You need to upload NFT file",
     "failedMaxSize": "Your File is too large",
     "needToSetValidPrice": "To list NFT, price has to be more than 0",
@@ -686,71 +717,22 @@
     "properties": {
       "label": "Attributes"
     },
-    "offer": {
-      "label": "Offers ({0})",
-      "count": "Number of offers {0}",
-      "empty": "There are currently no offers for this NFT.",
-      "item": "Item",
-      "status": "Offer status",
-      "date": "Date",
-      "title": "Global Marketplace Offers"
-    },
     "notification": {
       "nftChanged": "[{chain}::{action}] Owner changed or NFT does not exist",
       "info": "[{action}] NFT: {itemId}"
     }
   },
-  "offer": {
-    "caller": "From",
-    "status": "Status",
-    "withdrawn": "Cancelled",
-    "active": "Active",
-    "accepted": "Accepted",
-    "inactive": "Inactive",
-    "price": "Price",
-    "usdPrice": "USD Price",
-    "expiration": "Expiration",
-    "expired": "offer has expired",
-    "action": "Action",
-    "daySelectLabel": "offer expires in",
-    "daySelectPlaceholder": "select day to expire",
-    "days": "days",
-    "collection": "Collection",
-    "nftName": "Name",
-    "accept": "NFT has new a owner",
-    "withdraw": "your offer has been withdrawn",
-    "burnedToggle": "Show Burned Nfts",
-    "allOffers": "All Offers",
-    "offersCreated": "Offers Created",
-    "incomingOffers": "Incoming Offers",
-    "floorDifferences": "Floor Difference"
-  },
   "statsOverview": {
     "buys": "Buys",
-    "offerStats": {
-      "status": "Status",
-      "totalCount": "Total Count",
-      "totalPrice": "Total price"
-    },
     "listed": "Listed",
     "minted": "Minted",
     "createdCollections": "Created Collections",
     "activeWallets": "Active wallets",
-    "offers": "Offers",
     "values": "VALUES",
-    "bsxTitle": "Basilisk Marketplace Statistics",
     "uniqueOwners": "Unique Owners",
     "highestSale": "Highest Sale",
     "floorPrice": "Floor Price",
     "totalVolume": "Total Volume"
-  },
-  "myOffer": {
-    "bsxTitle": "Incoming Offers",
-    "price": "Amount",
-    "caller": "Offer Maker",
-    "date": "Time",
-    "needLogin": "Connect wallet to see your offers here.",
-    "empty": "There are currently no offers."
   },
   "loader": {
     "broadcast": "Broadcasting the tx to blockchain",
@@ -807,6 +789,9 @@
     "holdings": "Holdings",
     "gains": "Gains",
     "showQr": "Show QR",
+    "searchNoResultsTitle": "No assets on selected chain",
+    "searchNoResultsText": "Explore artist's portfolio on other networks ({0})",
+    "searchNoResultsButton": "Explore on {0}",
     "collectedFromCreator": "Collected {0} NFT(s) from this creator",
     "highestSales": "Highest Sales"
   },
@@ -869,6 +854,7 @@
     "totalItems": "Σ Items",
     "todayTraded": "24H",
     "totalTraded": "Σ VOLUME TRADED",
+    "totalSupply": "Total Supply",
     "highestSale": "HIGHEST SALE",
     "totalBuys": "Σ BUYS",
     "unique": "UNIQUE",
@@ -876,10 +862,10 @@
     "distribution": "DISTRIBUTION",
     "floorPrice": "FLOOR PRICE",
     "floor": "Floor",
-    "bestOffer": "Best Offer",
     "volume": "Volume",
     "network": "Network",
     "creator": "Creator",
+    "listedAndMinted": "Listed/Minted",
     "owned": "Owned",
     "totalBought": "Total Bought",
     "totalSold": "Total Sold",
@@ -920,6 +906,14 @@
   },
   "tutorial": "Tutorial",
   "general": {
+    "subscribing": "Subscribing",
+    "checking": "Checking",
+    "resending": "Resending",
+    "checkAgain": "Check again",
+    "resend": "Resend",
+    "changeIt": "Change it",
+    "nft": "NFT",
+    "nfts": "NFT(s)",
     "apply": "Apply",
     "resetAll": "Reset All",
     "filters": "Filters",
@@ -971,7 +965,8 @@
     "supports": "Supports",
     "chooseProvider": "Choose A Provider",
     "doingSomeMagic": "Doing some magic",
-    "pleaseWait": "Please wait"
+    "pleaseWait": "Please wait",
+    "copy": "Copy"
   },
   "fiatOnRamp": {
     "agree": "I agree to the",
@@ -992,7 +987,8 @@
       "copy": "Kodadot link successfully copied"
     },
     "builtOn": "Built on",
-    "signStuckText": "Stuck? Make sure to check for any popups and SIGN the transaction."
+    "signStuckText": "Stuck? Make sure to check for any popups and SIGN the transaction.",
+    "unlimited": "Unlimited"
   },
   "cookies": {
     "notice": "We use cookies for better service",
@@ -1059,14 +1055,23 @@
     "receiveValue": "You will receive {0} {1} on {2} to",
     "insufficientBalance": "Insufficient {0} Balance",
     "insufficientAmountAfterFees": "Insufficient amount after fees",
-    "proceedToConfirmation":"Proceed To Confirmation",
+    "proceedToConfirmation": "Proceed To Confirmation",
     "artistProfile": "Go to artist's profile",
     "usdInput": "USD Value (approx)",
     "btnCopyPayment": "Copy Payment link",
     "congratsSupport": "Congratulations for supporting",
     "tweetDonation": "Tweet about your awesome donation",
     "donationSentTo": "Your donation will be sent to:",
-    "ownerMessage": "(You Are Owner)"
+    "ownerMessage": "(You Are Owner)",
+    "targetExistentialDepositWarning": "Transferring Less Than {0} {1} (existential deposit) + Fees Will Lead To An Irreversible",
+    "sourceExistentialDepositWarning": "keeping Less Than {0} {1} (existential deposit) + Fees Will Lead To An Irreversible",
+    "fundsAtRisk": "Funds at risk",
+    "fundLossRisk": "Funds Loss Risk",
+    "lossOfFunds": "Loss Of Funds.",
+    "why": "Why?",
+    "existentialDepositTooltip": "Amounts Below {0} + Fees Risk Being Lost. Enter The Minimum To Proceed.",
+    "whatIsExistentialDeposit": "What is Existential Deposit?",
+    "checkboxLabel": "I understand this action will lead to an irreversible loss of funds."
   },
   "preferences": {
     "basic": "basic user interface",
@@ -1086,8 +1091,6 @@
   "navbar": {
     "teleport": "Teleport",
     "teleportBridge": "Teleport Bridge",
-    "globalOffers": "Global Offers",
-    "offerStats": "Offers Stats",
     "create": {
       "waifu": "Waifu",
       "generateWaifu": "Generate Waifu",
@@ -1202,8 +1205,6 @@
     "description": "Description",
     "details": "Details",
     "parent": "Parent",
-    "offers": "Offers",
-    "offersDisabled": "Offers Are Not Available on this chain",
     "activity": "Activity",
     "chart": "Chart",
     "rarity": "Rarity by Kodadot",
@@ -1269,10 +1270,6 @@
     "consume": {
       "success": "Item burned",
       "error": "Failed to burn item"
-    },
-    "offer": {
-      "success": "Offer successfully created",
-      "error": "Offer creation failed"
     },
     "unlist": {
       "success": "Item successfully unlisted",
@@ -1364,12 +1361,15 @@
   "filters": {
     "buy": "Buy",
     "sale": "Sale",
-    "offer": "Offer",
     "acceptedOffer": "Accepted offer",
     "listing": "Listing",
     "mint": "Mint",
     "transfer": "Transfer",
-    "artView": "Art View"
+    "artView": "Art View",
+    "offer": "Offer",
+    "verified": "Verified",
+    "onlyVerifiedIdentities": "Only Verified Identities",
+    "identityVerification": "Identity Verification"
   },
   "redirect": {
     "title": "Leaving Kodadot",
@@ -1417,7 +1417,39 @@
     "enterValidEmail": "Enter valid email address",
     "subscribeAndClaim": "Subscribe & Claim your NFT",
     "agreeToProceed": "Agree to proceed",
-    "consent": "I consent to receive updates."
+    "consent": "I consent to receive updates.",
+    "plusGetA": "+ Get a",
+    "voucherToOurShop": "Voucher to our shop",
+    "justConfirmSubscriptionViaEmail": "Just confirm your subscription via email",
+    "claimingDrop": "Claiming drop",
+    "stayTuned": "Stay tuned — Your unique NFT is finalizing!",
+    "preparingYourNft": "Preparing Your NFT",
+    "youSuccessfullyClaimedNft": "You successfully claimed {0} NFT",
+    "artBy": "{0} By",
+    "viewNft": "View NFT",
+    "listNft": "List NFT",
+    "canList": "NFT ready for listing!",
+    "teleportRequiredAmount": "Teleport required amount",
+    "claimFree": "Claim free",
+    "claim": "Claim",
+    "checkYourEmail": "Check your email",
+    "toConfirmYourSubscription": "To confirm your subscription and claim free NFT.",
+    "iveConfirmed": "I've confirmed",
+    "emailNotConfirmed": "Email not confirmed. Please confirm your email address and check again",
+    "noEmail": "No email?",
+    "checkSpamFolder": "Or check your Spam folder.",
+    "wrongEmail": "Wrong email?",
+    "confirmYourSubscription": "Confirm Your Subscription",
+    "emailConfirmationSent": "Email confirmation sent",
+    "failedEmailConfirmation": "Failed sending email confirmation",
+    "failedCheckingSubscription": "Failed checking subscription",
+    "holderOfClaimed": "{0} drop already claimed with this NFT. Claim rights are not renewed after resale.",
+    "mintDrop": "Mint Drop",
+    "yourWalletNeeds": "Your wallet needs a minimum of {0} to claim this drop.",
+    "pleaseAddFunds": "Please add funds to proceed.",
+    "youCanContinueWithAutoteleport": "You can continue with Auto Teleport enabled.",
+    "proceedToSigning": "Proceed to signing",
+    "signTransaction": "Sign Transaction"
   },
   "confirmPurchase": {
     "action": "Confirm Purchase",
@@ -1452,6 +1484,7 @@
     "fixedPrice": "Fixed Price",
     "collectionFloorPrice": "Collection Floor Price",
     "potentialEarnings": "Potential Earnings",
+    "listingFees": "Listing Fees",
     "listForSale": "List For Sale",
     "chooseAPrice": "Choose a price",
     "floorPrice": "Floor Price",
@@ -1498,8 +1531,6 @@
       "cta": "Migrate Items",
       "own": "You Own <strong>{0}</strong> From This Collection"
     },
-    "migrationNotPossible": "Migration Not Possible:",
-    "migrationNotPossibleLabel": "Migration Is <strong>Not Possible</strong> For  Following Collections That You Own:",
     "homeButton": "Migration Homepage",
     "review": "Review",
     "reviewCtaUncheck": "Acknowledge Before Proceeding",
@@ -1602,52 +1633,38 @@
       },
       "buy": {
         "confirm": "Teleport And Confirm Purchase",
-        "action": "Purchase",
-        "item": "NFT",
-        "title": "Buying NFT",
-        "submit": "Buying NFT..."
+        "title": "Buying NFT"
       },
       "list": {
         "confirm": "Teleport And Confirm Listing(s)",
-        "action": "List",
-        "item": "NFT(s)",
-        "title": "Listing NFT",
-        "submit": "Listing NFT..."
+        "title": "Listing NFT"
       },
       "mint": {
         "confirm": "Teleport and Create Collection",
-        "action": "Create",
-        "item": "Collection",
-        "title": "Minting NFT Collection",
-        "submit": "Minting NFT Collection..."
+        "title": "Minting NFT Collection"
+      },
+      "free_drop": {
+        "confirm": "Teleport required amount"
+      },
+      "paid_drop": {
+        "confirm": "Teleport and claim NFT",
+        "title": "Minting NFT"
       },
       "mintnft": {
         "confirm": "Teleport and Mint NFT",
-        "action": "Mint",
-        "item": "NFT",
-        "title": "Minting NFT",
-        "submit": "Minting NFT..."
+        "title": "Minting NFT"
       },
       "send": {
         "confirm": "Teleport and Transfer NFT",
-        "action": "Transfer",
-        "item": "NFT",
-        "title": "Transferring NFT",
-        "submit": "Transferring NFT..."
+        "title": "Transferring NFT"
       },
       "delete": {
         "confirm": "Teleport and Delete Collection",
-        "action": "Delete",
-        "item": "Collection",
-        "title": "Deleting Collection",
-        "submit": "Deleting Collection..."
+        "title": "Deleting Collection"
       },
       "consume": {
         "confirm": "Teleport and Burn NFT",
-        "action": "Burn",
-        "item": "NFT",
-        "title": "Burning NFT",
-        "submit": "Burning NFT..."
+        "title": "Burning NFT"
       }
     }
   },

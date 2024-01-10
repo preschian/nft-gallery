@@ -15,7 +15,7 @@
       <NeoDropdownItem
         v-for="range in timeRangeList"
         :key="range.value"
-        class="is-flex is-justify-content-center px-0 is-align-items-center"
+        class="flex justify-center items-center"
         :active="selectedTimeRange.value === range.value"
         :value="selectedTimeRange"
         @click="setTimeRange({ value: range.value, label: range.label })">
@@ -37,22 +37,24 @@
         </NeoButton>
       </template>
 
-      <NeoDropdownItem class="px-4 py-3 no-hover">
-        <div
-          class="w-full is-flex is-justify-content-space-between is-align-items-center">
-          <div class="no-wrap mr-5 is-size-7">
+      <NeoDropdownItem class="no-hover px-0 py-0">
+        <div class="w-full flex justify-between items-center">
+          <NeoCheckbox
+            v-model="vHideOutliers"
+            class="m-0 no-wrap"
+            root-class="flex-auto px-4 py-3">
             {{ $t('activity.hideOutliers') }}
-          </div>
-          <NeoCheckbox v-model="vHideOutliers" class="m-0" />
+          </NeoCheckbox>
         </div>
       </NeoDropdownItem>
-      <NeoDropdownItem class="px-4 py-3 no-hover">
-        <div
-          class="w-full is-flex is-justify-content-space-between is-align-items-center">
-          <div class="no-wrap mr-5 is-size-7">
+      <NeoDropdownItem class="no-hover px-0 py-0">
+        <div class="w-full flex justify-between items-center">
+          <NeoCheckbox
+            v-model="vApplySmoothing"
+            class="m-0 no-wrap"
+            root-class="flex-auto px-4 py-3">
             {{ $t('activity.applySmoothing') }}
-          </div>
-          <NeoCheckbox v-model="vApplySmoothing" class="m-0" />
+          </NeoCheckbox>
         </div>
       </NeoDropdownItem>
     </NeoDropdown>
@@ -77,36 +79,8 @@ import {
   NeoIcon,
 } from '@kodadot1/brick'
 import { useEventListener, useVModel } from '@vueuse/core'
+
 ChartJS.register(zoomPlugin)
-const { $i18n } = useNuxtApp()
-const { chainSymbol } = useChain()
-const { isDarkMode } = useTheme()
-const daysTranslation = (day: number) => $i18n.t('priceChart.days', [day])
-
-const timeRangeList = [
-  {
-    value: 0,
-    label: $i18n.t('priceChart.all'),
-  },
-  {
-    value: 14,
-    label: daysTranslation(14),
-  },
-  {
-    value: 30,
-    label: daysTranslation(30),
-  },
-  {
-    value: 90,
-    label: daysTranslation(90),
-  },
-]
-
-const selectedTimeRange = ref(timeRangeList[0])
-
-const setTimeRange = (value: { value: number; label: string }) => {
-  selectedTimeRange.value = value
-}
 
 const props = defineProps<{
   priceChartData?: [Date, number][][]
@@ -115,6 +89,35 @@ const props = defineProps<{
   applySmoothing: boolean
 }>()
 const emit = defineEmits(['update:hideOutliers', 'update:applySmoothing'])
+
+const { $i18n } = useNuxtApp()
+const { chainSymbol } = useChain()
+const { isDarkMode } = useTheme()
+
+const timeRangeList = [
+  {
+    value: 0,
+    label: $i18n.t('priceChart.all'),
+  },
+  {
+    value: 14,
+    label: $i18n.t('topCollections.timeFrames.week'),
+  },
+  {
+    value: 30,
+    label: $i18n.t('topCollections.timeFrames.month'),
+  },
+  {
+    value: 90,
+    label: $i18n.t('topCollections.timeFrames.quarter'),
+  },
+]
+
+const selectedTimeRange = ref(timeRangeList[0])
+
+const setTimeRange = (value: { value: number; label: string }) => {
+  selectedTimeRange.value = value
+}
 
 const vHideOutliers = useVModel(props, 'hideOutliers', emit)
 const vApplySmoothing = useVModel(props, 'applySmoothing', emit)
@@ -133,14 +136,7 @@ onMounted(() => {
   getPriceChartData()
 })
 
-const lineColor = computed(() => {
-  if (isDarkMode.value) {
-    return 'white'
-  } else {
-    return '#181717'
-  }
-})
-
+const lineColor = computed(() => (isDarkMode.value ? '#fff' : '#181717'))
 const gridColor = computed(() => (isDarkMode.value ? '#6b6b6b' : '#cccccc'))
 
 const displayChartData = computed(() => {

@@ -56,6 +56,12 @@ type CollectionsReady = {
     }[]
     nfts?: {
       id: string
+      name?: string
+      currentOwner?: string
+      meta?: {
+        id: string
+        image: string
+      }
     }[]
   }[]
 }
@@ -106,6 +112,9 @@ export function useMigrateDeposit(
   const fiatStore = useFiatStore()
   const preferencesStore = usePreferencesStore()
 
+  const route = useRoute()
+  const collectionOwner = route.query.collectionOwner?.toString()
+
   const chainDecimals = computed(() => {
     if (chain.value?.tokenDecimals) {
       return chain.value.tokenDecimals
@@ -114,13 +123,15 @@ export function useMigrateDeposit(
     return 12
   })
 
-  const chainItemDeposit = computed(() =>
-    parseDeposit(
+  const chainItemDeposit = computed(() => {
+    // Calculate the sum of all deposits and then multiply by itemCount squared
+    const total =
       (metadataDeposit.value + itemDeposit.value + existentialDeposit.value) *
-        itemCount,
-      chainDecimals.value,
-    ),
-  )
+      itemCount *
+      itemCount
+
+    return parseDeposit(total, chainDecimals.value)
+  })
 
   const chainTokenPrice = computed(() =>
     Number(fiatStore.getCurrentTokenValue(chainSymbol.value) ?? 0),
@@ -137,18 +148,22 @@ export function useMigrateDeposit(
   const chainNetworkFee = computedAsync(async () => {
     if (account) {
       const fee = await getTransitionFee(account, [''], chainDecimals.value)
-      return parseDeposit(parseInt(fee) * itemCount, chainDecimals.value)
+      return parseDeposit(
+        parseInt(fee) * itemCount * itemCount,
+        chainDecimals.value,
+      )
     }
 
     return 0
   })
 
   const totalChain = computed(() => {
-    const total =
-      chainNetworkFee.value +
-      parseFloat(totalCollectionDeposit.value) +
-      chainItemDeposit.value +
-      kodadotFee.value
+    let total =
+      chainNetworkFee.value + chainItemDeposit.value + kodadotFee.value
+
+    if (!collectionOwner) {
+      total += parseFloat(totalCollectionDeposit.value)
+    }
 
     if (isNaN(total)) {
       return 0
@@ -191,6 +206,29 @@ const useDestinationSelected = () =>
   useState('destinationSelected', () =>
     availablePrefixWithIcon().find((item) => item.value === 'ahp'),
   )
+
+export const toReview = ({
+  collectionId,
+  itemCount,
+  collectionOwner = '',
+  setDestination = '',
+}) => {
+  const sourceSelected = useSourceSelected()
+  const destinationSelected = useDestinationSelected()
+  const { accountId } = useAuth()
+
+  navigateTo({
+    path: '/migrate/review',
+    query: {
+      accountId: accountId.value,
+      collectionId: collectionId,
+      source: sourceSelected.value?.value,
+      destination: setDestination || destinationSelected.value?.value,
+      itemCount,
+      collectionOwner,
+    },
+  })
+}
 
 // default composables
 export default function useMigrate() {

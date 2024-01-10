@@ -2,6 +2,7 @@ import {
   type Chain,
   chainToPrefixMap,
   getChainCurrency,
+  getChainExistentialDeposit,
   allowedTransitions as teleportRoutes,
 } from '@/utils/teleport'
 import { chainPropListOf } from '@/utils/config/chain.config'
@@ -13,10 +14,16 @@ import type { AutoTeleportAction, AutoTeleportFeeParams } from './types'
 const BUFFER_FEE_PERCENT = 0.2
 const BUFFER_AMOUNT_PERCENT = 0.02
 
+const DEFAULT_AUTO_TELEPORT_FEE_PARAMS = {
+  actionAutoFees: true,
+  actions: 0,
+  actionLazyFetch: false,
+}
+
 export default function (
   actions: ComputedRef<AutoTeleportAction[]>,
-  neededAmount: ComputedRef<number>,
-  fees: AutoTeleportFeeParams = { actionAutoFees: true, actions: 0 },
+  neededAmount: ComputedRef<number | bigint>,
+  feesParams: AutoTeleportFeeParams = DEFAULT_AUTO_TELEPORT_FEE_PARAMS,
 ) {
   const {
     chainBalances,
@@ -24,16 +31,22 @@ export default function (
     fetchChainsBalances,
     getAddressByChain,
   } = useTeleport()
+  const fees = { ...DEFAULT_AUTO_TELEPORT_FEE_PARAMS, ...feesParams }
+
   const { apiInstance, apiInstanceByPrefix } = useApi()
   const { balance } = useBalance()
 
-  const hasBalances = ref(false)
+  const hasFetched = reactive({
+    teleportTxFee: false,
+    actionTxFees: false,
+    balances: false,
+  })
+
   const teleportTxFee = ref(0)
   const actionTxFees = ref<number[]>([])
   const extraActionFees = computed(() =>
     fees.actions ? Math.ceil(fees.actions) : 0,
   )
-  const actionAutoFees = computed(() => fees.actionAutoFees || true)
 
   const chainSymbol = computed(
     () => currentChain.value && getChainCurrency(currentChain.value),
@@ -48,7 +61,7 @@ export default function (
   )
 
   const neededAmountWithFees = computed(
-    () => Math.ceil(neededAmount.value) + totalFees.value,
+    () => Math.ceil(Number(neededAmount.value)) + totalFees.value,
   )
 
   const currentChainBalance = computed(
@@ -57,18 +70,29 @@ export default function (
       Number(balance.value),
   )
 
-  const { existentialDeposit } = useDeposit(
-    computed(() => chainToPrefixMap[currentChain.value]),
+  const currentChainExistentialDeposit = computed(() =>
+    getChainExistentialDeposit(currentChain.value),
   )
 
   const transferableCurrentChainBalance = computed(
-    () => Number(currentChainBalance.value) - existentialDeposit.value,
+    () =>
+      Number(currentChainBalance.value) - currentChainExistentialDeposit.value,
   )
 
   const hasEnoughInCurrentChain = computed(
     () =>
       neededAmountWithFees.value <=
       Number(transferableCurrentChainBalance.value),
+  )
+
+  const needsSourceChainBalances = computed(
+    () => !hasEnoughInCurrentChain.value,
+  )
+
+  const actionAutoFees = computed(() =>
+    fees.actionAutoFees
+      ? fees.actionLazyFetch || needsSourceChainBalances.value
+      : false,
   )
 
   const sourceChainsBalances = computed<{ [key: Chain]: string }>(() =>
@@ -81,14 +105,32 @@ export default function (
     ),
   )
 
+  const hasBalances = computed(
+    () =>
+      (Boolean(currentChainBalance.value) &&
+        Object.values(sourceChainsBalances.value).every(Boolean)) ||
+      hasFetched.balances,
+  )
+
   const richestChain = computed<Chain | undefined>(
     () => getMaxKeyByValue(sourceChainsBalances.value) as Chain | undefined,
+  )
+
+  const richestChainExistentialDeposit = computed(() =>
+    getChainExistentialDeposit(richestChain.value),
   )
 
   const richestChainBalance = computed(() =>
     richestChain.value
       ? Number(sourceChainsBalances.value[richestChain.value])
       : 0,
+  )
+
+  const transferableRichestChainBalance = computed(() =>
+    Math.max(
+      richestChainBalance.value - richestChainExistentialDeposit.value,
+      0,
+    ),
   )
 
   const buffer = computed(() => {
@@ -99,16 +141,43 @@ export default function (
     return bufferFee === 0 ? amountFee : bufferFee
   })
 
-  const amountToTeleport = computed(
+  const requiredAmountToTeleport = computed(
     () =>
       neededAmountWithFees.value +
       buffer.value -
       transferableCurrentChainBalance.value,
   )
 
-  const hasEnoughInRichestChain = computed(
-    () => (richestChainBalance.value || 0) >= amountToTeleport.value,
+  const amountToTeleport = computed(() =>
+    shouldTeleportAllBalance.value
+      ? richestChainBalance.value - (buffer.value + totalFees.value)
+      : requiredAmountToTeleport.value,
   )
+
+  const shouldTeleportAllBalance = computed<boolean>(() => {
+    const hasRichesChain = Boolean(richestChain.value)
+    const doesntHaveEnoughInCurrentChain = !hasEnoughInCurrentChain.value
+    const willRemainingRichestChainBalanceBeSlashed =
+      richestChainBalance.value - requiredAmountToTeleport.value <=
+      richestChainExistentialDeposit.value
+    const hasRequiredAmountInRichestChain =
+      richestChainBalance.value >= requiredAmountToTeleport.value
+
+    return (
+      hasRichesChain &&
+      doesntHaveEnoughInCurrentChain &&
+      willRemainingRichestChainBalanceBeSlashed &&
+      hasRequiredAmountInRichestChain
+    )
+  })
+
+  const hasEnoughInRichestChain = computed(() => {
+    const balance = shouldTeleportAllBalance.value
+      ? richestChainBalance.value
+      : transferableRichestChainBalance.value
+
+    return balance >= amountToTeleport.value
+  })
 
   const addTeleportFee = computed(() => {
     if (!richestChain.value) {
@@ -121,6 +190,39 @@ export default function (
     return sourceChainProperties?.tokenSymbol === chainSymbol.value
   })
 
+  const canGetTeleportFee = computed<boolean>(
+    () =>
+      Boolean(richestChain.value) &&
+      !teleportTxFee.value &&
+      addTeleportFee.value &&
+      hasEnoughInRichestChain.value &&
+      amountToTeleport.value > 0,
+  )
+
+  const doesNotNeedsTeleport = computed<boolean>(() => {
+    const needsTeleport =
+      Boolean(currentChainBalance.value) && !hasEnoughInCurrentChain.value
+
+    if (!needsTeleport) {
+      return true
+    }
+
+    return Boolean(richestChain.value) && !hasEnoughInRichestChain.value
+  })
+
+  const hasFetchedDetails = computed(() => {
+    if (doesNotNeedsTeleport.value) {
+      return true
+    }
+
+    return [
+      hasFetched.teleportTxFee,
+      actionAutoFees.value ? hasFetched.actionTxFees : true,
+    ].every(Boolean)
+  })
+
+  const isReady = computed(() => hasBalances.value && hasFetchedDetails.value)
+
   const getTeleportTransactionFee = async () => {
     return await getTransactionFee({
       amount: amountToTeleport.value,
@@ -132,15 +234,6 @@ export default function (
     })
   }
 
-  const fetchTeleportFee = computed(
-    () =>
-      richestChain.value &&
-      !teleportTxFee.value &&
-      addTeleportFee.value &&
-      hasEnoughInRichestChain.value &&
-      amountToTeleport.value > 0,
-  )
-
   const getTransitionBalances = () => {
     return fetchChainsBalances([
       ...allowedSourceChains.value,
@@ -148,10 +241,12 @@ export default function (
     ])
   }
 
-  watch(fetchTeleportFee, async () => {
-    if (fetchTeleportFee.value) {
+  watch(canGetTeleportFee, async () => {
+    if (canGetTeleportFee.value) {
+      hasFetched.teleportTxFee = false
       const fee = await getTeleportTransactionFee()
       teleportTxFee.value = Number(fee) || 0
+      hasFetched.teleportTxFee = true
     }
   })
 
@@ -164,6 +259,7 @@ export default function (
     async () => {
       if (actionAutoFees.value) {
         try {
+          hasFetched.actionTxFees = false
           const feesPromisses = actions.value.map(
             async ({ action, prefix }) => {
               let api = await apiInstance.value
@@ -182,6 +278,8 @@ export default function (
           actionTxFees.value = fees.map(Number)
         } catch (error) {
           console.error(`[AUTOTELEPORT]: Failed getting action fee  ${error}`)
+        } finally {
+          hasFetched.actionTxFees = true
         }
       }
     },
@@ -189,11 +287,12 @@ export default function (
   )
 
   watch(
-    [allowedSourceChains, hasEnoughInCurrentChain],
+    [allowedSourceChains, needsSourceChainBalances],
     async () => {
-      if (allowedSourceChains.value.length && !hasEnoughInCurrentChain.value) {
+      if (allowedSourceChains.value.length && needsSourceChainBalances.value) {
+        hasFetched.balances = false
         await getTransitionBalances()
-        hasBalances.value = true
+        hasFetched.balances = true
       }
     },
     { immediate: true },
@@ -201,10 +300,11 @@ export default function (
 
   return {
     amountToTeleport,
-    hasBalances,
+    isReady,
     hasEnoughInCurrentChain,
     hasEnoughInRichestChain,
     sourceChain: richestChain,
+    txFees: totalFees,
     chainSymbol,
   }
 }

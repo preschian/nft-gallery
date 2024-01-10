@@ -4,16 +4,13 @@
     animation="slide"
     :class="{ 'fluid-padding-left': fluidPadding }">
     <template #trigger="{ open }">
-      <div
-        class="is-flex is-justify-content-space-between"
-        role="button"
-        :aria-expanded="open">
+      <div class="flex justify-between" role="button" :aria-expanded="open">
         <p class="py-3 px-4 is-size-7 has-text-grey">
           <span data-testid="advanced-filter-collapsible">{{
             $t('advancedFilters')
           }}</span>
           <span v-if="artView" class="ml-2 has-text-primary"
-            >({{ $t('offer.active') }})</span
+            >({{ $t('active') }})</span
           >
         </p>
         <a class="card-header-icon mr-1 has-text-grey">

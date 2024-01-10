@@ -11,7 +11,7 @@
       :label="$t('tabs.description')"
       class="p-5"
       data-testid="gallery-item-description-tab-content">
-      <div class="mb-3 is-flex" data-testid="gallery-item-description-tab">
+      <div class="mb-3 flex" data-testid="gallery-item-description-tab">
         <span class="mr-2">{{ $t('tabs.tabDescription.made') }}:</span>
         <nuxt-link
           v-if="nft?.issuer"
@@ -66,11 +66,11 @@
       :label="$t('tabs.details')"
       class="p-5"
       data-testid="gallery-item-details-tab-content">
-      <!-- <div class="is-flex is-justify-content-space-between">
+      <!-- <div class="flex justify-between">
         <p>Contract Address</p>
         <p>--</p>
       </div> -->
-      <div class="is-flex is-justify-content-space-between">
+      <div class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.creator') }}</p>
         <nuxt-link
           v-if="nft?.issuer"
@@ -79,26 +79,24 @@
           <Identity ref="identity" :address="nft?.issuer" />
         </nuxt-link>
       </div>
-      <div class="is-flex is-justify-content-space-between">
+      <div class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.blockchain') }}</p>
         <p>{{ urlPrefix }}</p>
       </div>
-      <div v-if="version" class="is-flex is-justify-content-space-between">
+      <div v-if="version" class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.version') }}</p>
         <p>{{ version }}</p>
       </div>
-      <!-- <div class="is-flex is-justify-content-space-between">
+      <!-- <div class="flex justify-between">
         <p>Token Standard</p>
         <p>--</p>
       </div> -->
-      <div v-if="nft?.royalty" class="is-flex is-justify-content-space-between">
+      <div v-if="nft?.royalty" class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.royalties') }}</p>
         <p>{{ nft?.royalty }}%</p>
       </div>
 
-      <div
-        v-if="recipient"
-        class="recipient is-flex is-justify-content-space-between is-capitalized">
+      <div v-if="recipient" class="recipient flex justify-between capitalize">
         <p>{{ $t('transfers.recipients') }}</p>
         <template v-if="Array.isArray(recipient) && recipient.length > 1">
           <ol>
@@ -128,11 +126,11 @@
       </div>
 
       <hr class="my-2" />
-      <div v-if="nftImage" class="is-flex is-justify-content-space-between">
+      <div v-if="mediaUrl" class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.media') }}</p>
         <div>
           <a
-            v-safe-href="nftImage"
+            v-safe-href="mediaUrl"
             class="has-text-link"
             data-testid="media-link"
             target="_blank"
@@ -141,19 +139,19 @@
           </a>
         </div>
       </div>
-      <div v-if="nftAnimation" class="is-flex is-justify-content-space-between">
+      <div v-if="animatedMediaUrl" class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.animatedMedia') }}</p>
         <div>
           <a
-            v-safe-href="nftAnimation"
+            v-safe-href="animatedMediaUrl"
             class="has-text-link"
             target="_blank"
             rel="nofollow noopener noreferrer">
-            {{ animationMediaMimeType }}
+            {{ nftAnimationMimeType }}
           </a>
         </div>
       </div>
-      <div class="is-flex is-justify-content-space-between">
+      <div class="flex justify-between">
         <p>{{ $t('tabs.tabDetails.metadata') }}</p>
         <a
           v-safe-href="metadataURL"
@@ -173,7 +171,7 @@
           <BaseMediaItem
             :key="parent?.nftImage"
             :class="{
-              'is-flex is-align-items-center is-justify-content-center h-audio':
+              'flex items-center justify-center h-audio':
                 resolveMedia(parent?.nftMimeType.value) == MediaType.AUDIO,
             }"
             class="gallery-parent-item"
@@ -206,7 +204,7 @@ import { sanitizeIpfsUrl } from '@/utils/ipfs'
 import { GalleryItem, useGalleryItem } from './useGalleryItem'
 
 import { MediaType } from '@/components/rmrk/types'
-import { getMimeType, resolveMedia } from '@/utils/gallery/media'
+import { resolveMedia } from '@/utils/gallery/media'
 import { replaceSingularCollectionUrlByText } from '@/utils/url'
 
 const { urlPrefix } = usePrefix()
@@ -222,6 +220,7 @@ const nftMetadata = getValue('nftMetadata')
 const nftMimeType = getValue('nftMimeType')
 const nftImage = getValue('nftImage')
 const nftAnimation = getValue('nftAnimation')
+const nftAnimationMimeType = getValue('nftAnimationMimeType')
 
 const activeTab = ref('0')
 const { version } = useRmrkVersion()
@@ -266,7 +265,7 @@ const parentNftUrl = computed(() => {
 
 const properties = computed(() => {
   const attributes = (nftMetadata.value?.attributes ||
-    nftMetadata.value?.meta.attributes ||
+    nftMetadata.value?.meta?.attributes ||
     []) as Array<{ trait_type: string; value: string; key?: string }>
 
   return attributes.map(({ trait_type, key, value }) => ({
@@ -283,22 +282,25 @@ const propertiesTabDisabled = computed(() => {
   return !properties.value?.length
 })
 
-const metadataMimeType = ref('application/json')
-const metadataURL = ref('')
-const animationMediaMimeType = ref('')
+const metadataMimeType = 'application/json'
+const metadataURL = computed(() => sanitizeIpfsUrl(nft.value?.metadata))
 
-watchEffect(async () => {
-  if (nft.value?.metadata) {
-    const sanitizeMetadata = sanitizeIpfsUrl(nft.value?.metadata)
-    const mimeType = await getMimeType(sanitizeMetadata)
+const isCloudflareStream = (url: string) => url.includes('cloudflarestream.com')
 
-    metadataMimeType.value = mimeType || 'application/json'
-    metadataURL.value = sanitizeMetadata
+const mediaUrl = computed(() => {
+  if (isCloudflareStream(nftImage.value)) {
+    return sanitizeIpfsUrl(nft.value.meta?.image)
   }
 
-  if (nftAnimation.value) {
-    animationMediaMimeType.value = await getMimeType(nftAnimation.value)
+  return nftImage.value
+})
+
+const animatedMediaUrl = computed(() => {
+  if (isCloudflareStream(nftAnimation.value)) {
+    return sanitizeIpfsUrl(nft.value.meta?.animation_url)
   }
+
+  return nftAnimation.value
 })
 </script>
 

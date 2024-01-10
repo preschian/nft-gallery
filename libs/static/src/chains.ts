@@ -25,7 +25,6 @@ const DEFAULT_CHAIN_PROPERTIES: ChainProperties = toChainProperty(
 export const CHAINS: Config<ChainProperties> = {
   rmrk: DEFAULT_CHAIN_PROPERTIES,
   ksm: DEFAULT_CHAIN_PROPERTIES,
-  bsx: toChainProperty(10_041, 12, 'BSX', 'https://basilisk.subscan.io/'),
   ahk: toChainProperty(2, 12, 'KSM', 'https://statemine.subscan.io/'),
   dot: toChainProperty(0, 10, 'DOT', 'https://polkadot.subscan.io/'),
   ahp: toChainProperty(0, 10, 'DOT', 'https://statemint.subscan.io/'),
@@ -34,7 +33,7 @@ export const CHAINS: Config<ChainProperties> = {
   // glmr: toChainProperty(1284, 18, 'GLMR', 'https://moonbeam.subscan.io/'),
 }
 
-export const DEFAULT_PREFIX: Prefix = 'ksm'
+export const DEFAULT_PREFIX: Prefix = 'ahp'
 
 export const chainPrefixes: Prefix[] = [
   'ahp',
@@ -42,7 +41,6 @@ export const chainPrefixes: Prefix[] = [
   'rmrk',
   'ksm',
   'dot',
-  'bsx',
   // 'ahr',
   // 'movr',
   // 'glmr',
@@ -56,7 +54,6 @@ export const chainPrefixesMap = chainPrefixes.reduce(
 ) as Record<Prefix, Prefix>
 
 export const chainInfo: Record<Prefix, string> = {
-  bsx: 'basilisk',
   rmrk: 'kusama',
   ksm: 'rmrk',
   ahk: 'statemine',
@@ -68,7 +65,6 @@ export const chainInfo: Record<Prefix, string> = {
 }
 
 export const chainNames: Record<Prefix, string> = {
-  bsx: 'Basilisk',
   rmrk: 'Kusama',
   ksm: 'Kusama',
   ahk: 'Kusama AssetHub',
@@ -85,4 +81,12 @@ export const chainList = (): Option[] => {
     text: NAMES[prefix],
     value: prefix,
   }))
+}
+
+export const existentialDeposit: Record<Prefix, number> = {
+  ksm: 333333333,
+  rmrk: 333333333,
+  ahk: 33333333,
+  dot: 10000000000,
+  ahp: 1000000000,
 }

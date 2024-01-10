@@ -1,6 +1,6 @@
 <template>
   <div
-    class="gallery-item-activity-table is-flex is-flex-direction-column"
+    class="gallery-item-activity-table flex flex-col"
     data-testid="gallery-item-activity-table">
     <NeoTable
       v-if="events.length"
@@ -25,7 +25,7 @@
         <p v-if="Number(props.row.meta)">
           {{ formatPrice(props.row.meta)[0] }}
           <span class="has-text-grey">
-            (${{ formatPrice(props.row.meta)[1] }})</span
+            ${{ formatPrice(props.row.meta)[1] }}</span
           >
         </p>
       </NeoTableColumn>
@@ -199,8 +199,11 @@ const formatPrice = (price) => {
 
 .gallery-item-activity-table {
   overflow-y: auto;
-  :deep(table tr > *:first-child) {
-    padding-left: 2rem;
+
+  @include desktop {
+    :deep(table tr > *:first-child) {
+      padding-left: 2rem;
+    }
   }
 }
 
@@ -208,6 +211,9 @@ const formatPrice = (price) => {
   .gallery-item-activity-table {
     :deep(.o-table__td) {
       border-bottom: inherit !important;
+      &:before {
+        font-weight: 400 !important;
+      }
     }
   }
 }

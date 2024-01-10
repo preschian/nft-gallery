@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-size mt-6 border">
+  <div class="fixed-size border">
     <div
       class="fixed-top-left border px-4 py-2 theme-background-color has-z-index-1 no-wrap">
       {{ $t('mint.unlockable.yourVariation') }}
@@ -11,10 +11,10 @@
       preview
       is-detail
       class="border-bottom" />
-    <div class="is-flex is-justify-content-center is-align-items-center py-6">
+    <div class="flex justify-center items-center py-6">
       <NeoButton
         v-if="isLoading"
-        class="border-k-grey hover-button fixed-width"
+        class="border-k-grey hover-button fixed-width pointer-events-auto cursor-wait"
         rounded
         no-shadow
         disabled>
@@ -33,11 +33,11 @@
 
       <a
         v-safe-href="sanitizeIpfsUrl(displayUrl)"
-        class="is-flex is-align-items-center has-text-link fixed-right"
+        class="flex items-center has-text-link fixed-right"
         rel="nofollow noopener noreferrer"
         target="_blank"
         role="link">
-        {{ $t('Img') }}
+        {{ $t('img') }}
         <NeoIcon icon="arrow-up-right" class="ml-1 has-text-link" />
       </a>
     </div>
@@ -77,9 +77,6 @@ const generativeImageUrl = ref(
 
 const isLoading = ref(false)
 
-watch([accountId], () => {
-  generateNft(true)
-})
 const displayUrl = computed(() => {
   return generativeImageUrl.value || props.image
 })
@@ -93,6 +90,16 @@ const generateNft = (isDefault: boolean = false) => {
     isLoading.value = false
   }, 3000)
 }
+
+watch(
+  accountId,
+  () => {
+    generateNft(true)
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <style scoped lang="scss">

@@ -1,16 +1,26 @@
 <template>
   <div
-    class="container is-fluid is-flex border-top is-justify-content-space-between is-align-items-center py-3 mt-7">
-    <div class="is-flex is-align-items-center">
+    class="container is-fluid flex border-top justify-between items-center py-3 mt-7">
+    <div class="flex items-center">
       <img
         width="42"
         height="42"
         src="/drop/unlockable-pulse-static.svg"
         alt="unlockable icon" />
-      <span>{{ $t('mint.unlockable.mintLive') }}</span>
+      <NeoSkeleton v-if="!isReady" height="15" no-margin width="120" />
+      <span v-else>{{ mintStatusText }}</span>
     </div>
-    <nuxt-link class="has-text-weight-bold" to="/ahp/drops/snowflakes">
-      {{ $t('mint.unlockable.takeMe') }}
-    </nuxt-link>
+    <div class="flex items-center">
+      <NeoSkeleton v-if="!isReady" height="15" no-margin width="80" />
+      <nuxt-link v-else class="has-text-weight-bold" :to="to">
+        {{ actionText }}
+      </nuxt-link>
+    </div>
   </div>
 </template>
+<script setup>
+import { useUnlockableTag } from './utils/useUnlockableTag'
+import { NeoSkeleton } from '@kodadot1/brick'
+
+const { to, actionText, mintStatusText, isReady } = useUnlockableTag(true)
+</script>

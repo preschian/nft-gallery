@@ -14,7 +14,7 @@
 import {
   checkInvalidBalanceFilter,
   default as formatBalance,
-  roundTo,
+  roundAmount,
 } from '@/utils/format/balance'
 import { chainPropListOf } from '@/utils/config/chain.config'
 import type { Prefix } from '@kodadot1/static'
@@ -30,7 +30,6 @@ const props = withDefaults(
   }>(),
   {
     value: 0,
-    round: 4,
     unitSymbol: '',
     prefix: undefined,
   },
@@ -47,22 +46,14 @@ const displayUnit = computed(
     (props.prefix ? chainPropListOf(props.prefix).tokenSymbol : unit.value),
 )
 const finalValue = computed(() =>
-  round(
+  roundAmount(
     formatBalance(
       checkInvalidBalanceFilter(props.value),
       tokenDecimals.value,
       '',
     ),
-    props.round,
-    true,
+    props.round || 4,
+    props.round === undefined,
   ),
 )
-
-const round = (value: string, limit: number, disableFilter: boolean) => {
-  const number = Number(value.replace(/,/g, ''))
-  if (disableFilter) {
-    return parseFloat(number.toString())
-  }
-  return roundTo(value, limit)
-}
 </script>

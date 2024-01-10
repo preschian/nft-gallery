@@ -102,8 +102,7 @@
         :error="!form.salePrice"
         :label="`${$t('price')} *`">
         <div class="w-full">
-          <div
-            class="is-flex is-justify-content-space-between is-align-items-center is-relative">
+          <div class="flex justify-between items-center is-relative">
             <NeoInput
               v-model="form.salePrice"
               data-testid="create-nft-input-list-value"
@@ -117,7 +116,7 @@
               ~{{ salePriceUsd }} usd
             </div>
             <div class="form-addons">
-              {{ isBasilisk ? 'KSM' : chainSymbol }}
+              {{ chainSymbol }}
             </div>
           </div>
         </div>
@@ -193,7 +192,7 @@
 
       <!-- deposit and balance -->
       <div>
-        <div class="is-flex has-text-weight-medium has-text-info">
+        <div class="flex has-text-weight-medium has-text-info">
           <div>{{ $t('mint.deposit') }}:&nbsp;</div>
           <div>
             <span data-testid="create-nft-deposit-amount-token">
@@ -206,7 +205,7 @@
             </span>
           </div>
         </div>
-        <div class="is-flex">
+        <div class="flex">
           <div>{{ $t('general.balance') }}:&nbsp;</div>
           <div>
             <span>{{ balance }} {{ chainSymbol }}</span>
@@ -215,9 +214,6 @@
             </span>
           </div>
         </div>
-        <nuxt-link v-if="isBasilisk" :to="`/${currentChain}/assets`">
-          {{ $t('general.tx.feesPaidIn', [chainSymbol]) }}
-        </nuxt-link>
       </div>
 
       <hr class="my-6" />
@@ -231,7 +227,7 @@
         native-type="submit"
         size="medium"
         :loading="isLoading" />
-      <div class="p-4 is-flex">
+      <div class="p-4 flex">
         <NeoIcon icon="circle-info" size="medium" class="mr-4" />
         <p class="is-size-7">
           <span
@@ -351,7 +347,7 @@ watch(urlPrefix, (value) => {
 
 // get/set current chain/prefix
 const currentChain = computed(() => selectChain.value as Prefix)
-const { isBasilisk, isRemark, isRmrk } = useIsChain(currentChain)
+const { isRemark, isRmrk } = useIsChain(currentChain)
 watch(currentChain, () => {
   // reset some state on chain change
   form.salePrice = 0
@@ -373,9 +369,8 @@ const deposit = computed(() =>
 // usd value
 
 // when left undefined urlPrefix will be used
-const tokenType = computed(() =>
-  isBasilisk.value ? chainSymbol.value.toLowerCase() : undefined,
-)
+// TODO: evaluate better
+const tokenType = computed(() => undefined)
 
 const calculateUsdValue = (amount) => {
   // remove comma from amount - required becuase bsx balance is formatted string

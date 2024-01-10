@@ -13,7 +13,7 @@
       @close="onClose">
       <div v-if="isLogIn">
         <div
-          class="rounded border shade-border-color is-flex is-justify-content-start is-flex-grow-1 pl-3">
+          class="rounded border shade-border-color flex justify-start flex-grow pl-3">
           <IdentityItem
             :label="$t('confirmPurchase.connectedWith')"
             hide-identity-popover
@@ -34,7 +34,7 @@
         <PriceItem :nft="extendedInformation" />
       </div>
       <div class="pt-5">
-        <div class="is-flex is-justify-content-space-between">
+        <div class="flex justify-between">
           <AutoTeleportActionButton
             ref="autoteleport"
             :amount="totalFee + networkFee"
@@ -108,7 +108,6 @@ const { urlPrefix } = usePrefix()
 const { $i18n } = useNuxtApp()
 const fiatStore = useFiatStore()
 const preferencesStore = usePreferencesStore()
-const { isBasilisk } = useIsChain(urlPrefix)
 
 const { metadataDeposit, collectionDeposit, existentialDeposit, itemDeposit } =
   useDeposit(urlPrefix)
@@ -118,7 +117,7 @@ const emit = defineEmits(['confirm', 'update:modelValue'])
 const networkFee = ref(0)
 const autoteleport = ref()
 
-const loading = computed(() => !autoteleport.value?.hasBalances)
+const loading = computed(() => !autoteleport.value?.isReady)
 
 const isNFT = computed(
   () => props.nftInformation.mintType === CreateComponent.NFT,
@@ -194,12 +193,10 @@ const confirm = (params) => {
 watchEffect(async () => {
   networkFee.value = 0
 
-  if (!isBasilisk.value) {
-    const fee = await getTransitionFee(accountId.value, [''], decimals.value)
-    networkFee.value = props.nftInformation.listForSale
-      ? Number(fee) * 2
-      : Number(fee)
-  }
+  const fee = await getTransitionFee(accountId.value, [''], decimals.value)
+  networkFee.value = props.nftInformation.listForSale
+    ? Number(fee) * 2
+    : Number(fee)
 })
 </script>
 

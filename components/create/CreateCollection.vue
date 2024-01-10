@@ -54,12 +54,11 @@
 
       <!-- collection max nfts -->
       <NeoField
-        v-if="!isBasilisk"
         :label="$t('Maximum NFTs in collection')"
         data-testid="collection-maxAmount"
         required>
         <div class="w-full">
-          <div class="is-flex is-justify-content-space-between">
+          <div class="flex justify-between">
             <p>{{ $t('mint.unlimited') }}</p>
             <NeoSwitch v-model="unlimited" position="left" />
           </div>
@@ -68,6 +67,7 @@
             v-model="max"
             class="mt-3"
             type="number"
+            data-testid="collection-input-maximum-nfts"
             placeholder="1 is the minimum"
             :min="1" />
         </div>
@@ -109,21 +109,18 @@
 
       <!-- deposit and balance -->
       <div>
-        <div class="is-flex has-text-weight-medium has-text-info">
+        <div class="flex has-text-weight-medium has-text-info">
           <div>{{ $t('mint.deposit') }}:&nbsp;</div>
           <div data-testid="collection-deposit">
             {{ totalCollectionDeposit }} {{ chainSymbol }}
           </div>
         </div>
-        <div class="is-flex">
+        <div class="flex">
           <div>{{ $t('general.balance') }}:&nbsp;</div>
           <div data-testid="collection-balance">
             {{ balance }} {{ chainSymbol }}
           </div>
         </div>
-        <nuxt-link v-if="isBasilisk" :to="`/${currentChain}/assets`">
-          {{ $t('general.tx.feesPaidIn', [chainSymbol]) }}
-        </nuxt-link>
       </div>
 
       <hr class="my-6" />
@@ -137,7 +134,7 @@
         size="medium"
         data-testid="collection-create"
         :loading="isLoading" />
-      <div class="p-4 is-flex">
+      <div class="p-4 flex">
         <NeoIcon icon="circle-info" size="medium" class="mr-4" />
         <p class="is-size-7">
           <span
@@ -235,7 +232,7 @@ const currentChain = computed(() => {
   return selectBlockchain.value as Prefix
 })
 
-const { isAssetHub, isBasilisk, isRemark } = useIsChain(currentChain)
+const { isAssetHub, isRemark } = useIsChain(currentChain)
 const { balance, totalCollectionDeposit, chainSymbol, chain } =
   useDeposit(currentChain)
 
@@ -275,10 +272,6 @@ const collection = computed(() => {
     collection['nftCount'] = unlimited.value ? 0 : max.value
   }
 
-  if (isBasilisk.value) {
-    collection['tags'] = []
-  }
-
   if (isRemark.value) {
     collection['symbol'] = symbol.value
     collection['nftCount'] = unlimited.value ? 0 : max.value
@@ -315,10 +308,6 @@ const handleCreateCollectionConfirmation = async ({
 
 const createCollection = async () => {
   try {
-    showNotification(
-      `Creating Collection: "${name.value}"`,
-      notificationTypes.info,
-    )
     isLoading.value = true
 
     await transaction(mintCollectionAction.value, currentChain.value)

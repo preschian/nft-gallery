@@ -1,10 +1,6 @@
 import { CHAINS, Prefix } from '@kodadot1/static'
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto'
-import {
-  assetsVisible,
-  createVisible,
-  incomingOfferssVisible,
-} from '@/utils/config/permission.config'
+import { createVisible } from '@/utils/config/permission.config'
 import { RawLocation } from 'vue-router/types/router'
 
 const NO_REDIRECT_ROUTE_NAMES = [
@@ -52,6 +48,8 @@ function getRedirectPathForPrefix({
 }): RawLocation {
   if (routeName === 'prefix-u-id') {
     const accountId = getAddress(chain, route.params.id)
+
+    delete route.query.collections
 
     return {
       params: {
@@ -111,9 +109,7 @@ export default function () {
       return
     }
 
-    const isAssets = routeName.includes('-assets')
     const isSimpleCreate = routeName.includes('-create')
-    const isIncomingOffers = routeName.includes('-incomingOffers')
 
     let redirectLocation: RawLocation = { path: `/${newChain}` }
 
@@ -123,12 +119,8 @@ export default function () {
         chain: newChain,
         route,
       })
-    } else if (isAssets && assetsVisible(newChain)) {
-      redirectLocation = { path: `/${newChain}/assets` }
     } else if (isSimpleCreate && createVisible(newChain)) {
       redirectLocation = { path: `/${newChain}/create` }
-    } else if (isIncomingOffers && incomingOfferssVisible(newChain)) {
-      redirectLocation = { path: `/${newChain}/incomingoffers` }
     }
 
     router.push(redirectLocation)

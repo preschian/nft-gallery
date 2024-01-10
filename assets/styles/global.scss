@@ -336,9 +336,21 @@ a.has-text-grey {
   }
 }
 
+.border-k-orange2 {
+  @include ktheme() {
+    border-color: theme('border-k-orange2') !important;
+  }
+}
+
 .border-top-k-shade {
   @include ktheme() {
     border-top: 1px solid theme('k-shade');
+  }
+}
+
+.border-bottom-k-shade {
+  @include ktheme() {
+    border-bottom: 1px solid theme('k-shade');
   }
 }
 
@@ -375,12 +387,6 @@ a.has-text-grey {
     @include ktheme() {
       color: theme('k-blue-hover');
     }
-  }
-}
-
-.has-text-k-grey {
-  @include ktheme() {
-    color: theme('k-grey');
   }
 }
 
@@ -435,10 +441,18 @@ a.has-text-grey {
     background-color: theme('k-red');
   }
 }
+.k-orange-light {
+  @include ktheme() {
+    background-color: theme('k-orange-light');
+  }
+}
 .k-redaccent {
   @include ktheme() {
     background-color: theme('k-redaccent');
   }
+}
+.k-grey-light {
+  background-color: var(--k-grey-light) !important;
 }
 .theme-background-color {
   @include ktheme() {
@@ -490,12 +504,6 @@ a.has-text-grey {
   }
 }
 
-// flex helper - makes flex items equal width
-
-.is-flex-1 {
-  flex: 1;
-}
-
 .has-z-index-1 {
   z-index: 1;
 }
@@ -544,6 +552,11 @@ a.has-text-grey {
   border-radius: 50%;
 }
 
+.is-rounded-small {
+  border-radius: 4rem;
+}
+
+
 .w-half {
   width: 50%;
 }
@@ -561,6 +574,10 @@ a.has-text-grey {
   font-size: 1.6rem;
 }
 
+.is-size-8 {
+  font-size: 0.5rem;
+}
+
 .is-max-width-fit-content {
   max-width: fit-content;
 }
@@ -571,4 +588,16 @@ a.has-text-grey {
 
 .has-text-inherit {
   color: inherit !important;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+.pointer-events-none {
+  pointer-events: none !important;
 }

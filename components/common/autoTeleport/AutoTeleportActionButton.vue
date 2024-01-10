@@ -1,9 +1,9 @@
 <template>
-  <div class="is-flex is-flex-direction-column w-full">
+  <div class="flex flex-col w-full">
     <div
-      v-if="showAutoTeleport"
-      class="is-flex is-justify-content-space-between w-full mb-4">
-      <div class="is-flex">
+      v-if="showAutoTeleport && !hideTop"
+      class="flex justify-between w-full mb-4">
+      <div class="flex">
         <div class="has-accent-blur">
           <img :src="autoTeleportIcon" class="mr-2" alt="teleport arrow" />
           <img
@@ -15,11 +15,11 @@
 
         <p
           class="has-text-weight-bold"
-          :class="{ 'has-text-k-grey': !hasAvailableTeleportTransition }">
+          :class="{ 'text-k-grey': !hasAvailableTeleportTransition }">
           {{ $t('autoTeleport.autoTeleport') }}
         </p>
 
-        <AutoTeleportTooltip
+        <AutoTeleportPopover
           v-if="hasAvailableTeleportTransition"
           position="top"
           :transition="optimalTransition" />
@@ -27,11 +27,11 @@
 
       <div
         v-if="!hasAvailableTeleportTransition"
-        class="is-flex is-align-items-center"
-        :class="{ 'has-text-k-grey': !hasAvailableTeleportTransition }">
+        class="flex items-center"
+        :class="{ 'text-k-grey': !hasAvailableTeleportTransition }">
         <span class="is-size-7">{{ $t('autoTeleport.notAvailable') }}</span>
 
-        <AutoTeleportTooltip position="left" :transition="optimalTransition" />
+        <AutoTeleportPopover position="left" :transition="optimalTransition" />
       </div>
 
       <NeoSwitch
@@ -45,24 +45,8 @@
       variant="k-accent"
       no-shadow
       :disabled="isDisabled"
-      class="is-flex is-flex-grow-1 btn-height is-capitalized"
-      @click="submit" />
-
-    <div v-if="showAutoTeleport" class="is-flex is-justify-content-center mt-4">
-      <span
-        v-if="hasAvailableTeleportTransition"
-        class="has-text-grey is-capitalized"
-        >{{ $t('or') }}</span
-      >
-
-      <NeoButton
-        variant="text"
-        no-shadow
-        class="ml-2"
-        @click="onRampActive = true"
-        >+ {{ $t('autoTeleport.addFundsViaOnramp') }}
-      </NeoButton>
-    </div>
+      class="flex flex-grow btn-height capitalize"
+      @click="handleSubmit" />
   </div>
 
   <AutoTeleportModal
@@ -71,6 +55,8 @@
     :can-do-action="hasEnoughInCurrentChain"
     :transactions="transactions"
     :auto-close="autoCloseModal"
+    :auto-close-delay="autoCloseModalDelayModal"
+    :interaction="interaction"
     @close="handleAutoTeleportModalClose"
     @telport:retry="teleport"
     @action:start="(i) => actionRun(i)"
@@ -93,6 +79,8 @@ import type {
   AutoTeleportAction,
   AutoTeleportFeeParams,
 } from '@/composables/autoTeleport/types'
+import { ActionlessInteraction, getActionDetails } from './utils'
+import { getAutoTeleportActionInteraction } from '@/composables/autoTeleport/useAutoTeleportTransactionActions'
 
 export type AutoTeleportActionButtonConfirmEvent = {
   autoteleport: boolean
@@ -107,18 +95,25 @@ const emit = defineEmits([
 ])
 const props = withDefaults(
   defineProps<{
-    amount: number
-    label: string
+    amount: number | bigint
+    label?: string
     disabled: boolean
-    actions: AutoTeleportAction[]
+    actions?: AutoTeleportAction[]
     fees?: AutoTeleportFeeParams
     autoCloseModal: boolean
+    autoCloseModalDelayModal?: number
+    interaction?: ActionlessInteraction
+    hideTop?: boolean
   }>(),
   {
+    autoCloseModalDelayModal: undefined,
     fees: () => ({ actions: 0, actionAutoFees: true }),
     disabled: false,
     amount: 0,
     autoCloseModal: false,
+    actions: () => [],
+    label: '',
+    hideTop: false,
   },
 )
 
@@ -130,7 +125,7 @@ const amount = ref()
 
 const {
   isAvailable: isAutoTeleportAvailable,
-  hasBalances,
+  isReady,
   hasEnoughInCurrentChain,
   hasEnoughInRichestChain,
   optimalTransition,
@@ -179,35 +174,38 @@ const showAutoTeleport = computed(
   () =>
     !hasEnoughInCurrentChain.value &&
     isAutoTeleportAvailable.value &&
-    hasBalances.value &&
+    isReady.value &&
     !props.disabled,
 )
 
 const allowAutoTeleport = computed(
-  () => needsAutoTelport.value && canAutoTeleport.value && hasBalances.value,
+  () => needsAutoTelport.value && canAutoTeleport.value && isReady.value,
 )
 
 const hasNoFundsAtAll = computed(
   () => !hasEnoughInCurrentChain.value && !hasEnoughInRichestChain.value,
 )
 
-const confirmButtonTitle = computed(() => {
+const confirmButtonTitle = computed<string>(() => {
   const interaction =
-    transactions.value.actions[0].interaction?.toLocaleLowerCase()
-  return $i18n.t(`autoTeleport.steps.${interaction}.confirm`)
+    props.interaction || transactions.value.actions[0].interaction
+
+  return getActionDetails(interaction).confirm
 })
+
+const showAddFunds = computed(() => isReady.value && hasNoFundsAtAll.value)
 
 const autoTeleportLabel = computed(() => {
   if (hasEnoughInCurrentChain.value || props.disabled) {
-    return props.label
+    return props.label || confirmButtonTitle.value
   }
 
-  if (!hasBalances.value) {
+  if (!isReady.value) {
     return $i18n.t('autoTeleport.checking')
   }
 
-  if (hasNoFundsAtAll.value) {
-    return $i18n.t('autoTeleport.insufficientFunds')
+  if (showAddFunds.value) {
+    return `+ ${$i18n.t('autoTeleport.addFundsViaOnramp')}`
   }
 
   if (allowAutoTeleport.value) {
@@ -225,8 +223,12 @@ const autoTeleportLabel = computed(() => {
 })
 
 const isDisabled = computed(() => {
-  if (props.disabled || hasNoFundsAtAll.value) {
+  if (props.disabled) {
     return true
+  }
+
+  if (showAddFunds.value) {
+    return false
   }
 
   if (hasEnoughInCurrentChain.value) {
@@ -248,20 +250,28 @@ const openAutoTeleportModal = () => {
 
 const actionRun = async (interaction, isRetry = false) => {
   const autoTeleportAction = props.actions.find(
-    (action) => action.action.interaction === interaction,
+    (action) => getAutoTeleportActionInteraction(action) === interaction,
   )
 
   if (!autoTeleportAction) {
     return
   }
 
-  if (autoTeleportAction.transaction) {
+  if (autoTeleportAction.transaction && autoTeleportAction.action) {
     await autoTeleportAction.transaction(
       autoTeleportAction.action,
       autoTeleportAction.prefix || '',
     )
   } else if (autoTeleportAction.handler) {
     await autoTeleportAction.handler({ isRetry })
+  }
+}
+
+const handleSubmit = () => {
+  if (showAddFunds.value) {
+    onRampActive.value = true
+  } else {
+    submit()
   }
 }
 
@@ -275,10 +285,10 @@ const submit = () => {
   }
 }
 
-const handleAutoTeleportModalClose = () => {
+const handleAutoTeleportModalClose = (completed: boolean) => {
   isModalOpen.value = false
   clear()
-  emit('modal:close')
+  emit('modal:close', completed)
 }
 
 watch(allowAutoTeleport, (allow) => {
@@ -293,7 +303,7 @@ watchSyncEffect(() => {
   }
 })
 
-defineExpose({ hasBalances })
+defineExpose({ isReady, optimalTransition, canAutoTeleport })
 </script>
 
 <style lang="scss" scoped>

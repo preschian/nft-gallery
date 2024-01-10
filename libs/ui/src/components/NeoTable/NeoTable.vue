@@ -13,7 +13,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../scss/_theme.scss';
 @import '@oruga-ui/oruga-next/src/scss/utilities/_expressions.scss';
 @import '@oruga-ui/oruga-next/src/scss/utilities/_variables.scss';
 @import '@oruga-ui/oruga-next/src/scss/utilities/_animations.scss';
@@ -25,75 +24,62 @@ $table-td-border: 0;
 $table-th-border: 0;
 $table-th-font-weight: 400;
 
+@import '@oruga-ui/oruga-next/src/scss/components/_table.scss';
+
 .o-table {
-  @include ktheme() {
-    color: theme('text-color');
-    background-color: theme('background-color');
-  }
+  @apply text-text-color bg-background-color;
 
   &__root {
-    overflow-x: auto;
+    @apply overflow-x-auto;
   }
 
   &__th {
-    font-size: 12px;
-    @include ktheme() {
-      color: theme('k-grey');
-      background-color: theme('background-color');
-    }
+    @apply text-xs text-k-grey bg-background-color #{!important};
   }
 
   &__detail {
-    @include ktheme() {
-      color: theme('text-color');
-      background-color: theme('background-color');
-    }
+    @apply text-text-color bg-background-color;
   }
 
   @media (max-width: 1024px) {
     tbody tr {
-      padding-top: 1.5rem;
-      @include ktheme() {
-        background-color: theme('background-color') !important;
+      @apply pt-6 bg-background-color shadow-none border-t-default border-t-k-shade;
+      @apply mx-6 #{!important};
+
+      &:first-child {
+        @apply border-t-0;
+      }
+      &:last-child {
+        @apply pb-6;
       }
     }
 
     &__td {
       &::before {
-        font-size: 0.75rem;
-        line-height: 1.5rem;
-        @include ktheme() {
-          color: theme('k-grey');
-        }
+        @apply text-xs/4.5 text-k-grey;
       }
 
-      margin: 0 1.5rem;
-      padding: 0.25rem 0;
+      @apply my-0 mx-0 py-1 px-0;
 
       &:last-child {
-        @include ktheme() {
-          border-bottom: 1px solid theme('k-shade') !important;
-        }
+        @apply border-b-default border-b-k-shade;
       }
     }
-
     &--hoverable {
       tbody tr:hover td {
-        @include ktheme() {
-          background-color: theme('background-color') !important;
-        }
+        @apply bg-transparent #{!important};
       }
     }
   }
 
   &--hoverable {
-    tbody tr:hover td {
-      @include ktheme() {
-        background-color: theme('k-accentlight2');
+    tbody tr {
+      @apply bg-inherit #{!important};
+
+      &:hover td {
+        @apply bg-k-accent-light-2;
       }
     }
   }
 }
-
-@import '@oruga-ui/oruga-next/src/scss/components/_table.scss';
 </style>

@@ -1,19 +1,17 @@
 <template>
   <section>
     <form @submit.prevent>
-      <h1 class="title is-size-3 mb-8 is-capitalized">
+      <h1 class="title is-size-3 mb-8 capitalize">
         {{ $t('identity.setOn', [getChainName(identityPrefix)]) }}
       </h1>
 
-      <div v-if="hasIdentity" class="is-size-6">
+      <div v-if="alreadyHasIdentity" class="is-size-6">
         <hr class="my-7" />
         <div class="mb-4">
           {{ $t('identity.establishedIdentity') }}
         </div>
-        <div
-          class="is-flex is-justify-content-space-between is-align-items-flex-end">
-          <div
-            class="is-flex is-justify-content-space-between is-align-items-center">
+        <div class="flex justify-between items-end">
+          <div class="flex justify-between items-center">
             <Avatar :value="accountId" :size="34" />
             <div class="ml-4">
               <div class="has-text-grey">{{ $t('identity.existing') }}</div>
@@ -63,7 +61,7 @@
       </NeoField>
 
       <NeoField label="Any Socials?" class="mb-4">
-        <div class="is-flex is-flex-direction-column">
+        <div class="flex flex-col">
           <p>{{ $t('identity.socialsDescription') }}</p>
 
           <PillTabs
@@ -101,7 +99,7 @@
       </p>
 
       <NeoButton
-        class="is-flex is-flex-grow-1 fixed-height"
+        class="flex flex-grow fixed-height"
         variant="k-accent"
         :label="$t('identity.create')"
         :disabled="disabled"
@@ -219,6 +217,7 @@ const {
   identityApi,
   identityPrefix,
   identityUnit,
+  hasIdentity,
   refetchIdentity,
 } = useIdentity({
   address: accountId,
@@ -228,6 +227,8 @@ const isConfirmModalActive = ref(false)
 const isLoaderModalVisible = ref(false)
 const transactionValue = ref('')
 
+const alreadyHasIdentity = computed(() => accountId.value && hasIdentity.value)
+
 const activeSocials = computed(() => {
   return socialTabs.value.reduce(
     (reducer, tab) => ({ ...reducer, [tab.value]: tab.active }),
@@ -235,7 +236,7 @@ const activeSocials = computed(() => {
   )
 })
 
-const isMobile = computed(() => useWindowSize().width.value <= 764)
+const { isMobile } = useViewport()
 const disabled = computed(
   () => identity.value.display.value === '' || isLoading.value,
 )
@@ -279,14 +280,6 @@ const setIdentityValue = (values: Record<string, string>) => {
     }
   }, identity.value)
 }
-
-const hasIdentity = computed(() => {
-  const { display, legal, web, twitter, riot, email } = identityData.value
-  return (
-    accountId.value &&
-    Boolean(display || legal || web || twitter || riot || email)
-  )
-})
 
 const handleUrlPrefixChange = async () => {
   deposit.value = await fetchDeposit()

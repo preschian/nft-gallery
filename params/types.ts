@@ -70,4 +70,7 @@ export type DropItem = {
   type: DropType
   meta: string
   disabled: number
+  minted?: number
+  max?: number
+  price?: string
 }

@@ -11,6 +11,7 @@ type SuccessFunctionMessage = (blockNumber: string) => string
 export type ObjectMessage = {
   message: string | SuccessFunctionMessage
   large: boolean
+  shareLink?: string
 }
 export type ExecuteTransactionSuccessMessage =
   | string
@@ -180,6 +181,7 @@ export interface ActionMintCollection {
 
 export enum Collections {
   DELETE = 'delete',
+  SET_MAX_SUPPLY = 'setCollectionMaxSupply',
 }
 
 export type ActionsInteractions = Interaction | ShoppingActions | Collections
@@ -204,6 +206,15 @@ export interface ActionBurnMultipleNFTs {
   errorMessage?: string
 }
 
+export interface ActionSetCollectionMaxSupply {
+  interaction: Collections.SET_MAX_SUPPLY
+  collectionId: string
+  urlPrefix: string
+  max: number
+  successMessage?: string | ((blockNumber: string) => string)
+  errorMessage?: string
+}
+
 export type Actions =
   | ActionBuy
   | ActionList
@@ -215,3 +226,4 @@ export type Actions =
   | ActionMintCollection
   | ActionDeleteCollection
   | ActionBurnMultipleNFTs
+  | ActionSetCollectionMaxSupply

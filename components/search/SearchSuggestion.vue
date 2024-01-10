@@ -33,14 +33,13 @@
             @click="gotoCollectionItem(item)">
             <SearchResultItem :image="item.image">
               <template #content>
-                <div
-                  class="is-flex is-flex-direction-row is-justify-content-space-between pt-2 pr-2">
+                <div class="flex flex-row justify-between pt-2 pr-2">
                   <span class="main-title name">{{ item.name }}</span>
                   <span class="has-text-grey">
                     {{ item.chain }}
                   </span>
                 </div>
-                <div class="is-flex is-justify-content-space-between pr-2">
+                <div class="flex justify-between pr-2">
                   <NeoSkeleton
                     v-if="item.floorPrice === undefined"
                     :count="1"
@@ -118,16 +117,14 @@
             @click="gotoGalleryItem(item)">
             <SearchResultItem :image="item.image">
               <template #content>
-                <div
-                  class="is-flex is-flex-direction-row is-justify-content-space-between pt-2 pr-2">
+                <div class="flex flex-row justify-between pt-2 pr-2">
                   <span class="main-title name">{{ item.name }}</span>
-                  <span>{{ urlPrefix.toUpperCase() }}</span>
+                  <span class="capitalize">{{ urlPrefix }}</span>
                 </div>
-                <div
-                  class="is-flex is-flex-direction-row is-justify-content-space-between pr-2">
+                <div class="flex flex-row justify-between pr-2">
                   <span class="name">{{ item.collection?.name }}</span>
                   <span v-if="item.price && parseFloat(item.price) > 0">
-                    {{ $t('offer.price') }}:
+                    {{ $t('price') }}:
                     <Money :value="item.price" :prefix="item.chain" inline />
                   </span>
                 </div>
@@ -173,14 +170,14 @@
       <div
         v-for="item in filterSearch"
         :key="item.id"
-        class="is-flex is-align-items-center is-justify-content-space-between mb-1 search-history-item"
+        class="flex items-center justify-between mb-1 search-history-item"
         @click="goToExploreResults(item)">
-        <div class="is-flex is-align-items-center">
+        <div class="flex items-center">
           <NeoIcon icon="history" />
           <div class="ml-3 history-label">{{ item.name }}</div>
         </div>
         <div
-          class="remove-search-history is-flex is-align-items-center"
+          class="remove-search-history flex items-center"
           @click.stop.prevent="removeSearchHistory(item.name)">
           <svg
             width="12"
@@ -216,18 +213,18 @@
               <div class="pr-2 pt-2">
                 <span class="main-title name">{{ item.name }}</span>
               </div>
-              <div
-                class="is-flex is-flex-direction-row is-justify-content-space-between pr-2 secondary-info">
-                <span>{{ $t('search.units') }}: {{ item.total }}</span>
-                <span
-                  >{{ $t('search.owners') }}: {{ item.uniqueCollectors }}</span
+              <div class="flex flex-row justify-between pr-2 secondary-info">
+                <span v-if="item.nftCount"
+                  >{{ $t('search.units') }}: {{ item.nftCount }}</span
                 >
-                <span>{{ urlPrefix.toUpperCase() }}</span>
+                <span>{{ $t('search.owners') }}: {{ item.owners }}</span>
+                <span class="capitalize">{{ urlPrefix }}</span>
               </div>
             </template>
           </SearchResultItem>
         </div>
         <nuxt-link
+          v-show="urlPrefix === 'rmrk'"
           class="search-footer-link"
           :to="{ name: 'series-insight' }"
           @click="$emit('close')">
@@ -253,7 +250,6 @@
 
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import seriesInsightList from '@/queries/rmrk/subsquid/seriesInsightList.graphql'
 import { denyList } from '@/utils/constants'
 import {
   type CollectionWithMeta,
@@ -264,11 +260,11 @@ import { logError, mapNFTorCollectionMetadata } from '@/utils/mappers'
 import { processMetadata } from '@/utils/cachingStrategy'
 import resolveQueryPath from '@/utils/queryPathResolver'
 import { unwrapSafe } from '@/utils/uniquery'
-import { RowSeries } from '@/components/series/types'
 import { fetchCollectionSuggestion } from './utils/collectionSearch'
 import { NeoIcon, NeoSkeleton, NeoTabItem, NeoTabs } from '@kodadot1/brick'
 import Money from '@/components/shared/format/Money.vue'
-import type { SearchQuery } from './types'
+import type { DefaultCollectionSuggestion, SearchQuery } from './types'
+import { useTopCollections } from '../landing/topCollections/utils/useTopCollections'
 
 const props = defineProps({
   name: {
@@ -289,16 +285,16 @@ const props = defineProps({
 
 const query = toRef(props, 'query', {})
 
-const searchSuggestionEachTypeMaxNum = 5
+const searchSuggestionEachTypeMaxNum = 12
 const activeSearchTab = ref('Collections')
 const activeTrendingTab = ref('Trending')
 const selectedIndex = ref(-1)
 const isCollectionResultLoading = ref(false)
-const isNFTResultLoading = ref(false)
 const nftResult = ref([] as NFTWithMeta[])
 const collectionResult = ref([] as CollectionWithMeta[])
 const searched = ref([] as NFTWithMeta[])
 const searchString = ref('')
+const defaultCollectionSuggestions = ref<DefaultCollectionSuggestion[]>([])
 
 onMounted(() => {
   getSearchHistory()
@@ -512,37 +508,48 @@ const goToExploreResults = (item) => {
     search: item.name,
   })
 }
-const { data: defaultCollectionSuggestions } = await useAsyncData(
-  'defaultCollectionSuggestions',
-  async () => {
-    if (showDefaultSuggestions.value) {
-      try {
-        const { data: result } = await useAsyncQuery({
-          query: seriesInsightList,
-          clientId: client.value,
-          variables: {
-            limit: searchSuggestionEachTypeMaxNum,
-            orderBy: 'volume_DESC',
-          },
-        })
-        const { collectionEntities: collections } = result.value
-        const collectionResult: (CollectionWithMeta & RowSeries)[] =
-          collections.map((data) => {
-            return {
-              ...data,
-              image: sanitizeIpfsUrl(
-                data.image || data.mediaUri || '',
-                'image',
-              ),
-            }
-          })
-        return collectionResult
-      } catch (e) {
-        $consola.warn(e, 'Error while fetching default suggestions')
-      }
+
+const getFormattedDefaultSuggestions = (
+  collections,
+): DefaultCollectionSuggestion[] => {
+  return collections.map((collection) => ({
+    id: collection.id,
+    name: collection.name,
+    image: collection.image,
+    nftCount: collection.nftCount,
+    owners: collection.ownerCount || collection.uniqueCollectors,
+  }))
+}
+
+const { data: topCollections, refresh: getTopCollection } = useTopCollections(
+  searchSuggestionEachTypeMaxNum,
+  props.showDefaultSuggestions,
+)
+
+watch(
+  topCollections,
+  (data) => {
+    defaultCollectionSuggestions.value = getFormattedDefaultSuggestions(
+      data,
+    ).slice(0, searchSuggestionEachTypeMaxNum)
+  },
+  { immediate: true },
+)
+
+watch(
+  () => props.showDefaultSuggestions,
+  (showDefaultSuggestions) => {
+    if (showDefaultSuggestions) {
+      getTopCollection()
     }
   },
 )
+
+const {
+  data: dataNFTs,
+  loading: isNFTResultLoading,
+  refetch: fetchSearchNFTs,
+} = useSearchNfts({ ...queryVariables.value, immediate: false })
 
 const updateSuggestion = useDebounceFn(async (value: string) => {
   //To handle empty string
@@ -554,22 +561,14 @@ const updateSuggestion = useDebounceFn(async (value: string) => {
   }
 
   isCollectionResultLoading.value = true
-  isNFTResultLoading.value = true
   query.value.search = value
   searchString.value = value
-  await updateNftSuggestion()
+  await fetchSearchNFTs(queryVariables.value)
   await updateCollectionSuggestion(value)
 }, 200)
 
-const updateNftSuggestion = async () => {
+const updateNftSuggestion = async (nFTEntities) => {
   try {
-    const queryNft = await resolveQueryPath(client.value, 'nftListWithSearch')
-    const { data } = await useAsyncQuery({
-      query: queryNft.default,
-      clientId: client.value,
-      variables: queryVariables.value,
-    })
-    const { nFTEntities } = data.value
     const nftList = unwrapSafe(
       nFTEntities.slice(0, searchSuggestionEachTypeMaxNum),
     )
@@ -589,7 +588,6 @@ const updateNftSuggestion = async () => {
   } catch (e) {
     logError(e, (msg) => $consola.warn('[PREFETCH] Unable fo fetch', msg))
   }
-  isNFTResultLoading.value = false
 }
 
 const updateCollectionSuggestion = async (value: string) => {
@@ -656,6 +654,10 @@ const fetchCollectionStats = async (
 
   return collection
 }
+
+watch(dataNFTs, async (data) => {
+  await updateNftSuggestion(data.nFTEntities || [])
+})
 
 watch(
   () => props.name,

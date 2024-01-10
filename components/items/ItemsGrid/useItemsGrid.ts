@@ -11,18 +11,30 @@ import { nftToListingCartItem } from '@/components/common/shoppingCart/utils'
 import { useListingCartStore } from '@/stores/listingCart'
 import { NFT, TokenId } from '@/components/rmrk/service/scheme'
 
+const DEFAULT_RESET_SEARCH_QUERY_PARAMS = [
+  'sort',
+  'search',
+  'listed',
+  'min',
+  'max',
+  'owned',
+  'collections',
+]
+
 export function useFetchSearch({
   first,
   total,
   isFetchingData,
   resetSearch,
   isLoading,
+  resetSearchQueryParams = DEFAULT_RESET_SEARCH_QUERY_PARAMS,
 }: {
   first: Ref<number>
   total: Ref<number>
   isFetchingData: Ref<boolean>
   isLoading: Ref<boolean>
   resetSearch: () => void
+  resetSearchQueryParams?: string[]
 }) {
   const { client, urlPrefix } = usePrefix()
   const { isAssetHub } = useIsChain(urlPrefix)
@@ -44,7 +56,7 @@ export function useFetchSearch({
     search?: { [key: string]: string | number }[]
   }
 
-  const getSearchCriteria = (searchParams) => {
+  const getSearchCriteria = (searchParams, reducer = {}) => {
     const mapping = {
       currentOwner_eq: (value) => ({ owner: value }),
       issuer_eq: (value) => ({ issuer: value }),
@@ -57,12 +69,16 @@ export function useFetchSearch({
 
     return searchParams.reduce((acc, curr) => {
       for (const [key, value] of Object.entries(curr)) {
+        if (Array.isArray(value)) {
+          return getSearchCriteria(value, acc)
+        }
+
         if (mapping[key]) {
           Object.assign(acc, mapping[key](value))
         }
       }
       return acc
-    }, {})
+    }, reducer)
   }
 
   async function fetchSearch({
@@ -114,6 +130,24 @@ export function useFetchSearch({
       offset: (page - 1) * first.value,
       orderBy: getRouteQueryOrDefault(route.query.sort, ['blockNumber_DESC']),
     }
+
+    const isPriceSortActive = (sort?: string | null | (string | null)[]) => {
+      if (!sort) {
+        return false
+      }
+      const sortArray = Array.isArray(sort) ? sort : [sort]
+      return sortArray.some((sortBy) => (sortBy ?? '').includes('price'))
+    }
+    watch(
+      () => route.query.sort,
+      (newSort, oldSort) => {
+        const priceSortHasBeenActivated =
+          isPriceSortActive(newSort) && !isPriceSortActive(oldSort)
+        if (priceSortHasBeenActivated && route.query.listed !== 'true') {
+          route.query.listed = 'true'
+        }
+      },
+    )
 
     const searchForToken = getSearchCriteria(
       search?.length ? search : searchParams.value,
@@ -173,24 +207,19 @@ export function useFetchSearch({
     fetchSearch({ search })
   }
 
-  watch(
-    [
-      () => route.query.sort,
-      () => route.query.search,
-      () => route.query.listed,
-      () => route.query.min,
-      () => route.query.max,
-      () => route.query.owned,
-      () => route.query.collections,
-    ],
-    (currentQuery, prevQuery) => {
-      if (isEqual(currentQuery, prevQuery)) {
-        return
-      }
-      loadedPages.value = []
-      resetSearch()
-    },
+  const resetSearchQueryParamsValues = computed(() =>
+    Object.fromEntries(
+      resetSearchQueryParams.map((key) => [key, route.query[key]]),
+    ),
   )
+
+  watch(resetSearchQueryParamsValues, (currentQuery, prevQuery) => {
+    if (isEqual(currentQuery, prevQuery)) {
+      return
+    }
+    loadedPages.value = []
+    resetSearch()
+  })
 
   return {
     items,

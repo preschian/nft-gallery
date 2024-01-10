@@ -1,7 +1,7 @@
 <template>
   <div class="columns mb-2">
     <div class="column is-clipped">
-      <div class="is-flex is-align-items-center">
+      <div class="flex items-center">
         <nuxt-link
           :to="`/${urlPrefix}/gallery/${event.nft.id}`"
           class="height-50px">
@@ -23,7 +23,7 @@
     </div>
 
     <div class="column is-1">
-      <div class="height-50px is-flex is-align-items-center">
+      <div class="height-50px flex items-center">
         <EventTag
           :interaction="event.interaction"
           :interaction-name="interactionName" />
@@ -31,7 +31,7 @@
     </div>
 
     <div class="column is-ellipsis">
-      <div class="height-50px is-flex is-align-items-center">
+      <div class="height-50px flex items-center">
         <div v-if="amount === blank">
           {{ blank }}
         </div>
@@ -40,12 +40,16 @@
     </div>
 
     <div class="column">
-      <div class="height-50px is-flex is-align-items-center">
+      <div class="height-50px flex items-center">
         <nuxt-link
           v-if="fromAddress !== blank"
           :to="`/${urlPrefix}/u/${fromAddress}`"
           class="has-text-link">
-          <IdentityIndex ref="identity" :address="fromAddress" show-clipboard />
+          <IdentityIndex
+            ref="identity"
+            :address="fromAddress"
+            show-clipboard
+            show-badge />
         </nuxt-link>
         <div v-else>
           {{ blank }}
@@ -53,12 +57,16 @@
       </div>
     </div>
     <div class="column">
-      <div class="height-50px is-flex is-align-items-center">
+      <div class="height-50px flex items-center">
         <nuxt-link
           v-if="toAddress !== blank"
           :to="`/${urlPrefix}/u/${toAddress}`"
           class="has-text-link">
-          <IdentityIndex ref="identity" :address="toAddress" show-clipboard />
+          <IdentityIndex
+            ref="identity"
+            :address="toAddress"
+            show-clipboard
+            show-badge />
         </nuxt-link>
         <div v-else>
           {{ blank }}
@@ -66,7 +74,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="height-50px is-flex is-align-items-center">
+      <div class="height-50px flex items-center">
         {{ timeAgo(event.timestamp) }}
       </div>
     </div>

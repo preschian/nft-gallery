@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div class="is-flex is-justify-content-space-between mobile">
+    <div class="flex justify-between mobile">
       <div class="title is-2">{{ $t('general.topCollectionsHeading') }}</div>
-      <div
-        class="top-collection-controls buttons is-align-items-flex-start pt-2">
+      <div class="top-collection-controls buttons items-start pt-2">
         <NeoButton
           v-for="{ value, label } in timeRanges"
           :key="value"
@@ -12,11 +11,42 @@
           :label="`${$t(`topCollections.timeFrames.${label}`)}`"
           @click="setTimeRange(value)" />
       </div>
-      <div></div>
+      <div class="pt-2">
+        <ChainDropdown
+          position="bottom-left"
+          :show-network-label="false"
+          :redirect="false"
+          :exclude="['ksm']"
+          mobile-modal />
+      </div>
     </div>
 
-    <div class="top-collections-grid mb-5">
-      <div v-for="(collection, index) in data" :key="index">
+    <div class="top-collections-grid my-5">
+      <template v-if="loading">
+        <div
+          v-for="index in limit"
+          :key="index"
+          class="top-collections-item py-2 flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="p-4 has-text-weight-bold">
+              {{ index }}
+            </div>
+            <div>
+              <BasicImage custom-class="is-48x48 image-outline" rounded />
+            </div>
+          </div>
+          <div class="px-2" style="width: 60%">
+            <NeoSkeleton width="70%" />
+            <NeoSkeleton width="20%" size="small" />
+          </div>
+          <div class="is-pulled-right has-text-right px-4" style="width: 20%">
+            <NeoSkeleton width="80%" position="right" />
+            <NeoSkeleton width="70%" size="small" position="right" />
+          </div>
+        </div>
+      </template>
+
+      <div v-for="(collection, index) in data" v-else :key="collection.id">
         <TopCollectionsItem
           :collection="collection"
           :index="index + 1"
@@ -24,34 +54,7 @@
       </div>
     </div>
 
-    <div v-if="loading" class="top-collections-grid">
-      <div
-        v-for="index in limit"
-        :key="index"
-        class="top-collections-item py-2 is-flex is-align-items-center is-justify-content-space-between">
-        <div class="is-flex is-align-items-center">
-          <div class="p-4 has-text-weight-bold">
-            {{ index }}
-          </div>
-          <div>
-            <BasicImage custom-class="is-48x48 image-outline" rounded />
-          </div>
-        </div>
-        <div class="px-2" style="width: 60%">
-          <NeoSkeleton width="70%" />
-          <NeoSkeleton width="20%" size="small" />
-        </div>
-        <div class="is-pulled-right has-text-right px-4" style="width: 20%">
-          <NeoSkeleton width="80%" position="right" />
-          <NeoSkeleton width="70%" size="small" position="right" />
-        </div>
-      </div>
-    </div>
-
-    <nuxt-link
-      v-show="urlPrefix === 'rmrk' || urlPrefix === 'bsx'"
-      to="/series-insight"
-      class="link">
+    <nuxt-link v-show="urlPrefix === 'rmrk'" to="/series-insight" class="link">
       {{ $t('helper.seeMore') }} >
     </nuxt-link>
   </div>
