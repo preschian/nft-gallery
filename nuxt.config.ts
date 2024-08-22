@@ -102,8 +102,20 @@ export default defineNuxtConfig({
     appManifest: false,
   },
 
-  // Disable server-side rendering
-  ssr: false,
+  // Enable SSR globally
+  ssr: true,
+
+  // Set default route rules
+  routeRules: {
+    '/ahp/collection/13': { sitemap: { changefreq: 'daily', priority: 0.3 } },
+    // Set all routes to SSR: false by default
+    '/**': { ssr: false },
+
+    // Override specific routes to use SSR
+    '/': { prerender: true },
+    // Add other routes that should use SSR here
+    // '/some-ssr-route': { ssr: true },
+  },
 
   // Global page headers: https://nuxt.com/docs/api/configuration/nuxt-config#head
   app: {
