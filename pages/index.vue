@@ -1,5 +1,10 @@
 <template>
-  <LandingPage />
+  <div>
+    <h1>test: Hello Seattle</h1>
+    <ClientOnly>
+      <LandingPage />
+    </ClientOnly>
+  </div>
 </template>
 
 <script lang="ts" setup>
