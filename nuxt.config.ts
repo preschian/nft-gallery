@@ -30,7 +30,7 @@ export default defineNuxtConfig({
 
   vite: {
     build: {
-      sourcemap: process.env.NODE_ENV === 'development',
+      sourcemap: true,
     },
     plugins: [
       svgLoader({
