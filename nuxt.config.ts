@@ -414,4 +414,65 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-11',
+
+  hooks: {
+    'vite:extendConfig': (config, { isClient }) => {
+      if (isClient) {
+        config.build = config.build || {}
+        config.build.rollupOptions = config.build.rollupOptions || {}
+        config.build.rollupOptions.output = config.build.rollupOptions.output || {}
+
+        config.build.rollupOptions.output.manualChunks = (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('@polkadot')) {
+              return 'vendor-polkadot'
+            }
+            if (id.includes('@kodadot1')) {
+              return 'vendor-kodadot'
+            }
+            if (id.includes('oruga') || id.includes('@fortawesome')) {
+              return 'vendor-ui'
+            }
+            if (id.includes('chart.js') || id.includes('date-fns') || id.includes('lodash')) {
+              return 'vendor-utils'
+            }
+            if (id.includes('zod') || id.includes('markdown') || id.includes('stream') || id.includes('tanstack') || id.includes('sindresorhus') || id.includes('eth')) {
+              return 'vendor-utils-2'
+            }
+            if (id.includes('three') || id.includes('wavesurfer')) {
+              return 'vendor-media'
+            }
+            if (id.includes('viem') || id.includes('wagmi') || id.includes('ethers')) {
+              return 'vendor-web3'
+            }
+            if (id.includes('@web3modal')) {
+              return 'vendor-web3modal'
+            }
+            if (id.includes('walletconnect')) {
+              return 'vendor-walletconnect'
+            }
+            if (id.includes('coinbase')) {
+              return 'vendor-coinbase'
+            }
+            if (id.includes('apollo')) {
+              return 'vendor-apollo'
+            }
+            if (id.includes('snowbridge')) {
+              return 'vendor-snowbridge'
+            }
+            if (id.includes('vue')) {
+              return 'vendor-vue'
+            }
+            if (id.includes('apg') || id.includes('crawler') || id.includes('bn') || id.includes('ens') || id.includes('bignumber')) {
+              return 'vendor-web3-utils'
+            }
+            if (id.includes('noble') || id.includes('elliptic') || id.includes('rxjs') || id.includes('entities') || id.includes('aes')) {
+              return 'vendor-crypto'
+            }
+            return 'vendor'
+          }
+        }
+      }
+    },
+  },
 })
