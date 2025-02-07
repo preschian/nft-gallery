@@ -1,5 +1,5 @@
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 [build]
   # This will be your default build command.
@@ -8,18 +8,13 @@
   publish = "dist"
 
 [functions]
-  node_bundler = "esbuild"
-
-[dev]
-   command = "npx pnpm dev"
-   port = 9000
-   targetPort = 9090
+  directory = ""
 
 [context.deploy-preview]
 command = 'export BASE_URL=$DEPLOY_PRIME_URL && env && pnpm run generate:netlify'
 
 [context.production]
-command = 'export BASE_URL=$URL && env && pnpm run generate'
+command = 'export BASE_URL=$URL && env && pnpm run generate:netlify'
 
 [[redirects]]
   from = "/*"
